@@ -1,10 +1,10 @@
 ---
-title: Meteor Vocabulary
+title: Vocabolario Meteor
 slug: meteor-vocabulary
 date: 0014/01/02
 number: 14.5
 sidebar: true
-contents: Review a few common Meteor terms. 
+contents: Approfondimento della terminologia comune in Meteor. 
 paragraphs: 24
 ---
 
@@ -64,26 +64,27 @@ A Meteor package can consist of
 
 A package is like a super-powered library. Meteor comes with an extensive set of core packages. There's also [Atmosphere](http://atmosphere.meteor.com), which is a collection of community supplied third party packages.
 
-#### Publication
+#### Pubblicazione
 
-A publication is a named set of data that is customized for each user that subscribes to it. You set up a publication on the server.
+Una pubblicazione è un insieme di dati con un nome specifico, personalizzato per ogni utente che vi fa una sottoscrizione. Le pubblicazioni sono impostate sul server.
 
 #### Server
 
 The Meteor server is a HTTP and DDP server run via node.js. It consists of the all the Meteor libraries as well your server-side JavaScript code. When you start your Meteor server, it connects to a Mongo database (which it starts itself in development).
 
-#### Session
+#### Sessione
 
-The Session in Meteor refers to a client-side reactive data source that's used by your application to track the state that the user's in. 
+La Sessione in Meteor si riferisce alla fonte di dati reattivi presente sul client che l'applicazione utilizza per tenere traccia dell stato in cui si trova l'utente.
 
-#### Subscription
+#### Sottoscrizione
 
-A subscription is a connection to a publication for a specific client. The subscription is code that runs in the browser that talks to a publication on the server and keeps the data in sync.
+Una sottoscrizione è una connessione ad una pubblicazione per uno specifico client. La sottoscrizione è il codice che viene esguito nel browser che comunica con una pubblicazione sul server e mantiene sincronizzati i dati.
 
 #### Template
 
-A template is a method of generating HTML in JavaScript. By default, Meteor supports Handlebars, a logic-less templating system, although there are plans to support more in the future.
+Un template è un modo per generare HTML tramite Javascript. Per impostazione predefinita, Meteor supporta Handlebars, un sistema di templating *logic-less*, cioè privo di istruzioni if o cicli for, 
+anche si prevede di supportarne altri in futuro.
 
-#### Template Data Context
+#### Contesto dei dati di un Template
 
-When a template renders, it refers to a JavaScript object that provides specific data for this particular rendering. Usually such objects are plain-old-JavaScript-objects (POJOs), often documents from a collection, although they can be more complicated and have functions available on them.
+Quando un template viene renderizzato, fa riferimento ad un oggetto Javascript che fornisce dati specifici per quella particolare renderizzazione. Nella maggior parte dei casi si tratta di semplici oggetti Javascript (POJOs, plain-old-JavaScript-objects), di solito documenti da una collection, ma a volte possono essere anche più complessi e contenere all'interno delle funzioni.
