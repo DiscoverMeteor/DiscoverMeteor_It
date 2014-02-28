@@ -13,7 +13,7 @@ Ora cancella un documento da una delle due finestre. Il documento è scomparso a
 
 Non serve che tu faccia veramente quanto detto sopra per sapere che è scomparso. Quando modifichiamo qualcosa nel nostro filesystem locale, il cambiamento viene applicato ovunque senza la necessità di refresh o callbacks. É così.
 
-Ora prova a pensare come lo stesso scenario si presenterebbe sul web. Ad esempio, diciamo che hai aperto la pagina di amministrazione dello stesso sito WordPress in due browser diversi e creato un nuovo post da uno dei due. Diversamente da quel che succede sul filesystem, non importa quanto attendi, sull'altra finestra non vedrai i cambiamenti fin quando non ricaricherai la pagina deliberatamente. 
+Ora prova a pensare come lo stesso scenario si presenterebbe sul web. Ad esempio, diciamo che hai aperto la pagina di amministrazione dello stesso sito WordPress in due browser diversi e creato un nuovo post da uno dei due. Diversamente da quel che succede sul filesystem, non importa quanto attendi, sull'altra finestra non vedrai i cambiamenti fin quando non ricaricherai la pagina deliberatamente.
 
 Nel corso degli anni, ci siamo fatti l'idea che un sito web è un qualcosa con cui si comunica solamente in brevi e separate riprese.
 
@@ -23,7 +23,7 @@ Ma Meteor è parte di una nuova classe di frameworks e tecnologie che stanno cer
 
 Meteor è una piattaforma basata su Node.js che permette di costruire applicazioni web real-time. È la parte che sta tra il database della tua app e la sua interfaccia utente e garantisce che entrambe le cose siano mantenute sincronizzate.
 
-Visto che si basa su Node.js, Meteor utilizza JavaScript sia lato client che lato server. In più, Meteor permette di condividere codice tra le due parti. 
+Visto che si basa su Node.js, Meteor utilizza JavaScript sia lato client che lato server. In più, Meteor permette di condividere codice tra le due parti.
 
 Il risultato complessivo è una piattaforma che riesce ad essere molto potente e veramente semplice astraendo e nascondendo molte delle scocciature e insidie caratteristiche dello sviluppo per il web.
 
@@ -39,15 +39,15 @@ Meteor potrebbe essere il framework ideale per le tue necessità, come potrebbe 
 
 Durante gli ultimi 6 mesi, abbiamo lavorato a [Telescope](http://telesc.pe), un'applicazione Meteor, open-source, che permette a chiunque di creare il proprio sito di news (pensa a [Reddit](http://reddit.com) oppure [Hacker news](http://news.ycombinator.com)), in cui le persone possono inviare link e votarli.
 
-Abbiamo imparato un'esagerazione di cose costruendo l'applicazione, ma non sempre è stato facile trovare risposte alle nostre domande. Abbiamo dovuto mettere assieme cose trovate in diverse fonti e in molti caso persino inventare nostre soluzioni. Con questo libro, abbiamo voluto condividere tutte queste lezioni e creare una semplice guida passo passo che ti guidi nella costruzione di una applicazione Meteor completa partendo da zero. 
+Abbiamo imparato un'esagerazione di cose costruendo l'applicazione, ma non sempre è stato facile trovare risposte alle nostre domande. Abbiamo dovuto mettere assieme cose trovate in diverse fonti e in molti caso persino inventare nostre soluzioni. Con questo libro, abbiamo voluto condividere tutte queste lezioni e creare una semplice guida passo passo che ti guidi nella costruzione di una applicazione Meteor completa partendo da zero.
 
-L'app che costruiremo è una versione un po' semplificata di Telescope, che chiamiamo Microscope. Durante il suo sviluppo, considereremo tutti gli aspetti necessari a costruire un'applicazione Meteor, come gli account utente, le collezioni Meteor, il routing e molto altro. 
+L'app che costruiremo è una versione un po' semplificata di Telescope, che chiamiamo Microscope. Durante il suo sviluppo, considereremo tutti gli aspetti necessari a costruire un'applicazione Meteor, come gli account utente, le collezioni Meteor, il routing e molto altro.
 
 Quando avrai finito di leggere il libro, se vorrai andare oltre, sarai in grado di capire senza sforzo il codice di Telescope perché rispecchia la stessa struttura.
 
 ### Riguardo Gli Autori
 
-Nel caso tu ti stia chidendo chi siamo e per che motivo dovresti fidarti di noi, ti diamo qualche dettaglio in più su entrambi. 
+Nel caso tu ti stia chidendo chi siamo e per che motivo dovresti fidarti di noi, ti diamo qualche dettaglio in più su entrambi.
 
 <%= image "tom-photo.jpg", "portrait" %>
 
@@ -79,25 +79,25 @@ Nel caso tu ti stia chidendo chi siamo e per che motivo dovresti fidarti di noi,
 
 ### Altre Risorse
 
-////
+Se volessi approfondire di più qualche aspetto particolare di Meteor, il miglior punto da cui iniziare è la [guida ufficiale di Meteor](http://docs.meteor.com/).
 
-////
+Suggeriamo anche [Stack Overflow](http://stackoverflow.com/questions/tagged/meteor) per domande e possibili soluzioni a problemi, e il [canale IRC](https://webchat.freenode.net/) #meteor se ti serve aiuto in tempo reale.
 
 <% note do %>
 
 ### Mi serve Git?
 
-////
+Anche se per seguire questo libro non è strettamente necessario avere familiarità con il sistema Git di controllo versione, lo raccomandiamo vivamente.
 
-////
+Se vuoi fartene un'idea velocemente, raccomandiamo la pagina [Git Is Simpler Than You Think](http://nfarina.com/post/9868516270/git-is-simpler) di Nick Farina.
 
-////
+Se sei un novizio di Git, ti suggeriamo anche l'applicazione [GitHub for Mac](http://mac.github.com/), che ti permette di clonare e gestire i repository senza utilizzare la linea di comando.
 
 <% end %>
 
 ### Metterci in Contatto
 
-- ////
-- ////
-- ////
-- ////
+- Nel caso volessi contattarci, puoi inviarci un'email a [hello@discovermeteor.com](mailto:hello@discovermeteor.com).
+- In più, se trovi qualche errore tra i contenuti del libro, puoi farcelo sapere [sottomettendo un bug a questo repository GitHub](https://github.com/DiscoverMeteor/book/issues).
+- Se hai problemi con il codice di Microscope, puoi [sottomettere un bug nel repository di Microscope](https://github.com/DiscoverMeteor/Microscope/issues).
+- In fine, per qualsiasi altra domanda puoi anche lasciarci semplicemente un commento nel pannello laterale di questa app.
