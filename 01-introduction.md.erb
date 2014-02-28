@@ -11,43 +11,43 @@ Facciamo un esperimento concettuale assieme. Immagina di aprire la stessa cartel
 
 Ora cancella un documento da una delle due finestre. Il documento è scomparso anche nell'altra finestra?
 
-////
+Non serve che tu faccia veramente quanto detto sopra per sapere che è scomparso. Quando modifichiamo qualcosa nel nostro filesystem locale, il cambiamento viene applicato ovunque senza la necessità di refresh o callbacks. É così.
 
-////
+Ora prova a pensare come lo stesso scenario si presenterebbe sul web. Ad esempio, diciamo che hai aperto la pagina di amministrazione dello stesso sito WordPress in due browser diversi e creato un nuovo post da uno dei due. Diversamente da quel che succede sul filesystem, non importa quanto attendi, sull'altra finestra non vedrai i cambiamenti fin quando non ricaricherai la pagina deliberatamente. 
 
-////
+Nel corso degli anni, ci siamo fatti l'idea che un sito web è un qualcosa con cui si comunica solamente in brevi e separate riprese.
 
-////
+Ma Meteor è parte di una nuova classe di frameworks e tecnologie che stanno cercando di mettere in discussione lo status quo rendendo il web real-time e reattivo.
 
-### What is Meteor?
+### Che cosa è Meteor?
 
-////
+Meteor è una piattaforma basata su Node.js che permette di costruire applicazioni web real-time. È la parte che sta tra il database della tua app e la sua interfaccia utente e garantisce che entrambe le cose siano mantenute sincronizzate.
 
-////
+Visto che si basa su Node.js, Meteor utilizza JavaScript sia lato client che lato server. In più, Meteor permette di condividere codice tra le due parti. 
 
-////
+Il risultato complessivo è una piattaforma che riesce ad essere molto potente e veramente semplice astraendo e nascondendo molte delle scocciature e insidie caratteristiche dello sviluppo per il web.
 
-### Why Meteor?
+### Perché Meteor?
 
-////
+Dunque perché dovresti investire tempo per imparare Meteor anziché un altro framework per il web? Lasciando da parte tutte le varie caratteristiche di Meteor, crediamo ci sia un'unica ragione: Meteor è semplice da imparare.
 
-////
+Più di ogni altro framework, Meteor permette di avere un'applicazione web pronta e funzionante in poche ore. E se in passato hai già fatto sviluppo di front-end, sarai già pratico di JavaScript e non dovrai nemmeno imparare un nuovo linguaggio.
 
-////
+Meteor potrebbe essere il framework ideale per le tue necessità, come potrebbe non esserlo. Ma visto che puoi fartene una buona idea nel corso di poche serate o di un fine settimana, perché non provarlo e scoprirlo di persona?
 
-### Why This Book?
+### Perché Questo Libro?
 
-////
+Durante gli ultimi 6 mesi, abbiamo lavorato a [Telescope](http://telesc.pe), un'applicazione Meteor, open-source, che permette a chiunque di creare il proprio sito di news (pensa a [Reddit](http://reddit.com) oppure [Hacker news](http://news.ycombinator.com)), in cui le persone possono inviare link e votarli.
 
-////
+Abbiamo imparato un'esagerazione di cose costruendo l'applicazione, ma non sempre è stato facile trovare risposte alle nostre domande. Abbiamo dovuto mettere assieme cose trovate in diverse fonti e in molti caso persino inventare nostre soluzioni. Con questo libro, abbiamo voluto condividere tutte queste lezioni e creare una semplice guida passo passo che ti guidi nella costruzione di una applicazione Meteor completa partendo da zero. 
 
-////
+L'app che costruiremo è una versione un po' semplificata di Telescope, che chiamiamo Microscope. Durante il suo sviluppo, considereremo tutti gli aspetti necessari a costruire un'applicazione Meteor, come gli account utente, le collezioni Meteor, il routing e molto altro. 
 
-////
+Quando avrai finito di leggere il libro, se vorrai andare oltre, sarai in grado di capire senza sforzo il codice di Telescope perché rispecchia la stessa struttura.
 
-### About the Authors
+### Riguardo Gli Autori
 
-////
+Nel caso tu ti stia chidendo chi siamo e per che motivo dovresti fidarti di noi, ti diamo qualche dettaglio in più su entrambi. 
 
 <%= image "tom-photo.jpg", "portrait" %>
 
@@ -57,7 +57,7 @@ Ora cancella un documento da una delle due finestre. Il documento è scomparso a
 
 ////
 
-### Chapters & Sidebars
+### Capitoli & Approfondimenti
 
 ////
 
@@ -67,7 +67,7 @@ Ora cancella un documento da una delle due finestre. Il documento è scomparso a
 
 ////
 
-### Commits & Live Instances
+### Commit & Istanze Live
 
 ////
 
@@ -77,7 +77,7 @@ Ora cancella un documento da una delle due finestre. Il documento è scomparso a
 
 ////
 
-### A Few Other Resources
+### Altre Risorse
 
 ////
 
@@ -85,7 +85,7 @@ Ora cancella un documento da una delle due finestre. Il documento è scomparso a
 
 <% note do %>
 
-### Do I Need Git?
+### Mi serve Git?
 
 ////
 
@@ -95,7 +95,7 @@ Ora cancella un documento da una delle due finestre. Il documento è scomparso a
 
 <% end %>
 
-### Getting in Touch
+### Metterci in Contatto
 
 - ////
 - ////
