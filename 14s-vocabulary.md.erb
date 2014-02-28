@@ -12,79 +12,78 @@ In questo libro leggerete alcune parole che potrebbero sembrarvi nuove, o almeno
 
 #### Client
 
-////
+Quando parliamo di Client, ci riferiamo al codice eseguito nel *browser* dell'utente, sia che si tratti di un browser tradizionale come Firefox o Safari, o qualcosa di più complesso, come una UIWebView di un'applicazione nativa per iPhone.
 
 #### Collection
 
-////
+In Meteor una Collection è un contenitore di dati che si sincronizzano automaticamente tra client e server. Le Collections hanno un nome (ad esempio 'articoli'), e in generale sono presenti sia sul client che sul server. Anche se si comportano in maniera differente, hanno un API comune basata sull'API di Mongo.
 
 #### Computation
 
-////
+A computation is a block of code that runs every time one of the reactive data sources that it depends on changes. If you have a reactive data source (for example, a Session variable) and would like to respond reactively to it, you'll need set up a computation for it. 
 
 #### Cursor
 
-////
+A cursor is the result of running a query on a Mongo collection. On the client side, a cursor isn't just an array of results, but a *reactive* object that can be observed as objects in the relevant collection are added, removed and updated.
  
 #### DDP
 
-////
+DDP is Meteor's Distributed Data Protocol, the wire protocol used to synchronize collections and make Method calls. DDP is intended as a generic protocol, which takes the place of HTTP for realtime applications that are data heavy.
 
 #### Deps
 
-////
+Deps is Meteor's reactivity system. Deps is used behind the scenes to keep HTML automatically sync with the underlying data model.
 
 #### Document
 
-////
+Mongo is a document-based data-store, so the objects that come out of collections are called "documents". They are plain JavaScript objects (although they can't contain functions) with a single special property, the `_id`, which Meteor uses to track their properties over DDP.
 
 #### Helpers
 
-////
+When a template needs to render something more complex than a document property it can call a helper, a function that is used to aid rendering.
 
 #### Latency Compensation
 
-////
+Is a technique to allow simulation of Method calls on the client, to avoid lagginess while waiting for the server to respond.
 
 #### Method
 
-////
+A Meteor Method is a remote procedure call from the client to the server, with some special logic to keep track of collection changes and allow Latency Compensation.
 
 #### MiniMongo
 
-////
+The client-side collection is an in-memory data store offering a Mongo-like API. The library that supports this behaviour is called "MiniMongo", to indicate it's a smaller version of Mongo that runs completely in memory.
 
 #### Package
 
-////
+A Meteor package can consist of 
+  1. JavaScript code to run on the server.
+  2. JavaScript code to run on the client.
+  3. Instructions on how to process resources (such as SASS to CSS).
+  4. Resources to be processed.
 
-  1. ////
-  2. ////
-  3. ////
-  4. ////
-
-////
+A package is like a super-powered library. Meteor comes with an extensive set of core packages. There's also [Atmosphere](http://atmosphere.meteor.com), which is a collection of community supplied third party packages.
 
 #### Publication
 
-////
+A publication is a named set of data that is customized for each user that subscribes to it. You set up a publication on the server.
 
 #### Server
 
-////
+The Meteor server is a HTTP and DDP server run via node.js. It consists of the all the Meteor libraries as well your server-side JavaScript code. When you start your Meteor server, it connects to a Mongo database (which it starts itself in development).
 
 #### Session
 
-////
+The Session in Meteor refers to a client-side reactive data source that's used by your application to track the state that the user's in. 
 
 #### Subscription
 
-////
+A subscription is a connection to a publication for a specific client. The subscription is code that runs in the browser that talks to a publication on the server and keeps the data in sync.
 
 #### Template
 
-////
+A template is a method of generating HTML in JavaScript. By default, Meteor supports Handlebars, a logic-less templating system, although there are plans to support more in the future.
 
 #### Template Data Context
 
-////
+When a template renders, it refers to a JavaScript object that provides specific data for this particular rendering. Usually such objects are plain-old-JavaScript-objects (POJOs), often documents from a collection, although they can be more complicated and have functions available on them.
