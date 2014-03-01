@@ -6,6 +6,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
 
 ### Words kept in English
+  * browser
   * bug
   * callback
   * commit
@@ -16,12 +17,17 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * open-source
   * refresh
   * repository
+  * root
   * router
+  * server
+  * wrapper
 
 
 ### Words sometimes translated sometimes not...
 
  * **app** -> *applicazione*
+ * **boilerplate** -> *modello standard*
+ * **features** -> *funzionalità/caratteristiche*
  * **link(s)** -> *collegamento/collegamenti*
  * **real-time** -> *tempo reale*
  * **web** -> *rete*
@@ -29,4 +35,10 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
 ### Common Expressions
 
+ * **a note on** -> *una considerazione su*
+ * **getting started** -> *primi passi*
+ * **you'll be good to go** -> *sarai pronto a partire*
+ * **has you covered** -> *ha ciò che ti serve*
  * **mind experiment** -> *esperimento concettuale*
+ * **sidebar** -> *approfondimento*
+ * **up and running** -> *operativo*
