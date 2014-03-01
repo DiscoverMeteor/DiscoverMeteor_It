@@ -1,48 +1,48 @@
 ---
-title: Getting Started
+title: Primi Passi
 slug: getting-started
 date: 0002/01/01
 number: 2
-contents: Install Meteor & Meteorite.|Learn about the 5 types of Meteor packages.|Setup the file structure of your Meteor app.
+contents: Installare Meteor & Meteorite.|I 5 tipi di pacchetti Meteor.|Organizzare la struttura dei file della tua applicazione Meteor.
 paragraphs: 49
 ---
 
-////
+Le prime impressioni sono importanti, e l'installzione di Meteor dovrebbe essere indolore. Nella maggior parte dei casi, sarai operativo in meno di 5 minuti. 
 
-////
+Per cominciare, possiamo installare Meteor aprendo una finestra della riga di comando e scrivere:
 
 ~~~bash
 $ curl https://install.meteor.com | sh
 ~~~
 
-////
+Questo comando installerà l'eseguibile `meteor` nel tuo sistema e sarai pronto per usare Meteor.
 
 <% note do %>
 
-### *Not* Installing Meteor
+### *Non* Installare Meteor
 
-////
+Se non puoi (o non vuoi) installare Meteor localmente, ti suggeriamo di dare un'occhiata a [Nitrous.io](http://nitrous.io).
 
-////
+Nitrous.io è un servizio che ti permette di eseguire applicazioni e editare il loro codice direttamente dal tuo browser: abbiamo scritto una [breve guida](https://www.discovermeteor.com/2013/10/04/meteor-nitrous/) per aiutarti ad utilizzarlo. 
 
-////
+Puoi seguire la guida anche solo fino alla sezione "Installing Meteor & Meteorite" (inclusa), dopodiché tornare a seguire il libro ripartendo dalla sezione "Creare una semplice App" di questo capitolo. 
 
 <% end %>
  
 ### Meteorite
 
-////
+Dato che Meteor non supporta ancora pacchetti di terze parti nativamente, Tom Coleman (uno degli autori di questo libro) e alcuni membri della comunità hanno creato [Meteorite](http://oortcloud.github.com/meteorite/), un wrapper per Meteor. Meteorite si prende anche cura di installare Meteor per te collegandolo a qualsiasi pacchetto tu possa trovare.
 
-////
+Visto che ci appoggeremo a pacchetti di terze parti per alcune delle funzionalità di Microscope, installiamo Meteorite.
 
-### Installing Meteorite
+### Installare Meteorite
 
-////
+Dovrai assicurarti che node e git siano installati sulla tua macchina. Installali nel modo standard tipico del tuo SO, oppure prova questi link:
  
-- [Node download site](http://nodejs.org/download/)
-- [Git download site](http://git-scm.com/downloads)
+- [pagina da cui scaricare Node](http://nodejs.org/download/)
+- [pagina da cui scaricare Git](http://git-scm.com/downloads)
 
-////
+Dopodiché, installa Meteorite. Siccome è un eseguibile di [npm](https://npmjs.org/) (Node Packaged Module, formato standard dei moduli di Node), lo installiamo con in seguente comando:
 
 ~~~bash
 $ npm install -g meteorite
@@ -50,39 +50,39 @@ $ npm install -g meteorite
 
 <% note do %>
 
-### Permission errors?
+### Problemi con i Permessi?
 
-////
+Su alcune macchine potresti aver bisogno dei permessi di root per installare Meteorite. Per evitare problemi, assicurati di usare `sudo -H`:
 
 ~~~bash
 $ sudo -H npm install -g meteorite
 ~~~
 
-////
+Puoi leggere di più riguardo questo argomento nella [documentazione di Meteorite](https://github.com/oortcloud/meteorite/blob/master/README.md#permission-woes).
 
 <% end %>
 
-////
+Tutto qua! Da qui in poi Meteorite gestirà tutto.
 
-////
+Nota: al momento non c'è ancora supporto per Meteorite in Windows, ma puoi dare un'occhiata al nostro [tutorial per windows](http://themeteorbook.com/2013/03/20/using-meteor-and-atmopshere-on-windows/).
 
 <% note do %>
 
   ### `mrt` vs `meteor`
   
-////
+Meteorite installa l'eseguibile `mrt`, che useremo per installare pacchetti dentro la nostra applicazione. Quando invece vogliamo eseguire il nostro server, useremo l'eseguibile `meteor`.
   
 <% end %>
 
-### Creating a Simple App
+### Creare una semplice App
 
-////
+Ora che abbiamo installato Meteorite, creiamo una applicazione. Per farlo, utilizziamo il comando `mrt` di Meteorite da riga di comando:
 
 ~~~bash
 $ mrt create microscope
 ~~~
 
-////
+Questo comando scaricherà Meteor e imposterà per te un semplice e basilare progetto Meteor pronto all'uso. Quando ha terminato, dovresti vedere la cartella, `microscope/`, con all'interno quanto segue:
 
 ~~~bash
 microscope.css  
@@ -91,26 +91,26 @@ microscope.js
 smart.json 
 ~~~
 
-////
+L'applicazoine che Meteor ha creato per te è un semplice modello standard di applicazione che dimostra alcuni semplici schemi. 
 
-////
+Anche se la nostra applicazione non fa granché, possiamo lanciarla. Per eseguirla, torna al tuo terminale e digita:
 
 ~~~bash
 $ cd microscope
 $ meteor
 ~~~
 
-////
+Ora apri un browser e vai all'indirizzo `http://localhost:3000/` (o l'equivalente `http://0.0.0.0:3000/`) e dovresti vedere qualcosa come questo: 
 
 <%= screenshot "2-1", "Meteor's Hello World." %>
 
 <%= commit "2-1", "Created basic microscope project." %>
 
-////
+Congratulazioni! Hai eseguito la tua prima applicazione Meteor. A proposito, tutto quello che devi fare per fermarla è tornare alla finestra del terminale da dove l'hai lanciata e premere `ctrl+c`. 
 
-### Adding a Package
+### Aggiungere un Pacchetto
 
-////
+Ora useremo Meteorite per aggiungere un pacchetto smart che ci permetterà di includere [Bootstrap](http://getbootstrap.com/) nel nostro progetto:
 
 ~~~bash
 $ mrt add bootstrap
@@ -120,7 +120,7 @@ $ mrt add bootstrap
 
 <% note do %>
 
-### A Note on Packages
+### Una Considerazione sui Pacchetti
 
 ////
 
@@ -132,7 +132,7 @@ $ mrt add bootstrap
 
 <% end %>
 
-### The File Structure of a Meteor App
+### La Struttura dei File Structure di una Applicazione Meteor
 
 ////
 
@@ -153,7 +153,7 @@ $ mrt add bootstrap
 
 <% note do %>
 
-### Is Meteor MVC?
+### Meteor è un MVC?
 
 ////
 
@@ -161,7 +161,7 @@ $ mrt add bootstrap
 
 <% end %>
 
-### No public?
+### Nessuna cartella public?
 
 ////
 
@@ -179,7 +179,7 @@ $ mrt add bootstrap
 
 <% end %>
 
-### Taking Care of CSS
+### Prendersi Cura dei CSS
 
 ////
 
@@ -287,9 +287,9 @@ body {
 
 <% note do %>
 
-### A Note on CoffeeScript
+### Una Considerazione su CoffeeScript
 
-////
+All'interno di questo libro scriveremo codice in puro JavaScript. Ma se preferisci CoffeeScript, Meteor ha ciò che ti serve. Aggiungi semplicemente il pacchetto CoffeeScript e sarai pronto a partire:
 
 `mrt add coffeescript`
 
