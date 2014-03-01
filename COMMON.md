@@ -6,6 +6,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
 
 ### Words kept in English
+  * asset
   * browser
   * bug
   * callback
@@ -20,6 +21,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * root
   * router
   * server
+  * stylesheet
   * wrapper
 
 
@@ -29,6 +31,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **boilerplate** -> *modello standard*
  * **features** -> *funzionalità/caratteristiche*
  * **link(s)** -> *collegamento/collegamenti*
+ * **pattern** -> *schema*
  * **real-time** -> *tempo reale*
  * **web** -> *rete*
 

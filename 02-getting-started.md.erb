@@ -110,7 +110,7 @@ Congratulazioni! Hai eseguito la tua prima applicazione Meteor. A proposito, tut
 
 ### Aggiungere un Pacchetto
 
-Ora useremo Meteorite per aggiungere un pacchetto smart che ci permetterà di includere [Bootstrap](http://getbootstrap.com/) nel nostro progetto:
+Ora useremo Meteorite per aggiungere un pacchetto *smart* che ci permetterà di includere [Bootstrap](http://getbootstrap.com/) nel nostro progetto:
 
 ~~~bash
 $ mrt add bootstrap
@@ -122,17 +122,17 @@ $ mrt add bootstrap
 
 ### Una Considerazione sui Pacchetti
 
-////
+Quando si parla di pacchetti nel contesto di Meteor, è meglio essere precisi. Meteor utilizza cinque tipi base di pacchetti:
 
-- ////
-- ////
-- ////
-- ////
-- ////
+- Il nucleo stesso di Meteor è diviso in diversi **core packages**. Questi vengono inclusi in ogni applicazione Meteor, e non dovrai quasi mai preoccupartene.
+- Gli **smart packages** di Meteor sono un gruppo di [circa 37 pacchetti](http://docs.meteor.com/#packages) (puoi ottenere la lista completa con `meteor list`) che vengono forniti assieme a meteor Meteor e che puoi importare facoltativamente dentro la tua applicazione. Puoi aggiungerli anche se non usi Meteorite, usando il comando `meteor add nomepacchetto`. 
+- I **Local packages** (pacchetti locali) sono pacchetti personalizzati che puoi creare tu stesso e metterli nella cartella `/packages`. Per usarli non serve nemmeno Meteorite.
+- Gli **Atmosphere smart packages** sono pacchetti Meteor di terze parti la cui lista si trova su [Atmosphere](http://atmosphere.meteor.com). Per importali ed utilizzarli è necessario Meteorite. 
+- Gli **NPM packages** (Node Packaged Modules) sono pacchetti di Node.js. Nonostante non siano pacchetti pronti all'uso per Meteor, *possono* essere utilizzati dai precedenti tipi di pacchetti. 
 
 <% end %>
 
-### La Struttura dei File Structure di una Applicazione Meteor
+### La Struttura Dei File Di Una Applicazione Meteor
 
 ////
 
@@ -155,17 +155,17 @@ $ mrt add bootstrap
 
 ### Meteor è un MVC?
 
-////
+Se ti stai avvicinando a Meteor venendo da altri frameworks come Ruby on Rails, ti starai forse chiedendo se le applicazioni Meteor adottano lo schema MVC (Model View Controller). 
 
-////
+La risposta breve è no. Diversamente da Rails, Meteor non impone nessuna struttura predefinita alla tua applicazione. Qunidi in questo libro organizzeremo il codice nel modo che secondo noi ha più senso, senza preoccuparci più di tando degli acronimi.
 
 <% end %>
 
-### Nessuna cartella public?
+### Nessuna Cartella *public*?
 
-////
+OK, abbiamo mentito. Non ci serve la cartella `public/` per la semplice ragioneche Microscope non usa nessun asset statico! Ma visto che la maggior parte delle applicazioni Meteor includeranno al meno un paio di immagini, abbiamo pensato fosse importante parlare anche di questo. 
 
-////
+A proposito, potresti anche notare una cartella nascosta chiamata `.meteor`. Questo è il posto dove Meteor salva il proprio codice: modificare cose lì dentro è di solito una gran brutta idea. Infatti, in realtà non ti servirà mai guardare dentro questa cartella. L'unica eccezione è per i file `.meteor/packages` e `.meteor/release`, che sono utilizzati rispettivamente per elencare i tuoi smart packages e la versione in uso di Meteor. Quando aggiungi pacchetti o cambi versione di Meteor, può essere utile controllare le modifiche a questi file.
 
 <% note do %>
 
@@ -181,9 +181,9 @@ $ mrt add bootstrap
 
 ### Prendersi Cura dei CSS
 
-////
+Questo libro non tratta di CSS. Quindi per non rallentarti con dettagli relativi agli stili, abbiamo deciso di rendere disponibile fin da subito lo *stylesheet* completo, di modo che tu non debba più preoccupartene. 
 
-////
+I file CSS vengono caricati e minificati automaticamente da Meteor, quindi diversamente da altri *asset* statici vanno messi dentro `/client`, e non dentro `/public`. Continua e crea ora la cartella `client/stylesheets/` e metti al suo interno questo file `style.css`:
 
 ~~~css
 .grid-block, .main, .post, .comments li, .comment-form {
