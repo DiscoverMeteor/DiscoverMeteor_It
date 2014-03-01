@@ -6,9 +6,15 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
 
 ### Words kept in English
+  * bug
+  * callback
   * commit
+  * filesystem
+  * framework
+  * front-end
   * live
   * open-source
+  * refresh
   * repository
   * router
 
