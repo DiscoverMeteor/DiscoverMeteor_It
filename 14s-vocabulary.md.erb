@@ -4,7 +4,7 @@ slug: meteor-vocabulary
 date: 0014/01/02
 number: 14.5
 sidebar: true
-contents: Approfondimento della terminologia comune in Meteor. 
+contents: Approfondimento della terminologia più comune in Meteor. 
 paragraphs: 24
 ---
 
@@ -14,55 +14,55 @@ In questo libro leggerete alcune parole che potrebbero sembrarvi nuove, o almeno
 
 Quando parliamo di Client, ci riferiamo al codice eseguito nel *browser* dell'utente, sia che si tratti di un browser tradizionale come Firefox o Safari, o qualcosa di più complesso, come una UIWebView di un'applicazione nativa per iPhone.
 
-#### Collection
+#### Collezione
 
-In Meteor una Collection è un contenitore di dati che si sincronizzano automaticamente tra client e server. Le Collections hanno un nome (ad esempio 'articoli'), e in generale sono presenti sia sul client che sul server. Anche se si comportano in maniera differente, hanno un API comune basata sull'API di Mongo.
+In Meteor una collezione è un contenitore di dati che si sincronizzano automaticamente tra client e server. Le collezioni hanno un nome (ad esempio 'articoli'), e in generale sono presenti sia sul client che sul server. Anche se si comportano in maniera differente, hanno un API comune basata sull'API di Mongo.
 
-#### Computation
+#### Computazione
 
-A computation is a block of code that runs every time one of the reactive data sources that it depends on changes. If you have a reactive data source (for example, a Session variable) and would like to respond reactively to it, you'll need set up a computation for it. 
+Una computazione è un blocco di codice che viene eseguito ogni volta che una delle fonti di dati reattivi dalle quali dipende subisce un cambiamento. Se avete un sorgente di dati reattivi (ad esempio, una variabile di sessione), e volete rispondere in maniera reattiva, dove predisporre su di essa una computazione. 
 
-#### Cursor
+#### Cursore
 
-A cursor is the result of running a query on a Mongo collection. On the client side, a cursor isn't just an array of results, but a *reactive* object that can be observed as objects in the relevant collection are added, removed and updated.
+Un cursore è il risultato di effettuare una query su una collezione di Mongo. Lato client, un cursore non è solamente un'array di risultati, ma un oggetto *reattivo* che può essere rilevato quando vengono aggiunti, eliminati e modificati gli oggetti nella collezione.
  
 #### DDP
 
-DDP is Meteor's Distributed Data Protocol, the wire protocol used to synchronize collections and make Method calls. DDP is intended as a generic protocol, which takes the place of HTTP for realtime applications that are data heavy.
+DDP è il Protocollo di Dati Distribuiti di Meteor, il protocollo di rete usato per sincronizzare le collezioni ed eseguire chiamate ai metodi. DDP va inteso come un protocollo generico, che prende il posto dell'HTTP per applicazioni in tempo reale che fanno uso intensivo di dati.
 
 #### Deps
 
-Deps is Meteor's reactivity system. Deps is used behind the scenes to keep HTML automatically sync with the underlying data model.
+Deps è il sistema di reattività di Meteor. Deps è usato dietro le quinte per tenere l'HTML automaticamente sincronizzato con il sottostante modello di dati.
 
-#### Document
+#### Documento
 
-Mongo is a document-based data-store, so the objects that come out of collections are called "documents". They are plain JavaScript objects (although they can't contain functions) with a single special property, the `_id`, which Meteor uses to track their properties over DDP.
+Mongo è un database che si basa sui documenti, ogni oggetto che fa parte di una collezioni si chiama infatti "documento". Sono semplici oggetti Javascript (anche se non possono contenere funzioni) con una speciale proprietà, l'`_id`, che Meteor utilizza per tener traccia delle loro proprietà atraverso il protocollo DDP.
 
 #### Helpers
 
-When a template needs to render something more complex than a document property it can call a helper, a function that is used to aid rendering.
+Quando un template deve renderizzare qualcosa di più complesso della proprietà di un documento può chiamare un helper (aiutante), cioè una funzione che può aiutare nella renderizzazione.
 
-#### Latency Compensation
+#### Compensazione di Latenza
 
-Is a technique to allow simulation of Method calls on the client, to avoid lagginess while waiting for the server to respond.
+E' la tecnica che permette la simulazione delle chimate dei metodi lato client per evitare ritardi in attesa che il server risponda.
 
 #### Method
 
-A Meteor Method is a remote procedure call from the client to the server, with some special logic to keep track of collection changes and allow Latency Compensation.
+Un metodo di Meteor è le chiamata ad una procedura remota dal client al server, con un po' di logica speciale per tener traccia dei cambiamenti delle collezioni e permettere la compensazione di latenza.
 
 #### MiniMongo
 
-The client-side collection is an in-memory data store offering a Mongo-like API. The library that supports this behaviour is called "MiniMongo", to indicate it's a smaller version of Mongo that runs completely in memory.
+La collezione lato client è un archivio dati in memoria che offre un API simile a quella di Mongo. La libreria che permette questo comportamento si chiama "MinoMongo", per indicare che è una versione ridotta di Mongo che viene eseguita interamente in memoria.
 
-#### Package
+#### Pacchetti
 
-A Meteor package can consist of 
-  1. JavaScript code to run on the server.
-  2. JavaScript code to run on the client.
-  3. Instructions on how to process resources (such as SASS to CSS).
-  4. Resources to be processed.
+Un pacchetto di Meteor può essere
+  1. Codice Javascript eseguito sul server.
+  2. Codice Javascript eseguito sul client.
+  3. Istruzioni su come processare le risorse (come SASS in CSS).
+  4. Risorse che devono essere processate.
 
-A package is like a super-powered library. Meteor comes with an extensive set of core packages. There's also [Atmosphere](http://atmosphere.meteor.com), which is a collection of community supplied third party packages.
+Un pacchetto è come una libreria super potenziata. Meteor include già una larga serie di pacchetti di base. E' disponibile anche [Atmosphere](http://atmosphere.meteor.com), che è una raccolta di pacchetti di terze parti gestita dalla comunità.
 
 #### Pubblicazione
 
@@ -70,11 +70,11 @@ Una pubblicazione è un insieme di dati con un nome specifico, personalizzato pe
 
 #### Server
 
-The Meteor server is a HTTP and DDP server run via node.js. It consists of the all the Meteor libraries as well your server-side JavaScript code. When you start your Meteor server, it connects to a Mongo database (which it starts itself in development).
+Il server di Meteor è un server HTTP e DDP che funziona tramite node.js. Consiste in tutte le librerie di Meteor e nel vostro codice Javascript lato server. Quando avviate il server di Meteor, esso si connette a un database Mongo (che si auto avvia in fase di sviluppo).
 
 #### Sessione
 
-La Sessione in Meteor si riferisce alla fonte di dati reattivi presente sul client che l'applicazione utilizza per tenere traccia dell stato in cui si trova l'utente.
+La Sessione in Meteor si riferisce alla fonte di dati reattivi presente sul client che l'applicazione utilizza per tenere traccia dello stato in cui si trova l'utente.
 
 #### Sottoscrizione
 

@@ -134,22 +134,22 @@ Quando si parla di pacchetti nel contesto di Meteor, è meglio essere precisi. M
 
 ### La Struttura Dei File Di Una Applicazione Meteor
 
-////
+Prima di cominciare a scrivere codice, dobbiamo organizzare il nostro progetto in maniera adeguata. Per assicurarsi di avere una struttura pulita, aprite la cartella `microscope` e cancellate `microscope.html`, `microscope.js`, and `microscope.css`. 
 
-////
+Di seguito create cinque cartelle all'interno di `/microscope`: `/client`, `/server`, `/public`, `/lib`, e `/collections`, e create due file vuoti, `main.html` e `main.js`, all'interno di `/client`. Non vi preoccupate se questo rompe la vostra applicazione al momento, inizieremo a compilarli nel prossimo capitolo. 
 
-////
+E' necessatio notare che alcune di queste cartelle sono speciali. Quando di tratta di struttra dei file, Meteor ha alcune regole:
 
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
+- Codice nella cartella `/server` viene eseguito solo sul server.
+- Codice nella cartella `/client` viene eseguito solo sul client.
+- Tutto il resto viene eseguito sia sul client che sul server.
+- I file nella cartella `/lib` vengono caricati prima di ogni altra cosa.
+- I file `main.*` sono caricati dopo ogni altra cosa.
+- Le risorse statiche (font, immagini, ecc.) vanno messi nella cartella `/public`.
 
-////
+E' bene notare che anche se Meteor possiere queste regole, non vi forza in assoluto ad usare una struttura predefinita per la vostra applicazione se non ne avete intenzione. Perciò la struttura che vi suggeriamo è semplicemente il nostro modo di procedere, non una regola scolpita nella roccia.
 
-////
+Vi invitiamo a controllare la [documentazione ufficiale di Meteor](http://docs.meteor.com/#structuringyourapp) se volete maggiori dettagli su questo argomento.
 
 <% note do %>
 
@@ -163,7 +163,7 @@ La risposta breve è no. Diversamente da Rails, Meteor non impone nessuna strutt
 
 ### Nessuna Cartella *public*?
 
-OK, abbiamo mentito. Non ci serve la cartella `public/` per la semplice ragioneche Microscope non usa nessun asset statico! Ma visto che la maggior parte delle applicazioni Meteor includeranno al meno un paio di immagini, abbiamo pensato fosse importante parlare anche di questo. 
+OK, abbiamo mentito. Non ci serve la cartella `public/` per la semplice ragione che Microscope non usa nessun asset statico! Ma visto che la maggior parte delle applicazioni Meteor includeranno almeno un paio di immagini, abbiamo pensato fosse importante parlare anche di questo. 
 
 A proposito, potresti anche notare una cartella nascosta chiamata `.meteor`. Questo è il posto dove Meteor salva il proprio codice: modificare cose lì dentro è di solito una gran brutta idea. Infatti, in realtà non ti servirà mai guardare dentro questa cartella. L'unica eccezione è per i file `.meteor/packages` e `.meteor/release`, che sono utilizzati rispettivamente per elencare i tuoi smart packages e la versione in uso di Meteor. Quando aggiungi pacchetti o cambi versione di Meteor, può essere utile controllare le modifiche a questi file.
 
@@ -171,11 +171,11 @@ A proposito, potresti anche notare una cartella nascosta chiamata `.meteor`. Que
 
 ### Underscores vs CamelCase
 
-////
+L'unica cosa che possiamo dire a proposito dell'ormai storico dibattito tra underscore (`my_variable`) e camelCase (`myVariable`) è che non è importante quale modalità si scelga, l'importante è che una volta scelta la vostra preferita vi atteniate a pieno ad essa.
 
-////
+In questo libro utilizziamo il camelCase perchè è lo standard per quanto riguarda JavaScript (dopotutto si chiama JavaScript, non java_script!).
 
-////
+Le uniche eccezioni a questa regola sono i nomi dei file, che utilizzeranno gli underscore (`my_file.js`), e i le classi CSS, che useranno il trattino (`.my-class`). Il motivo di queste scelte è che nel filesystem gli underscore sono utilizzati frequentemente, mentre la sintassi CSS utilizza già i trattini (`font-family`, `text-align`, ecc.).
 
 <% end %>
 
