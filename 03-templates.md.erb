@@ -3,15 +3,15 @@ title: Templates
 slug: templates
 date: 0003/01/01
 number: 3
-contents: Learn about Meteor's templating language, Handlebars.|Create your first three templates.|Learn how Meteor managers work.|Get a basic prototype working with static data.
+contents: Impari a utilizzare il linguaggio di templating di Meteor, Handlebars.|Crea i tuoi primi 3 template.|Impari come funzionano i manager in Meteor.|Ottieni un prototipo di base utilizzando dati statici.
 paragraphs: 46
 ---
 
-////
+Per rendere semplice l'apprendimento dello sviluppo in Meteor, adotteremo un approccio dall'esterno. In altre parole realizzeremo prima una semplice stuttura in HTML/JavaScript e la integreremo con le funzionalità dell'applicazione solo in un secondo momento. 
 
-////
+Ciò siginifica che in questo capitolo ci preoccuperemo solamente di ciò che accade all'interno della cartella `/client`.
 
-////
+Let's create a new file named `main.html` inside our `/client` directory, and fill it with the following code: 
 
 ~~~html
 <head>
@@ -32,25 +32,25 @@ paragraphs: 46
 ~~~
 <%= caption "client/main.html" %>
 
-////
+Questo sarà il template principale della nostra applicazione. Come potete notare si tratta di semplice HTML ad eccezione del tag `{{> postsList}}`, che rappresenta il punto di inserimento del template `postsList` che vedremo a breve.Per ora creiamo altri 2 template.
 
-### Meteor Templates
+### Template in Meteor
 
-////
+Alla base, un sito di notizie social è composto di post organizzati in liste, e questo è esattamente il modo in cui andremo ad organizzare i nostri template.
 
-////
+Creiamo un cartella `/views` all'interno della cartella `/client`. In questa cartella andremo a posizionare tutti i nostri template e per mantenere la struttura ordinata creiamo una cartella `/posts` all'interno di `/views` solo per i template relativi ai post.
 
 <% note do %>
 
-### Finding Files
+### Come trovare i file
 
-////
+Meteor è grandioso a trovare i file. Non importa dove e come mettiate il codice all'interno della cartella `/client`, Meteor lo troverà e lo compilerà correttamente. Questo significa che non dovrete mai inserire manualmente i riferimenti ai file JavaScript e CSS.
 
-////
+Questo significa anche che potete inserire tutti i vostri file nella stessa cartella, o anche tutto il vostro codice in un solo file, ma visto che Meteor compilerà tutto in un singolo file minificato, è meglio che teniamo tutto ben organizzato in una struttura file ordinata.
 
 <% end %>
 
-////
+Creiamo finalmente il nostro secondo template. Dentro `client/views/posts`, create `posts_list.html`:
 
 ~~~html
 <template name="postsList">
@@ -63,7 +63,7 @@ paragraphs: 46
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-////
+E `post_item.html`: 
 
 ~~~html
 <template name="postItem">
@@ -76,15 +76,15 @@ paragraphs: 46
 ~~~
 <%= caption "client/views/posts/post_item.html" %>
 
-////
+Notate l'attributo `name="postsList"` dell'elemento template. Questo è il nome che viene utilizzato da Meteor per tenere traccia di dove vanno inseriti i vari template.
 
-////
+E' il momento di introdurre il sistema di template di Meteor, [Handlebars](http://handlebarsjs.com). Handlebars è semplice HTML, con l'aggiunta di tre particolarità: *parziali*, *espressioni* and *blocchi di controllo*.
 
-////
+I *parziali* usano la sintassi `{{> templateName}}`, e dicono semplicemente a Meteor di sostituire il parziale con il template con lo stesso nome (nel nostro caso `postItem`).
 
-////
+Le *espressioni* come `{{title}}` possono richiamare sia una proprietà dell'oggetto attuale, o il valore restituiro da un helper del template come definito nel manager del template attuale (parleremo meglio più avanti di questo).
 
-////
+Infine, i *blocchi di controllo* sono tag speciali che controllano il flusso del template come `{{#each}}…{{/each}}` o `{{#if}}…{{/if}}`.
 
 <% note do %>
 
