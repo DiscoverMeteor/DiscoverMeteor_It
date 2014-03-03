@@ -88,29 +88,29 @@ Infine, i *blocchi di controllo* sono tag speciali che controllano il flusso del
 
 <% note do %>
 
-### Going Further
+### Più informazioni
 
-////
+Potete far riferimento al [sito ufficiale di Handlebars](http://handlebarsjs.com) o [questo comodo tutorial](http://javascriptissexy.com/handlebars-js-tutorial-learn-everything-about-handlebars-js-javascript-templating/) se volete imparare di più su Handlebars. 
 
 <% end %>
 
-////
+Armati di queste nuove conoscenze, possiamo facilmente capire cosa sta succedendo.
 
-////
+Come prima cosa nel template `postsList`, stiamo iterando su un oggetto `posts` grazie al blocco di controllo `{{#each}}…{{/each}}`. Successivamente, per ogni iterazione, includiamo il template `postItem`. 
 
-////
+Da dove arriva questo oggetto `posts`? Buona domanda. Si tratta di un helper di template che definiremo più avanti quando di occuperemo dei manager di template. 
 
-////
+Il template `postItem` è abbastanza lineare. Usa solo tre espressioni: `{{url}}` e `{{title}}` ritornano le proprietà del documento, mentre `{{domain}}` chiama un helper del template. 
 
-////
+Abbiamo nominato molte volte gli "helper del template" in questo capitolo senza in realtà spiegare come funzionano. Prima di poter riparare a questa mancanza dobbiamo parlare dei manager.
 
-### Template Managers
+### Manager dei Template
 
-////
+Fino ad ora abbiamo lavaorato con Handlebars, che non è altro che puro HTML con l'aggiunta di qualche tag speciale. Contrariamente ad altri linguaggi come PHP (o anche normali pagine HTML, che possono includere JavaScript), Meteor tiene i template e la logica separati, e i template da soli non sono sufficienti.
 
-////
+Per prendere vita, un template ha bisogno di un **manager**. Potete immaginare un manager come uno chef che prende ingredienti grezzi (i vostri dati) e li prepara, prima di consegnare il piatto pronto al cameriere (il template) che ve lo presenta una volta pronto.
 
-////
+In altre parolo, mentre il ruolo del template è limitato al mostrare o iterare su delle variabili, il manager è colui che si occupa del lavoro duro, assegnando un valore ad ogni variabile.
 
 <% note do %>
 
