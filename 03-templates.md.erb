@@ -11,7 +11,7 @@ Per rendere semplice l'apprendimento dello sviluppo in Meteor, adotteremo un app
 
 Ciò significa che in questo capitolo ci preoccuperemo solamente di ciò che accade all'interno della cartella `/client`.
 
-Let's create a new file named `main.html` inside our `/client` directory, and fill it with the following code: 
+Creiamo un nuovo file chiamato `main.html` all'interno della cartella `/client` e inseriamoci il seguente codice: 
 
 ~~~html
 <head>
@@ -196,36 +196,36 @@ Questa volta il valore del nostro helper `domain` non è un array, ma una funzio
 
 <%= screenshot "3-2", "Visualizzazione del dominio di ogni link." %>
 
-////
+L'helper `domain` riceve uno URL e ne restituisce il dominio tramite un po' di magia in JavaScript. Ma da dove proviene questo URL?
 
-////
+Per rispondere a questa domanda dobbiamo tornare al nostro template `posts_list.html`. Il blocco di controllo `{{#each}}` non solo itera sul nostro array ma **definisce il valore di `this` sull'oggetto iterato all'interno del blocco**.
 
-////
+Questo significa che all'interno dei tag `{{#each}}`, ogni post è assegnato al valore di `this` ad ogni iterazione, e si estende automaticamente all'interno del manager del template incluso (`post_item.js`).
 
-////
+Ora possiamo capire perchè `this.url` restituisce l'URL dell'attuale post. E inoltre, se usiamo `{{title}}` e `{{url}}` all'interno del nostro template `post_item.html`, Meteor sa che si tratta in realtà di `this.title` e `this.url` e ci restituisce i valori corretti.
 
 <% note do %>
 
 ### JavaScript Magic
 
-////
+Sebbene non sia proprio di Meteor, di seguito trovate una veloce spiegazione del precedente pizzico di "magia JavaScript". Come prima cosa, creiamo un elemento HTML vuoto, (`a`), e lo teniamo in memoria.
 
-////
+Definiamo poi il valore del suo attributo `href` tramite il valore dell'URL del post attuale (come abbiamo appena visto, in un helper `this` è l'oggetto sul quale stiamo al momento operando).
 
-////
+Infine sfruttiamo la proprietà speciale dell'elemento `a`, `hostname`, per recuperare il nome del dominio del link senza il resto dell'URL. 
 
 <% end %>
 
-////
+Se avete seguito i passaggi correttamente, dovreste vedere una lista di post nel vostrp browser. Questa lista è formata solo da dati statici, perciò non si avvale ancora delle caratteristiche in tempo reale di Meteor. Vi mostreremo come modificare questa 'mancanza' nel prossimo capitolo!
 
 <% note do %>
 
-### Hot Code Reload
+### Ricaricamento del codice
 
-////
+Vi siete forse accorti che non dovete nemmeno ricaricare il vostro browser ogni volta che modificate un file.
 
-////
+Questo avviene perchè Meteor traccia tutti i file all'interno della cartella del progetto e ricarica automaticamente il browser ogni volta che si accorge di una modifica in uno qualsiasi di essi.
 
-////
+Il ricaricamento del codice di Meteor è piuttosto intelligente, infatti mantiene lo stato della vostra applicazione anche nel mezzo di due ricaricamenti!
 
 <% end %>
