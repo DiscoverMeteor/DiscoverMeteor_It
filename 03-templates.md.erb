@@ -9,7 +9,7 @@ paragraphs: 46
 
 Per rendere semplice l'apprendimento dello sviluppo in Meteor, adotteremo un approccio dall'esterno. In altre parole realizzeremo prima una semplice stuttura in HTML/JavaScript e la integreremo con le funzionalità dell'applicazione solo in un secondo momento. 
 
-Ciò siginifica che in questo capitolo ci preoccuperemo solamente di ciò che accade all'interno della cartella `/client`.
+Ciò significa che in questo capitolo ci preoccuperemo solamente di ciò che accade all'interno della cartella `/client`.
 
 Let's create a new file named `main.html` inside our `/client` directory, and fill it with the following code: 
 
@@ -110,21 +110,21 @@ Fino ad ora abbiamo lavaorato con Handlebars, che non è altro che puro HTML con
 
 Per prendere vita, un template ha bisogno di un **manager**. Potete immaginare un manager come uno chef che prende ingredienti grezzi (i vostri dati) e li prepara, prima di consegnare il piatto pronto al cameriere (il template) che ve lo presenta una volta pronto.
 
-In altre parolo, mentre il ruolo del template è limitato al mostrare o iterare su delle variabili, il manager è colui che si occupa del lavoro duro, assegnando un valore ad ogni variabile.
+In altre parole, mentre il ruolo del template è limitato al mostrare o iterare su delle variabili, il manager è colui che si occupa del lavoro duro, assegnando un valore ad ogni variabile.
 
 <% note do %>
 
-### Managers?
+### Manager?
 
-////
+Quando abbiamo chiesto ad altri sviluppatori Meteor come avrebbero chiamato i manager di template, metà ha risposto "controller", e metà "quei file dove metto il mio codice JavaScript".
 
-////
+I manager non sono esattamente controller (per lo meno non nel senso di controller MVC) a "QFDMIMCJ" non è certo un acronimo accattivante così abbiamo accantonato entrambe le proposte.
 
-////
+Dato che avevamo comunque bisogno di indicare in modo comprensibile ciò di cui stavamo parlando, abbiamo optato per il chiamarli "manager", termine che non ha nessun particolare significato all'interno di altri framework web e quindi più comodo per rappresentare qualcosa di nuovo.
 
 <% end %>
 
-////
+Per mantenere una certa semplicità, useremo la convenzione di nominare i manager in base al template, con la differenza di avere l'estensione **.js**. Creiamo quindi `posts_list.js` all'interno di `/client/views/posts` e iniziamo a scrivere il nostro primo manager:
 
 ~~~js
 var postsData = [
@@ -150,17 +150,17 @@ Template.postsList.helpers({
 ~~~
 <%= caption "client/views/posts/posts_list.js" %>
 
-////
+Se avete fatto correttamente, dovreste vedere qualcosa di simile nel vostro browser:
 
-<%= screenshot "3-1", "Our first templates with static data" %>
+<%= screenshot "3-1", "Il nostro primo template con dati statici" %>
 
-<%= commit "3-1", "Added basic posts list template and static data." %>
+<%= commit "3-1", "Aggiunto template di base della lista dei post e alcuni dati statici." %>
 
-////
+In questo codice stiamo facendo 2 cose. Come prima cosa stiamo costruendo un semplice prototipo di dati nell'array `postsData`. Questi dati normalmente verrebbero dal database ma dal momento che non abbiamo ancora visto come fare (lo faremo nel prossimo capitolo) stiamo "bluffando" utilizzando dei dati statici.
 
-////
+In secondo luogo, stiamo utilizzando la funzione di Meteor `Template.myTemplate.helpers()` per definire un helper del template chiamato `posts` che semplicemente ci restituisce l'array `postsData`.
 
-////
+Defindendo l'helper `posts`, lo rendiamo disponibile al nostro template:
 
 ~~~html
 <template name="postsList">
@@ -173,11 +173,11 @@ Template.postsList.helpers({
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-////
+In questo modo, il template potrà iterare sull'array `postsData` ed inviare ogni oggetto contenuto al suo interno al template `postItem`.
 
-### The Value of "this"
+### Il valore di "this"
 
-////
+Creiamo ora il manager `post_item.js`:
 
 ~~~js
 Template.postItem.helpers({
@@ -190,11 +190,11 @@ Template.postItem.helpers({
 ~~~
 <%= caption "client/views/posts/post_item.js" %>
 
-<%= commit "3-2", "Setup a `domain` helper on the `postItem`." %>
+<%= commit "3-2", "Si definisce un helper `domain` nel template `postItem`." %>
 
-////
+Questa volta il valore del nostro helper `domain` non è un array, ma una funzione anonima. Questo pattern è molto più diffuso (e utile) se paragonato al nostro precedente esempio con semplici dati statici.
 
-<%= screenshot "3-2", "Displaying domains for each links." %>
+<%= screenshot "3-2", "Visualizzazione del dominio di ogni link." %>
 
 ////
 
