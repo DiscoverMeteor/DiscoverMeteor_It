@@ -136,18 +136,18 @@ Quando si parla di pacchetti nel contesto di Meteor, è meglio essere precisi. M
 
 Prima di cominciare a scrivere codice, dobbiamo organizzare il nostro progetto in maniera adeguata. Per assicurarsi di avere una struttura pulita, aprite la cartella `microscope` e cancellate `microscope.html`, `microscope.js`, e `microscope.css`. 
 
-Di seguito create cinque cartelle all'interno di `/microscope`: `/client`, `/server`, `/public`, `/lib`, e `/collections`, e create due file vuoti, `main.html` e `main.js`, all'interno di `/client`. Non vi preoccupate se questo rompe la vostra applicazione al momento, inizieremo a compilarli nel prossimo capitolo. 
+Di seguito create cinque cartelle all'interno di `/microscope`: `/client`, `/server`, `/public`, `/lib`, e `/collections`, e create due file vuoti, `main.html` e `main.js`, all'interno di `/client`. Non preoccupatevi se questo compromette temporaneamente la vostra applicazione, inizieremo a scriverli nel prossimo capitolo. 
 
 E' necessario notare che alcune di queste cartelle sono speciali. Quando si tratta di struttra dei file, Meteor ha alcune regole:
 
-- Codice nella cartella `/server` viene eseguito solo sul server.
-- Codice nella cartella `/client` viene eseguito solo sul client.
+- Il codice nella cartella `/server` viene eseguito solo sul server.
+- Il codice nella cartella `/client` viene eseguito solo sul client.
 - Tutto il resto viene eseguito sia sul client che sul server.
 - I file nella cartella `/lib` vengono caricati prima di ogni altra cosa.
 - I file `main.*` sono caricati dopo ogni altra cosa.
-- Le risorse statiche (font, immagini, ecc.) vanno messi nella cartella `/public`.
+- Le risorse statiche (font, immagini, ecc.) vanno messe nella cartella `/public`.
 
-E' bene notare che anche se Meteor possiere queste regole, non vi forza in assoluto ad usare una struttura predefinita per la vostra applicazione se non ne avete intenzione. Perciò la struttura che vi suggeriamo è semplicemente il nostro modo di procedere, non una regola scolpita nella roccia.
+E' bene notare che, anche se Meteor ha queste regole, non vi obbliga ad usare una struttura predefinita per la vostra applicazione se non ne avete intenzione. Perciò la struttura che vi suggeriamo è semplicemente il nostro modo di procedere, non una regola scolpita nella roccia.
 
 Vi invitiamo a controllare la [documentazione ufficiale di Meteor](http://docs.meteor.com/#structuringyourapp) se volete maggiori dettagli su questo argomento.
 
