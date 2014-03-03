@@ -3,23 +3,23 @@ title: Collections
 slug: collections
 date: 0004/01/01
 number: 4
-contents: Learn about Meteor's core feature, realtime collections.|Understand how Meteor's data synchronization works.|Integrate collections with our templates.|Turn our basic prototype into a functioning realtime application!
+contents: Principali funzinalità del nucleo di Meteor, collezioni in tempo reale.| Comprendere come funziona la sincronizzazine dei dati in Meteor.|Integrare collezioni con i nostri template.|Trasformare il nostro prototipo in un'applicazione realtime funzionante!
 paragraphs: 72
 ---
 
-////
+Nel capitolo uno, abbiamo parlato della caratteristica principale di Meteor: la sincronizzazione automatica dei dati tra client e server.
 
-////
+In questo capitolo, analizzeremo più nel dettaglio questo meccanismo, osservando il funzionamento della tecnologia chiave che lo permette: la collezione (`collection`) di Meteor.
 
-////
+Stiamo costruendo un'applicazione di nodizie social, e la prima cosa che vogliamo fare è creare una lista di link che le persone hanno inserito. Chiameremo "post" ognuno di questi oggetti.
 
-////
+Naturalmente, dovremo salvare questi posta da qualche parte. Meteor installa anche Mongo che viene eseguito sul vostro server e funge da base di dati *persistente*.
 
-////
+Dunque, anche se il browser dell'utente può contenere alcune informazioni di stato (ad esempio la pagina corrente, o il commento che stà scrivendo in quel momento), il server, e più precisamente Mongo, contiene la sorgente di dati permanente canonica. *Canonica* significa che è la stessa per tutti gli utenti: ogni utente può essere su di una pagina diversa, ma la lista originale dei post è la stessa per tutti.
 
-////
+Questi dati sono salvati in Meteor all'interno di una **Collezione**. Una collezione è una struttura dati speciale che, per mezzo di pubblicazioni e sottoscrizioni, si prende cura della sincronizzazione tempo reale dei dati tra il database Mongo e ogni browser degli utenti connessi, in entrambe le direzioni. Vediamo come.
 
-////
+Vogliamo che i post siano permanenti e condivisi tra gli utenti, inizieremo quindi creando una collezione chiamata `Posts` dentro cui salvarli. Se non lo avete ancora fatto, create la cartella `collections/` dentro la cartella principale della vostra applicazione, e dentro essa il file `posts.js`. Quindi aggiungete:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
