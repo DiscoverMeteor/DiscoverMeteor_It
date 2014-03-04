@@ -3,65 +3,65 @@ title: Routing
 slug: routing
 date: 0005/01/01
 number: 5
-contents: Learn about routing in Meteor.|Create post discussion pages, with unique URLs.|Learn how to link to those URLs properly.
+contents: Il routing in Meteor.|Creazione di pagine di discussione dei post, con URL unici.|Come linkare correttamente questi URL.
 paragraphs: 72
 ---
 
-////
+Ora che abbiamo una lista di post (che nella versione finale saranno inseriti dagli utenti), abbiamo bisogno di una pagina specifica per ogni post dove gli utetni possono discutere del singolo post.
 
-////
+Sarebbe bene rendere queste pagine accessibili tramite *permalink*, un URL nella forma `http://myapp.com/posts/xyz` (dove `xyz` è un identificatore `_id` di MongoDB)
 
-////
+Dunque abbiamo bisogno di un meccanismo di indirizzamento detto *routing* per leggere la barra dell'URL del browser e mostrare il contenuto corrispondente.
 
-### Adding the Iron Router Package
+### Aggiungere il pacchetto Iron Router
 
-////
+[Iron Router](https://github.com/EventedMind/iron-router) è un pacchetto di gestione routing progettato appositamente per le applicazioni Meteor.
 
-////
+Non è utile solo per il routing (impostare il percorso), ma può gestire i filtri (assegnando azioni ad alcuni di questi persorsi) ed anche gestire le sottoscrizioni (controllare quale percorso ha accesso a quali dati). (Nota: Iron Router è sviluppato in parte da Tom Coleman, co-autore di *Discover Meteor*.)
 
-////
+Per prima cosa installiamo il package da Atmosphere:
 
 ~~~bash
 $ mrt add iron-router
 ~~~
 <%= caption "Terminal" %>
 
-////
+Questo comando scarica ed installa il pacchetto iron-router nell'applicazione, pronto all'uso. Potrebbe essere necessario rilanciare l'applicazione Meteor (con `ctrl+c` per terminare il processo e poi `mrt` per riavviarlo) prima che un pacchetto sia utilizzabile.
 
-////
+Si noti che Iron Router è un pacchetto di terze parti, quindi serve Meteorite per installarlo (`meteor add iron-router` non funziona).
 
 <% note do %>
 
-### Router Vocabulary
+### Vocabolario Router
 
-////
+In questo capitolo vedremo molte caratteristiche del router. Se hai già esperienza con un framework tipo Rails, hai già familiarità con la maggior parte di questi concetti. Se no, ecco un veloce glossario per farti imparare rapidamente:
 
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
+- **Routes**: Una route è il mattone base del routing. E' il set di istruzioni che dicono all'applicazione dove andare e cosa fare quando incontra un URL.
+- **Paths**: Un path è un URL all'interno dell'applicazione. Può essere statico (`/terms_of_service`) o dinamico (`/posts/xyz`), e può anche includere parametri di ricerca (`/search?keyword=meteor`).
+- **Segments**: Le diverse parti di un path, delimitato da slashes (`/`).
+- **Hooks**: Le hooks sono le azioni che desideri fare prima, dopo, o anche durante il processo di routing. Un esempio tipico è il controllo dei diritti di accesso dell'utente prima di mostrare una determinata pagina.
+- **Filters**: I filtri sono semplicemente hook definiti globalmente per una o più route.
+- **Route Templates**: Ogni route deve puntare ad un template. Se non ne specifichi uno, il router cercherà un template con lo stesso nome della route.
+- **Layouts**: Puoi immaginare i layouts come una di quelle cornici digitali. Contengono tutto il codice HTML che avvolge l'attuale template, e rimarrà invariato anche se il template cambia.
+- **Controllers**: A volte potresti renderti conto che molti dei tuoi template riutilizzano gli stessi parametri. Piuttosto che duplicare il codice, puoi ereditare queste route da un unic *routing controller* che contiene tutta la logica di routing.
 
-////
+Per altre informazioni su Iron Router, consulta [la documentazione comlpeta su GitHub](https://github.com/EventedMind/iron-router).
 
 <% end %>
 
-### Routing: Mapping URLs To Templates
+### Routing: Mappare le URL sui Template
 
-////
+Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto. 
 
-////
+Iron Router permette di superare questa staticità prendendo il controllo di ciò che viene mostrato nel tag HTML <body>. Non definiremo noi il contenuto di questo tag, come faremmo con una normale pagina HTML. Faremo invece puntare il router ad uno speciale template di struttura che contiene un helper `{{yield}}`.
 
-////
+Questo helper `{{yield}}` definirà un'area dinamica speciale che mostrerà automaticamente il template corrispondente all'attuale route (per convenzione chiameremo questo template speciale "route template" d'ora in poi):
 
 <%= diagram "router-diagram", "Layouts and templates.", "pull-center" %>
 
-////
+Iniziamo creando lo schema di pagina e aggiungendo l'helper `{{yield}}`. Per prima cosa eliminiamo il tag <body> da `main.html` e ne spostiamo il contenuto in un template `layout.html`.
 
-////
+Quindi il nostro `main.html` modificato appare così:
 
 ~~~html
 <head>
@@ -70,7 +70,7 @@ $ mrt add iron-router
 ~~~
 <%= caption "client/main.html" %>
 
-////
+Il nuovo file `layout.html` conterrà invece lo schema generale di pagina:
 
 ~~~html
 <template name="layout">
@@ -88,9 +88,9 @@ $ mrt add iron-router
 ~~~
 <%= caption "client/views/application/layout.html" %>
 
-////
+Come puoi notare abbiamo sostituito l'inclusione del template `postsList` con una chiamata all'helper `yield`. Dopo questa modifica a video non apparirà più nulla. Succede perché non abbiamo detto al router cosa mostrare con l'URL `/` e quindi mostra semplicemente un template vuoto.
 
-////
+Per iniziare possiamo tornare alla situazione di prima mappando l'URL radice `/` sul template `postsList`. Creeremo una cartella `/lib` nella radice del nostro progetto ed all'interno il file `router.js` :
 
 ~~~js
 Router.configure({
@@ -103,15 +103,15 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js"%>
 
-////
+Abbiamo appena fatto due cose importanti. Primo, abbiamo detto al router di usare l'impaginazione appena creata come default per tutte le route. Secondo, abbiamo definito una una nuova route chiamata `postsList` e mappata sul path `/`.
 
 <% note do %>
 
-### The `/lib` folder
+### La cartella `/lib`
 
-////
+Tutto ciò che metti dentro la cartella `/lib` è garantito che sarà caricato prima di qualsiasi altra cosa nell'applicazione (con la sola potenziale eccezione dei pacchetti smart). E' quindi il posto migliore dove mettere il codice degli helper che deve essere disponibile sempre.
 
-////
+Una piccola avvertenza: poichè la cartella `/lib` non si trova ne dentro `/client` ne dentro `/server` il suo contenuto sarà visibile in entrambi gli ambienti.
 
 <% end %>
 
