@@ -9,11 +9,14 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * asset
   * browser
   * bug
+  * cache
   * callback
+  * client
   * commit
   * filesystem
   * framework
   * front-end
+  * handlebars (as all library names)
   * live
   * open-source
   * refresh
@@ -29,10 +32,15 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
  * **app** -> *applicazione*
  * **boilerplate** -> *modello standard*
+ * **collection** -> *collezione*
  * **features** -> *funzionalità/caratteristiche*
+ * **helper** -> *supporto* depending on the context
  * **link(s)** -> *collegamento/collegamenti*
+ * **package** -> *pacchetto*
  * **pattern** -> *schema*
+ * **publication** -> *pubblicazione*
  * **real-time** -> *tempo reale*
+ * **subscriptioin** -> *sottoscrizione*
  * **web** -> *rete*
 
 
