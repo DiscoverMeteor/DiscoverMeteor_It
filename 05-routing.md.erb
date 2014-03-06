@@ -117,11 +117,11 @@ Una piccola avvertenza: poichè la cartella `/lib` non si trova né dentro `/cli
 
 ### Nomi delle Route
 
-Chiariamo una aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `postsList`, ma abbiamo anche un *template* chiamato `postsList`. Dunque che significa?
+Chiariamo un aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `postsList`, ma abbiamo anche un *template* chiamato `postsList`. Dunque che significa?
 
 L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. Difatti cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`. 
 
-Postresti chiederti perché abbiamo bisogno di dare un nome alla route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
+Postresti chiederti perché abbiamo bisogno di dare un nome alle route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
 
 Noi vogliamo che il link alla home principale punti alla lista di post, e quindi invece di indicare una URL statica `/`, possiamo usare l'helper di Handlebars. Il risultato finale sarà lo stesso, ma avremo maggiore flessibilità visto che l'helper fornirà sempre l'URL corretta anche se cambiassimo il path della route nel router.
 
@@ -200,9 +200,9 @@ Per ora diciamo che è esattamente ciò che la reattività ci permette di fare, 
 
 Adesso che abbiamo visto come mostrare il template `postsList`, creiamo una route per mostrare i dettagli di un singolo post.
 
-C'è solo una difficoltà: non possiamo pensare di creare una route per ogni post visto che potrebbero essercene centinaia. Quindi dobbiamo creare una sola route *dinamica*, e far sì che mostri qualsiasi post desideriamo.
+C'è solo una difficoltà: non possiamo pensare di creare una route per ogni post visto che potrebbero essercene centinaia. Quindi creiamo una sola route ma di tipo *dinamico*, e facciamo in modo che mostri qualsiasi post desideriamo.
 
-Per iniziare creiamo un nuovo template che semplicemente mostra lo stesso template di post che abbiamo usato prima nella lista di post.
+Per iniziare creiamo un nuovo template che semplicemente mostra lo stesso template di post che abbiamo usato prima nella lista dei post.
 
 ~~~html
 <template name="postPage">
@@ -234,7 +234,7 @@ Nota che stiamo usando `_id` solo per chiarezza. Il router non ha modo di sapere
 
 A questo punto stiamo instradando al template corretto, ma ci manca ancora qualcosa: il router conosce l'`_id` del post che vogliamo mostrare, ma il template no. Come risolviamo?
 
-Fortunatamente il router ha una soluzione intelligente già integrata: permette di specificare il **contesto dati** del template. Puoi immaginare il contesto dati come la farcitura di una torta fatta di template e schema generale della pagina. Messa in maniera semplice è ciò con cui riempiamo il template:
+Fortunatamente il router ha una soluzione intelligente già integrata: permette di specificare il **contesto dati** (data context) del template. Puoi immaginare il contesto dati come la farcitura di una torta fatta di template e layout della pagina. Messa in maniera semplice è ciò con cui riempiamo il template:
 
 <%= diagram "router-diagram-2", "The data context.", "pull-center" %>
 
@@ -260,11 +260,11 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 
 <% note do %>
 
-### More About Data Contexts
+### Approfondiamo i Contesti Dati
 
-////
+Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpes all'interno del template. 
 
-////
+Normalmente lo si imposta implicitamente con l'iteratore `{{each}}`, che imposta automaticamente il contesto dati all'elemento su cui stiamo iterando:
 
 ~~~html
 {{#each widgets}}
@@ -272,7 +272,7 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 {{/each}}
 ~~~
 
-////
+Ma possiamo anche impostarlo esplicitamente usando `{{with}}`, che dice semplicemente: "considera questo oggetto e applicalo al seguente template". Ad esempio possiamo scrivere:
 
 ~~~html
 {{#with myWidget}}
@@ -280,7 +280,7 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 {{/with}}
 ~~~
 
-////
+Si può ottenere lo stesso risultato passando il contesto come *argomento* nell'invocazione del template. In questo caso il precedente codice può essere riscritto così:
 
 ~~~js
 {{> widgetPage myWidget}}
@@ -288,11 +288,11 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 
 <% end %>
 
-### Using a Dynamic Named Route Helper
+### Utilizzare un Route Helper con Nome Dinamico
 
-////
+Per concludere dobbiamo essere certi di puntare al giusto percorso ogni volta che desideriamo linkare un singolo post. Potremmo scrivere qualcosa del tipo `<a href="/posts/{{_id}}">`, ma usare un route helper è più affidabile.
 
-////
+Abbiamo chiamato la route del singolo post `postPage`, quindi possiamo utilizzare un helper `{{pathFor 'postPage'}}`:
 
 ~~~html
 <template name="postItem">
@@ -308,15 +308,15 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 <%= highlight "6" %>
 <%= commit "5-3", "Routing to a single post page." %>
 
-////
+Ma, un attimo! Come fa esattamente il router a sapere dove prendere la parte `xyz` in `/posts/xyz`? In fondo non stiamo passando nessun `_id`.
 
-////
+Scopriamo che Iron Router è sufficientemente intelligente da capirlo da solo. Infatti stiamo dicendo al router di usare la route `postPage`, ed il router sa già che questa route richiede un `_id` di qualche tipo (in quanto è così che abbiamo definito il `path`).
 
-////
+Quindi il router cercherà questo `_id` nel posto più logico: il contesto dati dell'helper {{pathFor 'postPage'}}, cioè `this`. Succede proprio che il nostro `this` corrisponde ad un post che (sorpresa!) possiede una proprietà `_id`.
 
-////
+In alternativa puoi anche dire esplicitamente al router dove vuoi che cerchi la proprietà `_id` passando un secondo argomento all'helper (es. `{{pathFor 'postPage' unAltroPost}}`). Nell'uso reale possiamo usare questa possibilità per avere un link al post precedente o successivo della lista, ad esempio.
 
-////
+Per vedere se funziona tutto correttamente, naviga alla lista di post e clicca sui link `Discuss`. Dovresti vedere qualcosa del genere:
 
 <%= screenshot "5-2", "A single post page." %>
 
@@ -324,10 +324,10 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 
 ### HTML5 pushState
 
-////
+Una cosa da tener presente è che questa gestione degli URL avviene attraverso [HTML5 pushState](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history?redirectlocale=en-US&redirectslug=Web%2FGuide%2FDOM%2FManipulating_the_browser_history).
 
-////
+Il router intercetta i click sugli URL che sono interni al sito e impedisce al browser di gestirli come fossero link esterni, preoccupandosi invece di modificare opportunamente solo lo stato dell'applicazione.
 
-////
+Se tutto funziona a dovere la pagina dovrebbe modificarsi istantaneamente. Addirittura a volte le cose cambiano così rapidamente che potrebbe essere opportuno inserire delle transizioni di pagina. Pur essendo fuori dall'ambito di questo capitolo è un argomento molto interessante. 
 
 <% end %>
