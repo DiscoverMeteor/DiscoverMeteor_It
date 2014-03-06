@@ -73,15 +73,15 @@ In questo capitolo inizieremo a fare uso della **console del browser**, che non 
 - Prompt: `>`.
 - Conosciuta anche come: Console di Mongo.
 
-Notiamo che, in ognuna di esse, non è necessario digitare il carattere del prompt (`$`, `❯`, o `>`) come parte dei comandi. Possiamo anche assumere che ogni riga che *non* inizi con il prompt sia il risultato del comando precedente.
+Notiamo che, per tutte, non è necessario digitare il carattere del prompt (`$`, `❯`, o `>`) come parte dei comandi. Possiamo anche assumere che ogni riga che *non* inizi con il prompt sia il risultato del comando precedente.
 
 <% end %>
 
 ### Server-Side Collections
 
-////
+Sul server, la collezione funge da API per il database Mongo. Questo permette, per il codice lato server, di scrivere comandi Mongo come `Posts.insert()` oppure `Posts.update()`: questi modificheranno la collezione `posts` in Mongo.
 
-////
+Per guardare all'interno del database Mongo, aprite una seconda finestra del terminale (mentre `meteor` è ancora in esecuzione nella prima) e spostatevi nella cartella della vostra app. Eseguite quindi il comando `meteor mongo` per lanciare la shell di Mongo: al suo interno potete digitare i comandi standard di Mongo (e come usuale, potete terminarla con la combinazione di tasti `ctrl+c`). Per fare un esempio, inseriamo un nuovo post:
 
 ~~~bash
 > db.posts.insert({title: "A new post"});
@@ -89,33 +89,33 @@ Notiamo che, in ognuna di esse, non è necessario digitare il carattere del prom
 > db.posts.find();
 { "_id": ObjectId(".."), "title" : "A new post"};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "La Shell di Mongo" %>
 
 <% note do %>
 
-### Mongo on Meteor.com
+### Mongo su Meteor.com
 
-////
+Se ospotate la vostra applicazione su *.meteor.com, potete comunque accedere alla shell di mongo dell'applicazione funzionante con `meteor mongo myApp`.
 
-////
+E, tanto che ci siamo, potete anche ottenere i log dell'applicazione scrivendo `meteor logs myApp`.
 
 <% end %>
 
-////
+La sintassi di Mongo è familiare, visto che utilizza un'interfaccia JavaScript. Non faremo altre manipolazioni di dati dalla shell di Mongo, ma potremo ritornarci di tanto in tanto giusto per assicurarci di che dati ci sono dentro.
 
 ### Client-Side Collections
 
-////
+Le collezioni sono ancora più interessanti viste dal lato client. Quando dichiariamo `Posts = new Meteor.Collection('posts');` sul client, stiamo creando una copia _locale nella cache del browser_ della reale collezione in Mongo. Quando diciamo che una collezione lato client è una "cache", vogliamo dire che contiene un *sottoinsieme* dei dati ai quali offre un accesso molto *rapido*.
 
-////
+È importante capire bene questo concetto perché risulta fondamentale al funzionamento di Meteor. In generale, una collezione lato client consiste in un sottoinsieme di tutti i documenti salvati all'interno della collezione Mongo (dopo tutto, generalmente non vogliamo mandare *tutto* il database al client).
 
-////
+Secondariamente, questi documenti sono salvati nella *memoria del browser*, il che significa che accedervi è praticamente istantaneo. Quando eseguiamo `Posts.find()` sul client per caricare i dati, non ci sono quindi comunicazioni lente con il server o il database, perché i dati sono già pre-caricati.
 
 <% note do %>
 
 ### Introducing MiniMongo
 
-////
+L'implementazione Meteor di Mongo per il lato client viene chiamata MiniMongo. Non è ancora un'implementazione perfetta e, occasionalmente, potrete scoprire che alcune funzionalità di Mongo non funzionano in MiniMongo. Nonostante ciò, tutte le funzionalità che copriremo con questo libro funzionano allo stesso modo sia in Mongo che MiniMongo.
 
 <% end %>
 
