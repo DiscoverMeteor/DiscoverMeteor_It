@@ -19,11 +19,13 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * handlebars (as all library names)
   * live
   * open-source
+  * prompt
   * refresh
   * repository
   * root
   * router
   * server
+  * shell
   * stylesheet
   * wrapper
 
@@ -33,6 +35,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **app** -> *applicazione*
  * **boilerplate** -> *modello standard*
  * **collection** -> *collezione*
+ * **console** -> *terminale*
  * **features** -> *funzionalità/caratteristiche*
  * **helper** -> *supporto* depending on the context
  * **link(s)** -> *collegamento/collegamenti*
@@ -41,6 +44,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **publication** -> *pubblicazione*
  * **real-time** -> *tempo reale*
  * **subscriptioin** -> *sottoscrizione*
+ * **terminal** -> *terminale*
  * **web** -> *rete*
 
 
