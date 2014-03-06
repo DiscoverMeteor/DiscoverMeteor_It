@@ -28,52 +28,52 @@ Posts = new Meteor.Collection('posts');
 
 <%= commit "4-1", "Added a posts collection" %>
 
-////
+Il codice che non si trova all'interno delle cartelle `client/` e `server/` verrà eseguito in *entrambi* i contesti. Per questo motivo la collezione `Posts` risulterà disponibile sia lato client che lato server. Comunque, il ruolo della collezione in ognuno dei due ambienti è molto diverso.
 
 <% note do %>
 
-### To Var Or Not To Var?
+### Usare Var O Non Usare Var?
 
-////
+In Meteor, la keyword `var` limita la visibilità di un oggetto al file corrente. Vogliamo rendere la collezione `Posts` visibile a tutta l'applicazione, motivo per cui la stiamo omettendo dalla sua dichiarazione.
 
 <% end %>
 
-////
+Sul server la collezione ha il compito di parlare con il database Mongo, leggendo e scrivendo qualsiasi cambiamento. Da questo punto di vista, può essere paragonata ad una libreria standard per database. Sul client, diversamente, la collezione è una copia *sicura* di un *sottoinsieme* della reale collezione canonica. La collezione lato client è mantenuta costantemente aggiornata, in modo quasi del tutto trasparente, con quel sottoinsieme di dati in tempo reale.
 
 <% note do %>
 
 ### Console vs Console vs Console
 
-////
+In questo capitolo inizieremo a fare uso della **console del browser**, che non va confusa con il **terminale** o **la shell di Mongo**. Di seguito proponiamo una breve guida per ognuna di esse.
 
 #### Terminal
 
-<%= screenshot "terminal", "The Terminal" %>
+<%= screenshot "terminal", "Il Terminale" %>
 
-- ////
-- ////
-- ////
-- ////
+- Eseguito dal tuo sistema operativo.
+- `console.log()` eseguito **lato server** produce output qui.
+- Prompt: `$`.
+- Conosciuto anche come: Shell, Bash.
 
-#### Browser Console
+#### Console del Browser
 
-<%= screenshot "browser-console", "The Browser Console" %>
+<%= screenshot "browser-console", "La Console del Browser" %>
 
-- ////
-- ////
-- ////
-- ////
+- Richiamata dall'interno del browser, esegue codice JavaScript.
+- `console.log()` eseguito **lato client** produce output qui.
+- Prompt: `❯`.
+- Conosciuta anche come: Console JavaScript, Console dei DevTools
 
-#### Mongo Shell
+#### Shell di Mongo
 
-<%= screenshot "mongo-shell", "The Mongo Shell" %>
+<%= screenshot "mongo-shell", "La Shell di Mongo" %>
 
-- ////
-- ////
-- ////
-- ////
+- Lanciata dal Terminale con `meteor mongo` o `mrt mongo`.
+- Permette l'accecco diretto al database dell'applicazione.
+- Prompt: `>`.
+- Conosciuta anche come: Console di Mongo.
 
-////
+Notiamo che, in ognuna di esse, non è necessario digitare il carattere del prompt (`$`, `❯`, o `>`) come parte dei comandi. Possiamo anche assumere che ogni riga che *non* inizi con il prompt sia il risultato del comando precedente.
 
 <% end %>
 
@@ -205,13 +205,13 @@ if (Posts.find().count() === 0) {
     author: 'Sacha Greif',
     url: 'http://sachagreif.com/introducing-telescope/'
   });
-  
+
   Posts.insert({
     title: 'Meteor',
     author: 'Tom Coleman',
     url: 'http://meteor.com'
   });
-  
+
   Posts.insert({
     title: 'The Meteor Book',
     author: 'Tom Coleman',
@@ -272,8 +272,8 @@ Template.postsList.helpers({
 
 ~~~js
 ❯ Posts.insert({
-  title: 'Meteor Docs', 
-  author: 'Tom Coleman', 
+  title: 'Meteor Docs',
+  author: 'Tom Coleman',
   url: 'http://docs.meteor.com'
 });
 ~~~
