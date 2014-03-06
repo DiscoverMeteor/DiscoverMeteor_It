@@ -23,6 +23,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * refresh
   * repository
   * root
+  * route (to avoid confusion with path)
   * router
   * server
   * shell
@@ -40,10 +41,11 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **helper** -> *supporto* depending on the context
  * **link(s)** -> *collegamento/collegamenti*
  * **package** -> *pacchetto*
+ * **path** -> *percorso*, *indirizzo*
  * **pattern** -> *schema*
  * **publication** -> *pubblicazione*
  * **real-time** -> *tempo reale*
- * **subscriptioin** -> *sottoscrizione*
+ * **subscription** -> *sottoscrizione*
  * **terminal** -> *terminale*
  * **web** -> *rete*
 
