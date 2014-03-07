@@ -14,27 +14,27 @@ Questo approfondimento presume che non conosciate molto Git e GitHub. Se invece 
 
 ### Being Committed
 
-////
+La componente di base dell'uso di un repository Git è un *commit*. Si può pensare ad un commit come a un'istantanea che fotografa lo stato del vostro codice in un dato momento nel tempo.
 
-////
+Invece di dare semplicemente il codice completo di Microscope, abbiamo preso queste istantanee ad ogni passaggio della lavorazione, e le abbiamo rese tutte disponibili su GitHub.
 
-////
+Per esempio, questo è quello che si può vedere nell'[ultimo commit dello scorso capitolo](https://github.com/DiscoverMeteor/Microscope/commit/chapter3-2):
 
 <%= screenshot "s3-1", "A Git commit as shown on GitHub." %>
 
-////
+Quello che si vede qui sotto è un “diff” (sta per “differenza”) del file `post_item.js`, in altre parole i cambiamenti inseriti in questo commit. In questo caso abbiamo creato il file `post_item.js` da zero, perciò tutti i suoi contenuti sono evidenziati in verde.
 
-////
+Facciamo un confronto con un esempio preso [un po' più avanti nel libro](https://github.com/DiscoverMeteor/Microscope/commit/chapter13-1):
 
 <%= screenshot "s3-2", "Modifying code." %>
 
-////
+Questa volta solo le righe che sono state modificate sono evidenziate in verde.
 
-////
+Ovviamente, qualche volts non vengono aggiunte o modificate delle righe di codice, ma [vengono eliminate](https://github.com/DiscoverMeteor/Microscope/commit/chapter12-2):
 
 <%= screenshot "s3-3", "Deleting code." %>
 
-////
+Questo è il principale utilizzo di GitHub: poter vedere cosa è cambiato con una sola occhiata.
 
 ### Browsing A Commit's Code
 
