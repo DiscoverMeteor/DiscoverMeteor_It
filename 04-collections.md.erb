@@ -121,25 +121,25 @@ L'implementazione Meteor di Mongo per il lato client viene chiamata MiniMongo. N
 
 ### Client-Server Communication
 
-////
+La chiave di volta di tutto ciò sta nel meccanismo che la collezione lato client utilizza per sincronizzare i suoi dati con la collezione lato server che ha lo stesso nome ( in questo caso `'posts'`).
 
-////
+Anziché spiegarlo nei dettagli, guardiamo semplicemente cosa succede.
 
-////
+Iniziamo aprendo due finestre del browser e accediamo alla console del browser in entrambe. Fatto questo, apriamo una shell di Mongo dalla riga di comando. A questo punto dovremmo vedere in tutti e tre i contesti il solo documento che abbiamo crato in precedenza.
 
 ~~~bash
 > db.posts.find();
 {title: "A new post", _id: ObjectId("..")};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "La Shell di Mongo" %>
 
 ~~~js
 ❯ Posts.findOne();
 {title: "A new post", _id: LocalCollection._ObjectID};
 ~~~
-<%= caption "First browser console" %>
+<%= caption "La console del primo browser" %>
 
-////
+Creiamo un nuovo post. In una delle finestre del browser eseguiamo un inserimento:
 
 ~~~js
 ❯ Posts.find().count();
@@ -149,40 +149,40 @@ L'implementazione Meteor di Mongo per il lato client viene chiamata MiniMongo. N
 ❯ Posts.find().count();
 2
 ~~~
-<%= caption "First browser console" %>
+<%= caption "La console del primo browser" %>
 
-////
+Come ci si poteva aspettare, il post è stato inserito nella collezione locale. Ora controlliamo Mongo:
 
 ~~~bash
 ❯ db.posts.find();
 {title: "A new post", _id: ObjectId("..")};
 {title: "A second post", _id: 'yyy'};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "La Shell di Mongo" %>
 
-////
+Come possiamo  vedere, il post ha percorso tutta la strada all'indietro fino al database Mongo, senza che sia stato necessario scrivere una singola linea di codice per agganciare il nostro client al server (beh, a dire il vero, una _singola_ riga di codice l'abbiamo scritta: `new Meteor.Collection('posts')`). Ma questo non è tutto!
 
-////
+Passiamo alla seconda finestra del browser e digitiamo quanto segue nella console del browser:
 
 ~~~js
 ❯ Posts.find().count();
 2
 ~~~
-<%= caption "Second browser console" %>
+<%= caption "La console del secondo browser" %>
 
-////
+Il post è arrivato anche qua! Anche se non abbiamo mai ricaricato e nemmeno interagito con il secondo browser, e nemmeno abbiamo mai scritto codice per mandargli gli aggiornamenti. È successo tutto magicamente -- e anche istantaneamente, anche se tutto ciò diventerà più ovvio nel seguito.
 
-////
+Quel che è successo è che la collezione lato server è stata informata da una collezione lato client dell'inserimento di un nuovo post, e si è quindi presa in carico la distribuzione di questo post sia all'interno del database Mongo che all'indietro verso tutte le altre collezioni `post` connesse.
 
-////
+Recuperare i post dalla console del browser non è così utile. Impareremo come scrivere questi dati dentro ai template, e allo stesso tempo trasformeremo il nostro semplice prototipo HTML in una applicazione web real-time funzionante.
 
 ### Keeping it Real-time
 
-////
+Una cosa è guardare il contenuto delle Collezioni dalla console del browser, ma quello che ci piacerebbe fare veramente sarebbe visualizzare i dati, e le loro modifiche, sullo schermo. Nel fare questo trasformeremo la nostra app da una semplice *pagina* web che mostra contenuti statici, in una *applicazione* web real-time dai contenuti dinamici.
 
-////
+Scopriamo come.
 
-### Populating the Database
+### Popolare il Database
 
 ////
 
