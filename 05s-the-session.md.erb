@@ -4,23 +4,23 @@ slug: the-session
 date: 0005/01/02
 number: 5.5
 sidebar: true
-contents: Learn about the Meteor Session|Learn about the autorun function|Learn about Hot Code Reload
+contents: L'ggetto Session in Meteor|La funzione autorun|Il ricaricamento automatico ed a caldo del codice
 paragraphs: 33
 ---
 
-////
+Meteor è un framework reattivo. Ciò significa che al variare dei dati la nostra applicazione si aggiorna senza la necessità di fare nulla di specifico.
 
-////
+Abbiamo già visto all'opera questo meccanismo sui template che si aggiornano al variare dei dati e delle route.
 
-////
+Approfondiremo questo meccanismo nei prossimi capitoli, ma ora vogliamo introdurre alcune carattetistiche di base usate spesso nelle applicazioni.
 
-### The Meteor Session
+### L'oggetto Session in Meteor
 
-////
+In questo momento in Microscope lo stato dell'applicazione è interamente contenuto nell'URL che l'utente sta consultando (e nel database).
 
-////
+In molti casi però hai bisogno di alcune informazioni transitorie sullo stato dell'applicazione, rilevanti solo per l'istanza corrente dell'applicazione di uno specifico utente (ad esempio se un elemento è mostrato o nascosto). L'oggetto Session è perfetto per questo.
 
-////
+L'oggetto Session è un contenitore dati globale e reattivo. E' globale nel senso di un unico oggetto visibile ovunque: c'è una sola sessione ed è accessibile dall'intera applicazione. Le variabili globali sono normalmente viste male ma in questo caso l'oggetto Session è usato come centro di comunicazione tra tutte le parti dell'applicazione.
 
 ### Changing the Session
 
