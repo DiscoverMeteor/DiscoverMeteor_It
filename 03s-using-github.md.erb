@@ -36,7 +36,7 @@ Ovviamente, qualche volts non vengono aggiunte o modificate delle righe di codic
 
 Questo è il principale utilizzo di GitHub: poter vedere cosa è cambiato con una sola occhiata.
 
-### Browsing A Commit's Code
+### Come curiosare il codice di un Commit
 
 La visualizzazione di un commit di Git mostra i cambiamenti inclusi in quel commit, ma a volte si ha bisogno di controllare file che *non* hanno subito cambiamenti, per sincerarsi che il loro contenuto sia esattamente quello che ci si aspetta.
 
@@ -52,19 +52,19 @@ GitHub non offre indicazioni chiare a livello visivo che si sta guardando un com
 
 <%= screenshot "s3-7", "The repository at commit 14-2." %>
 
-### Accessing A Commit Locally
+### Accedere ad un Commit in locale
 
-////
+Si è appena visto come curiosare nell'intero codice di un commit direttamente su GitHub. Come si può fare la stessa cosa sulla propria macchina? Ad esempio potrebbe essere utile visualizzare la situazione dell'applicazione in un determinato commit sulla propria macchina, per poter verificare il funzionamento a quel punto della lavorazione.
 
-////
+Per poterlo fare, si deve procedere all'utilizzo dell'interfaccia di `git` a linea di comando dal terminale. Per chi non ha mai utilizzato questo strumento [bisogna prima installare Git](http://git-scm.com/downloads). In seguito bisogna **clonare** (cioè, scaricare una copia locale) il repository di Microscope con questo comando:
 
 ~~~bash
 $ git clone git@github.com:DiscoverMeteor/Microscope.git github_microscope
 ~~~
 
-////
+La dicitura `github_microscope` in fondo al comando serve a dare il nome della cartella locale dove si vuole copiare l'applicazione. Assumendo che sia già presente una cartella `microscope`, si può scegliere un qualsiasi altro nome (non è necessario che sia lo stesso della repository presente su GitHub).
 
-////
+Una volta entrati nel repository (con il comando `cd`), si può iniziare ad utilizzare l'interfaccia a linea di comando:
 
 ~~~bash
 $ cd github_microscope
