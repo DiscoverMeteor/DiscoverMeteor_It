@@ -3,17 +3,17 @@ title: Aggiungere Utenti
 slug: adding-users
 date: 0006/01/01
 number: 6
-contents: Imparare ad utilizzare gli account utente in Meteor.|Aggiungere l'autenticazione necessaria per Microscope.|Utilizzare il package accounts-ui per implementare rapidamente l'interfaccia utente.
+contents: Utilizzare gli account utente in Meteor.|Aggiungere l'autenticazione necessaria per Microscope.|Utilizzare il package accounts-ui per implementare rapidamente l'interfaccia utente.
 paragraphs: 27
 ---
-Sinora si è lavorato alla creazione e visualizzazione di dati statici in modo ragionevole e messi insieme in un semplice prototypo
+Sinora si è lavorato alla creazione e visualizzazione di dati statici in modo ragionevole e messi insieme in un semplice prototipo
 
 E' stato verificato come l'interfaccia utente sia reattiva in seguito a cambiamento nei dati, e inserimenti o modifiche vengono presentati immediatamente. Tuttavia, il sito è ancora penalizzato dal fatto che non è possibile inserire dati. E infatti ancora non vengono neanche gestiti gli utenti.
 
 Vediamo come sia possibile sistemare la cosa.
 
 ### Account: utenti resi semplici
-In molti framework per il web, aggiungere profili utente è un ostacolo frequente. Sicuramente è un requisito di qualunque progetto, ma non è mai così semplice come invece dovrebbe. Inoltre, non appena si rende necessario avere a che fare con OAuth o altri schemi di authenticazione di terze parti, le cose tendono a complicarsi velocemente.
+In molti framework per il web, aggiungere profili utente è un ostacolo frequente. Sicuramente è un requisito di qualunque progetto, ma non è mai così semplice come invece dovrebbe. Inoltre, non appena si rende necessario avere a che fare con OAuth o altri schemi di autenticazione di terze parti, le cose tendono a complicarsi velocemente.
 
 Fortunatamente, Meteor ha la soluzione. Grazie alla modalità con cui i package di Meteor possono fornire codice sia lato server (JavaScript) che lato client (JavaScript, HTML e CSS), è possibile avere un sistema di gestione degli account quasi a costo zero.
 
@@ -27,7 +27,7 @@ $ mrt add accounts-password
 
 Questi due comandi rendono disponibili gli appositi template per gli account; è possibile includerli nel sito utilizzando `{{loginButtons}}`. Un consiglio molto utile: si può controllare su quale lato posizionare il menù a tendina utilizzando l'attributo `align` (ad esempio: `{{loginButtons align="right"}}).
 
-E' tempo di aggiungere i pulsanti all'header. E poiché l'header comincia a crescere oltremodo, è meglio concedergli un pò più di spazio spostandolo su un apposito template (che verrà salvato in `client/views/includes/`). Verrà utilizzato del markup aggiuntivo e alcune classi Bootstrap per renderlo esteticamente migliore:
+E' tempo di aggiungere i pulsanti all'header. E poiché l'header comincia a crescere oltremodo, è meglio concedergli un po' più di spazio spostandolo su un apposito template (che verrà salvato in `client/views/includes/`). Verrà utilizzato del markup aggiuntivo e alcune classi Bootstrap per renderlo esteticamente migliore:
 
 ~~~html
 <template name="layout">
