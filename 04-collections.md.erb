@@ -1,5 +1,5 @@
 ---
-title: Collections
+title: Collezioni
 slug: collections
 date: 0004/01/01
 number: 4
@@ -184,19 +184,19 @@ Scopriamo come.
 
 ### Popolare il Database
 
-////
+Per prima cosa inseriremo un po' di dati all'interno del database. E lo fremo con un file di inizializzazione che carica un insieme di dati strutturati dentro la collezione `Posts` al primo avvio del server. 
 
-////
+Prima di tutto assicuriamoci che dentro al database non ci sia nulla. Useremo `meteor reset`, che cancella il database e resetta il progetto. Chiaramente bisogna stare molto attenti ad utilizzare questo comando, soprattutto quando si inizia a lavorare su progetti veri. 
 
-////
+Fermiamo il server Meteor (premendo `ctrl-c`) e dopo, da riga di comando, eseguiamo:
 
 ~~~bash
 $ meteor reset
 ~~~
 
-////
+Il comando reset svuota completamente il database Mongo. Durante la fase di sviluppo può risultare molto utile, visto che ci sono buone probabilità che il database cada in uno stato inconsistente. 
 
-////
+Ora che il database è vuoto, possiamo aggiungere il seguente codice che carica tre post ogni volta che il server viene lanciato e la collezione `Posts` risulti vuota:
 
 ~~~js
 if (Posts.find().count() === 0) {
@@ -223,22 +223,22 @@ if (Posts.find().count() === 0) {
 
 <%= commit "4-2", "Added data to the posts collection." %>
 
-////
+Abbiamo posizionato il file dentro alla cartella `server/`, in modo che non venga mai caricato in nessun browser utente. Il codice verrà eseguito immediatamente all'avvio del server, eseguendo delle chiamate `insert` sul database per aggiungere tre semplici post all'interno della collezione `Posts`. Visto che finora non abbiamo definito nessuna politica di sicurezza dei dati, non c'è nessuna differenza nel fare questo all'interno di un file eseguito sul server o da un browser. 
 
-////
+Ora lanciamo nuovamente il server con `meteor`: i tre post verrano inseriti nel database.
 
-### Wiring the data to our HTML with helpers
+### Collegare i dati all'HTML tramite helpers
 
-////
+Se ora apriamo una console del browser, vedremo tutti e tre i post caricati dentro a MiniMongo:
 
 ~~~js
 ❯ Posts.find().fetch();
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Console del Browser" %>
 
-////
+Per vedere questi post renderizzati in HTML, possiamo utlizzare un _template helper_. Nel Capitolo 3 abbiamo visto come Meteor permetta di collegare un *data context* ai template di Handlebars per costruire viste HTML di semplici strutture dati. Possiamo anche collegare i dati delle collezioni esattamente nello stesso modo. Rimpiazzeremo semplicemente l'oggetto statico `postsData` di JavaScript con una collezione dinamica.
 
-////
+Parlando di questo, a questo punto sentitevi liberi di cancellare il codice `postsData`. Questo è come ora dovrebbe diventare `posts_list.js`:
 
 ~~~js
 Template.postsList.helpers({
