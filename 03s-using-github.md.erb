@@ -4,7 +4,7 @@ slug: github
 date: 0003/01/02
 number: 3.5
 sidebar: true
-contents: Impara come utilizzare GitHub seguire passo passo il codice del libro.
+contents: Come utilizzare GitHub per seguire passo passo il codice del libro.
 paragraphs: 32
 ---
 
@@ -12,7 +12,7 @@ paragraphs: 32
 
 Questo approfondimento presume che non conosciate molto Git e GitHub. Se invece li utilizzate già entrambi, sentitevi liberi di passare direttamente al prossimo capitolo!
 
-### Being Committed
+### I Commit
 
 La componente di base dell'uso di un repository Git è un *commit*. Si può pensare ad un commit come a un'istantanea che fotografa lo stato del vostro codice in un dato momento nel tempo.
 
@@ -114,26 +114,26 @@ Infine, come smettere di guardare nella sfera di cristallo e tornare al presente
 $ git checkout master
 ~~~
 
-### Historical Perspective
+### Modalità History
 
-////
+Un altro scenario comune in Git è questo: guardando un file si notano alcuni cambiamenti mai visti prima. Il problema è quello di capire *quando* il file è stato modificato. Si potrebbe scorrere ad uno ad uno tutti i commit fino a trovare quello giusto, ma c'è un modo più semplice grazie alla modalità **History** di GitHub.
 
-////
+Da uno dei file del repository di GitHub, si cerchi il bottone “History”:
 
 <%= screenshot "s3-8", "GitHub's History button." %>
 
-////
+Si può vedere un lista completa dei commit in cui è stato modificato il file in questione:
 
 <%= screenshot "s3-9", "Displaying a file's history." %>
 
-### The Blame Game
+### Modalità Blame
 
-////
+Per concludere, si veda la modalità **Blame**:
 
 <%= screenshot "s3-10", "GitHub's Blame button." %>
 
-////
+Questa visualizzazione mostra linea per linea chi ha modificato il file e in quale commit (in altre parole, chi bisogna redarguire - blame - quando le cose non funzionano come ci si aspetta):
 
 <%= screenshot "s3-11", "GitHub's Blame view." %>
 
-////
+Git è uno strumento abbastanza complesso - così come GitHub -, non possiamo sperare di poter spiegare tutti in un solo capitolo. Infatti, abbiamo solo visto molto in superficie cosa sia possibile fare con questi strumenti. Speriamo che anche queste poche nozioni si rivelino utili mentre si prosegue nel resto del libro.
