@@ -70,9 +70,9 @@ Una volta entrati nel repository (con il comando `cd`), si può iniziare ad util
 $ cd github_microscope
 ~~~
 
-////
+Clonando il repository da GitHub, si è scaricato *tutto* il codice dell'applicazione, il che significa che quello che si vede è il codice del commit finale.
 
-////
+Fortunatamente c'è un modo per tornare indietro nel tempo e fare “checkout” di uno specifico commit senza che ciò abbia ripercursioni sugli altri. Nel terminale digitare:
 
 ~~~bash
 $ git checkout chapter3-1
@@ -90,17 +90,17 @@ do so (now or later) by using -b with the checkout command again. Example:
 HEAD is now at a004b56... Added basic posts list template and static data.
 ~~~
 
-////
+Git informa che si è ora in uno stato denominato “detached HEAD”, che significa che fino a che Git rimane in questo stato è possibile osservare i vecchi commit ma non modificarli. Si può pensare a un mago che guarda il passato da una sfera di cristallo.
 
-////
+(Si noti che Git ha anche un comandi che permettono di *cambiare* commit precedenti. Questo è più paragonabile a un viaggiatore nel tempo che per caso calpesta una farfalla, ma è al di là di quello che vogliamo trattare in questo libro.)
 
-////
+Il motivo per il quale è bastato digitare `chapter3-1` è perchè abbiamo nominato in precedenza tutti i commit di Microscope con un corretto indicatore (tag) del capitolo. Se non l'avessimo fatto si sarebbe dovuto prima trovare l'**hash** del commit, cioè il suò identificatore univoco. 
 
-////
+Ancora una volta GitHub rende la vita più semplice. E' possibile recuperare l'hash del commit nell'angolo in basso a destra dell'header box blu del commit come mostrato di seguito:
 
 <%= screenshot "s3-4", "Finding a commit hash." %>
 
-////
+Si usi ora un hash al posto di un tag:
 
 ~~~bash
 $ git checkout c7af59e425cd4e17c20cf99e51c8cd78f82c9932
@@ -108,7 +108,7 @@ Previous HEAD position was a004b56... Added basic posts list template and static
 HEAD is now at c7af59e... Augmented the postsList route to take a limit
 ~~~
 
-////
+Infine, come smettere di guardare nella sfera di cristallo e tornare al presente? Si dice a Git di fare checkout del branch **master**:
 
 ~~~bash
 $ git checkout master
