@@ -4,7 +4,7 @@ slug: the-session
 date: 0005/01/02
 number: 5.5
 sidebar: true
-contents: L'ggetto Session in Meteor|La funzione autorun|Il ricaricamento automatico ed a caldo del codice
+contents: L'oggetto Session in Meteor|La funzione autorun|Il ricaricamento automatico ed a caldo del codice
 paragraphs: 33
 ---
 
@@ -22,18 +22,18 @@ In molti casi però hai bisogno di alcune informazioni transitorie sullo stato d
 
 L'oggetto Session è un contenitore dati globale e reattivo. E' globale nel senso di un unico oggetto visibile ovunque: c'è una sola sessione ed è accessibile dall'intera applicazione. Le variabili globali sono normalmente viste male ma in questo caso l'oggetto Session è usato come centro di comunicazione tra tutte le parti dell'applicazione.
 
-### Changing the Session
+### Memorizzare dati nell'oggetto Session
 
-////
+L'oggetto Sessione è visibile ovunque come `Sessione. Per impostare un valore si invoca:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A different title');
 ~~~
 <%= caption "Browser console" %>
 
-////
+I dati memorizzati posso essere letti con `Session.get('mySessionProperty');`. E' una sorgente dati reattiva, quindi se utilizzata all'interno di un helper vedremo l'output dell'helper modificarsi automaticamente al cambio dei dati.
 
-////
+Per fare una prova, aggiungi questo codice al template di layout:
 
 ~~~html
 <header class="navbar">
@@ -51,16 +51,16 @@ Template.layout.helpers({
 ~~~
 <%= caption "client/views/application/layout.js"%>
 
-////
+Il meccanismo di ricaricamento automatico del codice di Meteor (noto come "hot code reload" o HCR) preserva lo stato delle variabili di sessione, e quindi ora dovremmo vedere "A different title" nella barra di navigazione. Se no occorre ridigitare il comando `Session.set()` di nuovo.
 
-////
+Inoltre se cambiamo ancora una volta il valore (nuovamente nella console del browser), vedremo il nuovo titolo:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A brand new title');
 ~~~
 <%= caption "Browser console" %>
 
-////
+L'oggetto Session è visibile globalmente, quindi le variazioni possono essere fatte ovunque nell'applicazione. Questo ci da molto potere, ma può anche trasformarsi in una trappola, se ne abusiamo.
 
 <% note do %>
 
