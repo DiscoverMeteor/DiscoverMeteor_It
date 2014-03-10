@@ -49,7 +49,7 @@ Per altre informazioni su Iron Router, consulta [la documentazione completa su G
 
 <% end %>
 
-### Routing: Mappare le URL sui Template
+### Routing: Mappare gli URL sui Template
 
 Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto. 
 
@@ -111,7 +111,7 @@ Abbiamo appena fatto due cose importanti. Primo, abbiamo detto al router di usar
 
 Tutto ciò che metti dentro la cartella `/lib` è garantito che sarà caricato prima di qualsiasi altra cosa nell'applicazione (con la sola potenziale eccezione dei pacchetti smart). E' quindi il posto migliore dove mettere il codice degli helper che deve essere disponibile sempre.
 
-Una piccola avvertenza: poichè la cartella `/lib` non si trova né dentro `/client` né dentro `/server` il suo contenuto sarà visibile in entrambi gli ambienti.
+Una piccola avvertenza: poiché la cartella `/lib` non si trova né dentro `/client` né dentro `/server` il suo contenuto sarà visibile in entrambi gli ambienti.
 
 <% end %>
 
@@ -121,7 +121,7 @@ Chiariamo un aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `p
 
 L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. Difatti cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`. 
 
-Postresti chiederti perché abbiamo bisogno di dare un nome alle route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
+Potresti chiederti perché abbiamo bisogno di dare un nome alle route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
 
 Noi vogliamo che il link alla home principale punti alla lista di post, e quindi invece di indicare una URL statica `/`, possiamo usare l'helper di Handlebars. Il risultato finale sarà lo stesso, ma avremo maggiore flessibilità visto che l'helper fornirà sempre l'URL corretta anche se cambiassimo il path della route nel router.
 
@@ -141,7 +141,7 @@ Noi vogliamo che il link alla home principale punti alla lista di post, e quindi
 
 ### In Attesa dei Dati
 
-Se si implementa l'attuale versione dell'applicazione (o la si lancia dal link qui sopra), potrai notare come la lista appaia vuota per alcuni istanti prima che appaiano i post. Succede perché quando la pagina viene caricata per la prima volta non ci sono post da mostrare finchè la sottoscrizione `posts` non ha completato il recupero dei dati dal server.
+Se si implementa l'attuale versione dell'applicazione (o la si lancia dal link qui sopra), potrai notare come la lista appaia vuota per alcuni istanti prima che appaiano i post. Succede perché quando la pagina viene caricata per la prima volta non ci sono post da mostrare finché la sottoscrizione `posts` non ha completato il recupero dei dati dal server.
 
 Sarebbe molto meglio dal punto di vista dell'esperienza d'uso dare un feedback visuale che indica che qualcosa sta succedendo, e quindi l'utente deve aspettare un attimo.
 

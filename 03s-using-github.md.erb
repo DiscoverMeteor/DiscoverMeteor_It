@@ -4,7 +4,7 @@ slug: github
 date: 0003/01/02
 number: 3.5
 sidebar: true
-contents: Impara come utilizzare GitHub seguire passo passo il codice del libro.
+contents: Come utilizzare GitHub per seguire passo passo il codice del libro.
 paragraphs: 32
 ---
 
@@ -12,67 +12,67 @@ paragraphs: 32
 
 Questo approfondimento presume che non conosciate molto Git e GitHub. Se invece li utilizzate già entrambi, sentitevi liberi di passare direttamente al prossimo capitolo!
 
-### Being Committed
+### I Commit
 
-////
+La componente di base dell'uso di un repository Git è un *commit*. Si può pensare ad un commit come a un'istantanea che fotografa lo stato del vostro codice in un dato momento nel tempo.
 
-////
+Invece di dare semplicemente il codice completo di Microscope, abbiamo preso queste istantanee ad ogni passaggio della lavorazione, e le abbiamo rese tutte disponibili su GitHub.
 
-////
+Per esempio, questo è quello che si può vedere nell'[ultimo commit dello scorso capitolo](https://github.com/DiscoverMeteor/Microscope/commit/chapter3-2):
 
 <%= screenshot "s3-1", "A Git commit as shown on GitHub." %>
 
-////
+Quello che si vede qui sotto è un “diff” (sta per “differenza”) del file `post_item.js`, in altre parole i cambiamenti inseriti in questo commit. In questo caso abbiamo creato il file `post_item.js` da zero, perciò tutti i suoi contenuti sono evidenziati in verde.
 
-////
+Facciamo un confronto con un esempio preso [un po' più avanti nel libro](https://github.com/DiscoverMeteor/Microscope/commit/chapter13-1):
 
 <%= screenshot "s3-2", "Modifying code." %>
 
-////
+Questa volta solo le righe che sono state modificate sono evidenziate in verde.
 
-////
+Ovviamente, qualche volts non vengono aggiunte o modificate delle righe di codice, ma [vengono eliminate](https://github.com/DiscoverMeteor/Microscope/commit/chapter12-2):
 
 <%= screenshot "s3-3", "Deleting code." %>
 
-////
+Questo è il principale utilizzo di GitHub: poter vedere cosa è cambiato con una sola occhiata.
 
-### Browsing A Commit's Code
+### Come curiosare il codice di un Commit
 
-////
+La visualizzazione di un commit di Git mostra i cambiamenti inclusi in quel commit, ma a volte si ha bisogno di controllare file che *non* hanno subito cambiamenti, per sincerarsi che il loro contenuto sia esattamente quello che ci si aspetta.
 
-////
+Ancora una volta ci si può avvalere dell'aiuto di GitHub. Quando ci si trova sulla pagina di un commit, cliccare il bottone **Browse code**:
 
 <%= screenshot "s3-5", "The Browse code button." %>
 
-////
+Si ha ora accesso alla repository *così come è in quel commit*:
 
 <%= screenshot "s3-6", "The repository at commit 3-2." %>
 
-////
+GitHub non offre indicazioni chiare a livello visivo che si sta guardando un commit, ma si può impostare una comparazione con il master “normale”, e vedere a colpo d'occhio che la struttura dei file è differente:
 
 <%= screenshot "s3-7", "The repository at commit 14-2." %>
 
-### Accessing A Commit Locally
+### Accedere ad un Commit in locale
 
-////
+Si è appena visto come curiosare nell'intero codice di un commit direttamente su GitHub. Come si può fare la stessa cosa sulla propria macchina? Ad esempio potrebbe essere utile visualizzare la situazione dell'applicazione in un determinato commit sulla propria macchina, per poter verificare il funzionamento a quel punto della lavorazione.
 
-////
+Per poterlo fare, si deve procedere all'utilizzo dell'interfaccia di `git` a linea di comando dal terminale. Per chi non ha mai utilizzato questo strumento [bisogna prima installare Git](http://git-scm.com/downloads). In seguito bisogna **clonare** (cioè, scaricare una copia locale) il repository di Microscope con questo comando:
 
 ~~~bash
 $ git clone git@github.com:DiscoverMeteor/Microscope.git github_microscope
 ~~~
 
-////
+La dicitura `github_microscope` in fondo al comando serve a dare il nome della cartella locale dove si vuole copiare l'applicazione. Assumendo che sia già presente una cartella `microscope`, si può scegliere un qualsiasi altro nome (non è necessario che sia lo stesso della repository presente su GitHub).
 
-////
+Una volta entrati nel repository (con il comando `cd`), si può iniziare ad utilizzare l'interfaccia a linea di comando:
 
 ~~~bash
 $ cd github_microscope
 ~~~
 
-////
+Clonando il repository da GitHub, si è scaricato *tutto* il codice dell'applicazione, il che significa che quello che si vede è il codice del commit finale.
 
-////
+Fortunatamente c'è un modo per tornare indietro nel tempo e fare “checkout” di uno specifico commit senza che ciò abbia ripercursioni sugli altri. Nel terminale digitare:
 
 ~~~bash
 $ git checkout chapter3-1
@@ -90,17 +90,17 @@ do so (now or later) by using -b with the checkout command again. Example:
 HEAD is now at a004b56... Added basic posts list template and static data.
 ~~~
 
-////
+Git informa che si è ora in uno stato denominato “detached HEAD”, che significa che fino a che Git rimane in questo stato è possibile osservare i vecchi commit ma non modificarli. Si può pensare a un mago che guarda il passato da una sfera di cristallo.
 
-////
+(Si noti che Git ha anche un comandi che permettono di *cambiare* commit precedenti. Questo è più paragonabile a un viaggiatore nel tempo che per caso calpesta una farfalla, ma è al di là di quello che vogliamo trattare in questo libro.)
 
-////
+Il motivo per il quale è bastato digitare `chapter3-1` è perchè abbiamo nominato in precedenza tutti i commit di Microscope con un corretto indicatore (tag) del capitolo. Se non l'avessimo fatto si sarebbe dovuto prima trovare l'**hash** del commit, cioè il suò identificatore univoco. 
 
-////
+Ancora una volta GitHub rende la vita più semplice. E' possibile recuperare l'hash del commit nell'angolo in basso a destra dell'header box blu del commit come mostrato di seguito:
 
 <%= screenshot "s3-4", "Finding a commit hash." %>
 
-////
+Si usi ora un hash al posto di un tag:
 
 ~~~bash
 $ git checkout c7af59e425cd4e17c20cf99e51c8cd78f82c9932
@@ -108,32 +108,32 @@ Previous HEAD position was a004b56... Added basic posts list template and static
 HEAD is now at c7af59e... Augmented the postsList route to take a limit
 ~~~
 
-////
+Infine, come smettere di guardare nella sfera di cristallo e tornare al presente? Si dice a Git di fare checkout del branch **master**:
 
 ~~~bash
 $ git checkout master
 ~~~
 
-### Historical Perspective
+### Modalità History
 
-////
+Un altro scenario comune in Git è questo: guardando un file si notano alcuni cambiamenti mai visti prima. Il problema è quello di capire *quando* il file è stato modificato. Si potrebbe scorrere ad uno ad uno tutti i commit fino a trovare quello giusto, ma c'è un modo più semplice grazie alla modalità **History** di GitHub.
 
-////
+Da uno dei file del repository di GitHub, si cerchi il bottone “History”:
 
 <%= screenshot "s3-8", "GitHub's History button." %>
 
-////
+Si può vedere un lista completa dei commit in cui è stato modificato il file in questione:
 
 <%= screenshot "s3-9", "Displaying a file's history." %>
 
-### The Blame Game
+### Modalità Blame
 
-////
+Per concludere, si veda la modalità **Blame**:
 
 <%= screenshot "s3-10", "GitHub's Blame button." %>
 
-////
+Questa visualizzazione mostra linea per linea chi ha modificato il file e in quale commit (in altre parole, chi bisogna redarguire - blame - quando le cose non funzionano come ci si aspetta):
 
 <%= screenshot "s3-11", "GitHub's Blame view." %>
 
-////
+Git è uno strumento abbastanza complesso - così come GitHub -, non possiamo sperare di poter spiegare tutti in un solo capitolo. Infatti, abbiamo solo visto molto in superficie cosa sia possibile fare con questi strumenti. Speriamo che anche queste poche nozioni si rivelino utili mentre si prosegue nel resto del libro.

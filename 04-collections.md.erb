@@ -1,9 +1,9 @@
 ---
-title: Collections
+title: Collezioni
 slug: collections
 date: 0004/01/01
 number: 4
-contents: Principali funzinalità del nucleo di Meteor, collezioni in tempo reale.| Comprendere come funziona la sincronizzazine dei dati in Meteor.|Integrare collezioni con i nostri template.|Trasformare il nostro prototipo in un'applicazione realtime funzionante!
+contents: Principali funzionalità del nucleo di Meteor, collezioni in tempo reale.| Comprendere come funziona la sincronizzazione dei dati in Meteor.|Integrare collezioni con i nostri template.|Trasformare il nostro prototipo in un'applicazione realtime funzionante!
 paragraphs: 72
 ---
 
@@ -11,11 +11,11 @@ Nel capitolo uno, abbiamo parlato della caratteristica principale di Meteor: la 
 
 In questo capitolo, analizzeremo più nel dettaglio questo meccanismo, osservando il funzionamento della tecnologia chiave che lo permette: la collezione (`collection`) di Meteor.
 
-Stiamo costruendo un'applicazione di nodizie social, e la prima cosa che vogliamo fare è creare una lista di link che le persone hanno inserito. Chiameremo "post" ognuno di questi oggetti.
+Stiamo costruendo un'applicazione sociale di notizie, e la prima cosa che vogliamo fare è creare una lista di link che le persone hanno inserito. Chiameremo "post" ognuno di questi oggetti.
 
 Naturalmente, dovremo salvare questi posta da qualche parte. Meteor installa anche Mongo che viene eseguito sul vostro server e funge da base di dati *persistente*.
 
-Dunque, anche se il browser dell'utente può contenere alcune informazioni di stato (ad esempio la pagina corrente, o il commento che stà scrivendo in quel momento), il server, e più precisamente Mongo, contiene la sorgente di dati permanente canonica. *Canonica* significa che è la stessa per tutti gli utenti: ogni utente può essere su di una pagina diversa, ma la lista originale dei post è la stessa per tutti.
+Dunque, anche se il browser dell'utente può contenere alcune informazioni di stato (ad esempio la pagina corrente, o il commento che sta scrivendo in quel momento), il server, e più precisamente Mongo, contiene la sorgente di dati permanente canonica. *Canonica* significa che è la stessa per tutti gli utenti: ogni utente può essere su di una pagina diversa, ma la lista originale dei post è la stessa per tutti.
 
 Questi dati sono salvati in Meteor all'interno di una **Collezione**. Una collezione è una struttura dati speciale che, per mezzo di pubblicazioni e sottoscrizioni, si prende cura della sincronizzazione tempo reale dei dati tra il database Mongo e ogni browser degli utenti connessi, in entrambe le direzioni. Vediamo come.
 
@@ -34,7 +34,7 @@ Il codice che non si trova all'interno delle cartelle `client/` e `server/` verr
 
 ### Usare Var O Non Usare Var?
 
-In Meteor, la keyword `var` limita la visibilità di un oggetto al file corrente. Vogliamo rendere la collezione `Posts` visibile a tutta l'applicazione, motivo per cui la stiamo omettendo dalla sua dichiarazione.
+In Meteor, la parola chiave `var` limita la visibilità di un oggetto al file corrente. Vogliamo rendere la collezione `Posts` visibile a tutta l'applicazione, motivo per cui la stiamo omettendo dalla sua dichiarazione.
 
 <% end %>
 
@@ -46,7 +46,7 @@ Sul server la collezione ha il compito di parlare con il database Mongo, leggend
 
 In questo capitolo inizieremo a fare uso della **console del browser**, che non va confusa con il **terminale** o **la shell di Mongo**. Di seguito proponiamo una breve guida per ognuna di esse.
 
-#### Terminal
+#### Terminale
 
 <%= screenshot "terminal", "Il Terminale" %>
 
@@ -69,7 +69,7 @@ In questo capitolo inizieremo a fare uso della **console del browser**, che non 
 <%= screenshot "mongo-shell", "La Shell di Mongo" %>
 
 - Lanciata dal Terminale con `meteor mongo` o `mrt mongo`.
-- Permette l'accecco diretto al database dell'applicazione.
+- Permette l'accesso diretto al database dell'applicazione.
 - Prompt: `>`.
 - Conosciuta anche come: Console di Mongo.
 
@@ -77,7 +77,7 @@ Notiamo che, per tutte, non è necessario digitare il carattere del prompt (`$`,
 
 <% end %>
 
-### Server-Side Collections
+### Collezioni Lato Server
 
 Sul server, la collezione funge da API per il database Mongo. Questo permette, per il codice lato server, di scrivere comandi Mongo come `Posts.insert()` oppure `Posts.update()`: questi modificheranno la collezione `posts` in Mongo.
 
@@ -95,7 +95,7 @@ Per guardare all'interno del database Mongo, aprite una seconda finestra del ter
 
 ### Mongo su Meteor.com
 
-Se ospotate la vostra applicazione su *.meteor.com, potete comunque accedere alla shell di mongo dell'applicazione funzionante con `meteor mongo myApp`.
+Se ospitate la vostra applicazione su *.meteor.com, potete comunque accedere alla shell di mongo dell'applicazione funzionante con `meteor mongo myApp`.
 
 E, tanto che ci siamo, potete anche ottenere i log dell'applicazione scrivendo `meteor logs myApp`.
 
@@ -103,7 +103,7 @@ E, tanto che ci siamo, potete anche ottenere i log dell'applicazione scrivendo `
 
 La sintassi di Mongo è familiare, visto che utilizza un'interfaccia JavaScript. Non faremo altre manipolazioni di dati dalla shell di Mongo, ma potremo ritornarci di tanto in tanto giusto per assicurarci di che dati ci sono dentro.
 
-### Client-Side Collections
+### Collezioni Lato Client
 
 Le collezioni sono ancora più interessanti viste dal lato client. Quando dichiariamo `Posts = new Meteor.Collection('posts');` sul client, stiamo creando una copia _locale nella cache del browser_ della reale collezione in Mongo. Quando diciamo che una collezione lato client è una "cache", vogliamo dire che contiene un *sottoinsieme* dei dati ai quali offre un accesso molto *rapido*.
 
@@ -113,19 +113,19 @@ Secondariamente, questi documenti sono salvati nella *memoria del browser*, il c
 
 <% note do %>
 
-### Introducing MiniMongo
+### Introduzione a MiniMongo
 
 L'implementazione Meteor di Mongo per il lato client viene chiamata MiniMongo. Non è ancora un'implementazione perfetta e, occasionalmente, potrete scoprire che alcune funzionalità di Mongo non funzionano in MiniMongo. Nonostante ciò, tutte le funzionalità che copriremo con questo libro funzionano allo stesso modo sia in Mongo che MiniMongo.
 
 <% end %>
 
-### Client-Server Communication
+### Comunicazione Client-Server
 
 La chiave di volta di tutto ciò sta nel meccanismo che la collezione lato client utilizza per sincronizzare i suoi dati con la collezione lato server che ha lo stesso nome ( in questo caso `'posts'`).
 
 Anziché spiegarlo nei dettagli, guardiamo semplicemente cosa succede.
 
-Iniziamo aprendo due finestre del browser e accediamo alla console del browser in entrambe. Fatto questo, apriamo una shell di Mongo dalla riga di comando. A questo punto dovremmo vedere in tutti e tre i contesti il solo documento che abbiamo crato in precedenza.
+Iniziamo aprendo due finestre del browser e accediamo alla console del browser in entrambe. Fatto questo, apriamo una shell di Mongo dalla riga di comando. A questo punto dovremmo vedere in tutti e tre i contesti il solo documento che abbiamo creato in precedenza.
 
 ~~~bash
 > db.posts.find();
@@ -176,7 +176,7 @@ Quel che è successo è che la collezione lato server è stata informata da una 
 
 Recuperare i post dalla console del browser non è così utile. Impareremo come scrivere questi dati dentro ai template, e allo stesso tempo trasformeremo il nostro semplice prototipo HTML in una applicazione web real-time funzionante.
 
-### Keeping it Real-time
+### Rendere tutto Real-time
 
 Una cosa è guardare il contenuto delle Collezioni dalla console del browser, ma quello che ci piacerebbe fare veramente sarebbe visualizzare i dati, e le loro modifiche, sullo schermo. Nel fare questo trasformeremo la nostra app da una semplice *pagina* web che mostra contenuti statici, in una *applicazione* web real-time dai contenuti dinamici.
 
@@ -184,19 +184,19 @@ Scopriamo come.
 
 ### Popolare il Database
 
-////
+Per prima cosa inseriremo un po' di dati all'interno del database. E lo fremo con un file di inizializzazione che carica un insieme di dati strutturati dentro la collezione `Posts` al primo avvio del server. 
 
-////
+Prima di tutto assicuriamoci che dentro al database non ci sia nulla. Useremo `meteor reset`, che cancella il database e resetta il progetto. Chiaramente bisogna stare molto attenti ad utilizzare questo comando, soprattutto quando si inizia a lavorare su progetti veri. 
 
-////
+Fermiamo il server Meteor (premendo `ctrl-c`) e dopo, da riga di comando, eseguiamo:
 
 ~~~bash
 $ meteor reset
 ~~~
 
-////
+Il comando reset svuota completamente il database Mongo. Durante la fase di sviluppo può risultare molto utile, visto che ci sono buone probabilità che il database cada in uno stato inconsistente. 
 
-////
+Ora che il database è vuoto, possiamo aggiungere il seguente codice che carica tre post ogni volta che il server viene lanciato e la collezione `Posts` risulti vuota:
 
 ~~~js
 if (Posts.find().count() === 0) {
@@ -223,22 +223,22 @@ if (Posts.find().count() === 0) {
 
 <%= commit "4-2", "Added data to the posts collection." %>
 
-////
+Abbiamo posizionato il file dentro alla cartella `server/`, in modo che non venga mai caricato in nessun browser utente. Il codice verrà eseguito immediatamente all'avvio del server, eseguendo delle chiamate `insert` sul database per aggiungere tre semplici post all'interno della collezione `Posts`. Visto che finora non abbiamo definito nessuna politica di sicurezza dei dati, non c'è nessuna differenza nel fare questo all'interno di un file eseguito sul server o da un browser. 
 
-////
+Ora lanciamo nuovamente il server con `meteor`: i tre post verrano inseriti nel database.
 
-### Wiring the data to our HTML with helpers
+### Collegare i dati all'HTML tramite helpers
 
-////
+Se ora apriamo una console del browser, vedremo tutti e tre i post caricati dentro a MiniMongo:
 
 ~~~js
 ❯ Posts.find().fetch();
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Console del Browser" %>
 
-////
+Per vedere questi post renderizzati in HTML, possiamo utilizzare un *template helper*. Nel Capitolo 3 abbiamo visto come Meteor permetta di collegare un *data context* ai template di Handlebars per costruire viste HTML di semplici strutture dati. Possiamo anche collegare i dati delle collezioni esattamente nello stesso modo. Rimpiazzeremo semplicemente l'oggetto statico `postsData` di JavaScript con una collezione dinamica.
 
-////
+Parlando di questo, a questo punto sentitevi liberi di cancellare il codice `postsData`. Questo è come ora dovrebbe diventare `posts_list.js`:
 
 ~~~js
 Template.postsList.helpers({

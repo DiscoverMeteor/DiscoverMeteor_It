@@ -18,6 +18,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * front-end
   * handlebars (as all library names)
   * live
+  * markup
   * open-source
   * prompt
   * refresh
@@ -28,6 +29,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * server
   * shell
   * stylesheet
+  * template
   * wrapper
 
 
@@ -35,8 +37,10 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
  * **app** -> *applicazione*
  * **boilerplate** -> *modello standard*
+ * **built-in** -> *integrato*
  * **collection** -> *collezione*
  * **console** -> *terminale*
+ * **dropdown menu** -> *menù a discesa*, *menù a tendina*
  * **features** -> *funzionalità/caratteristiche*
  * **helper** -> *supporto* depending on the context
  * **link(s)** -> *collegamento/collegamenti*
@@ -55,7 +59,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **a note on** -> *una considerazione su*
  * **getting started** -> *primi passi*
  * **you'll be good to go** -> *sarai pronto a partire*
- * **has you covered** -> *ha ciò che ti serve*
+ * **has you covered** -> *ha ciò che ti serve*, *ha la soluzione*
  * **mind experiment** -> *esperimento concettuale*
  * **sidebar** -> *approfondimento*
  * **up and running** -> *operativo*

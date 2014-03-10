@@ -7,7 +7,7 @@ contents: Installare Meteor & Meteorite.|I 5 tipi di pacchetti Meteor.|Organizza
 paragraphs: 49
 ---
 
-Le prime impressioni sono importanti, e l'installzione di Meteor dovrebbe essere indolore. Nella maggior parte dei casi, sarai operativo in meno di 5 minuti. 
+Le prime impressioni sono importanti, e l'installazione di Meteor dovrebbe essere indolore. Nella maggior parte dei casi, sarai operativo in meno di 5 minuti. 
 
 Per cominciare, possiamo installare Meteor aprendo una finestra della riga di comando e scrivere:
 
@@ -136,9 +136,9 @@ Quando si parla di pacchetti nel contesto di Meteor, è meglio essere precisi. M
 
 Prima di cominciare a scrivere codice, dobbiamo organizzare il nostro progetto in maniera adeguata. Per assicurarsi di avere una struttura pulita, aprite la cartella `microscope` e cancellate `microscope.html`, `microscope.js`, e `microscope.css`. 
 
-Di seguito create cinque cartelle all'interno di `/microscope`: `/client`, `/server`, `/public`, `/lib`, e `/collections`, e create due file vuoti, `main.html` e `main.js`, all'interno di `/client`. Non preoccupatevi se questo compromette temporaneamente la vostra applicazione, inizieremo a scriverli nel prossimo capitolo. 
+Di seguito create cinque cartelle all'interno di `/microscope`: `/client`, `/server`, `/public`, `/lib`, e `/collections`, e create due file vuoti, `main.html` e `main.js`, all'interno di `/client`. Non preoccupatevi se questo compromette temporaneamente la vostra applicazione, inizieremo a riempirli nel prossimo capitolo. 
 
-E' necessario notare che alcune di queste cartelle sono speciali. Quando si tratta di struttra dei file, Meteor ha alcune regole:
+E' necessario notare che alcune di queste cartelle sono speciali. Quando si tratta di struttura dei file, Meteor ha alcune regole:
 
 - Il codice nella cartella `/server` viene eseguito solo sul server.
 - Il codice nella cartella `/client` viene eseguito solo sul client.
@@ -155,9 +155,9 @@ Vi invitiamo a controllare la [documentazione ufficiale di Meteor](http://docs.m
 
 ### Meteor è un MVC?
 
-Se ti stai avvicinando a Meteor venendo da altri frameworks come Ruby on Rails, ti starai forse chiedendo se le applicazioni Meteor adottano lo schema MVC (Model View Controller). 
+Se ti stai avvicinando a Meteor venendo da altri framework come Ruby on Rails, ti starai forse chiedendo se le applicazioni Meteor adottano lo schema MVC (Model View Controller). 
 
-La risposta breve è no. Diversamente da Rails, Meteor non impone nessuna struttura predefinita alla tua applicazione. Quindi in questo libro organizzeremo il codice nel modo che secondo noi ha più senso, senza preoccuparci più di tando degli acronimi.
+La risposta breve è no. Diversamente da Rails, Meteor non impone nessuna struttura predefinita alla tua applicazione. Quindi in questo libro organizzeremo il codice nel modo che secondo noi ha più senso, senza preoccuparci più di tanto degli acronimi.
 
 <% end %>
 
@@ -173,9 +173,9 @@ A proposito, potresti anche notare una cartella nascosta chiamata `.meteor`. Que
 
 L'unica cosa che possiamo dire a proposito dell'ormai storico dibattito tra underscore (`my_variable`) e camelCase (`myVariable`) è che non è importante quale modalità si scelga, l'importante è che una volta scelta la vostra preferita vi atteniate a pieno ad essa.
 
-In questo libro utilizziamo il camelCase perchè è lo standard per quanto riguarda JavaScript (dopotutto si chiama JavaScript, non java_script!).
+In questo libro utilizziamo il camelCase perché è lo standard per quanto riguarda JavaScript (dopotutto si chiama JavaScript, non java_script!).
 
-Le uniche eccezioni a questa regola sono i nomi dei file, che utilizzeranno gli underscore (`my_file.js`), e i le classi CSS, che useranno il trattino (`.my-class`). Il motivo di queste scelte è che nel filesystem gli underscore sono utilizzati frequentemente, mentre la sintassi CSS utilizza già i trattini (`font-family`, `text-align`, ecc.).
+Le uniche eccezioni a questa regola sono i nomi dei file, che utilizzeranno gli underscore (`my_file.js`), e le classi CSS, che useranno il trattino (`.my-class`). Il motivo di queste scelte è che nel filesystem gli underscore sono utilizzati frequentemente, mentre la sintassi CSS utilizza già i trattini (`font-family`, `text-align`, ecc.).
 
 <% end %>
 
