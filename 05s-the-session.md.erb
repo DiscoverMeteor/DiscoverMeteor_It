@@ -4,7 +4,7 @@ slug: the-session
 date: 0005/01/02
 number: 5.5
 sidebar: true
-contents: L'oggetto Session in Meteor|La funzione autorun|Il ricaricamento automatico ed a caldo del codice
+contents: L'oggetto Session in Meteor|La funzione autorun|Il ricaricamento a caldo del codice
 paragraphs: 33
 ---
 
@@ -12,7 +12,7 @@ Meteor è un framework reattivo. Ciò significa che al variare dei dati la nostr
 
 Abbiamo già visto all'opera questo meccanismo sui template che si aggiornano al variare dei dati e delle route.
 
-Approfondiremo questo meccanismo nei prossimi capitoli, ma ora vogliamo introdurre alcune caratteristiche di base usate spesso nelle applicazioni.
+Approfondiremo questo meccanismo nei prossimi capitoli, ma ora vogliamo introdurre alcune caratteristiche reattive di base usate spesso nelle applicazioni.
 
 ### L'oggetto Session in Meteor
 
@@ -20,11 +20,11 @@ In questo momento in Microscope lo stato dell'applicazione è interamente conten
 
 In molti casi però hai bisogno di alcune informazioni transitorie sullo stato dell'applicazione, rilevanti solo per l'istanza corrente dell'applicazione di uno specifico utente (ad esempio se un elemento è mostrato o nascosto). L'oggetto Session è perfetto per questo.
 
-L'oggetto Session è un contenitore dati globale e reattivo. E' globale nel senso di un unico oggetto visibile ovunque: c'è una sola sessione ed è accessibile dall'intera applicazione. Le variabili globali sono normalmente viste male ma in questo caso l'oggetto Session è usato come centro di comunicazione tra tutte le parti dell'applicazione.
+L'oggetto Session è un contenitore dati globale e reattivo. E' globale nel senso di un unico oggetto visibile ovunque: c'è una sola sessione ed è accessibile dall'intera applicazione. Le variabili globali sono normalmente mal viste ma in questo caso l'oggetto Session è usato come centro di comunicazione tra tutte le parti dell'applicazione.
 
 ### Memorizzare dati nell'oggetto Session
 
-L'oggetto Sessione è visibile ovunque come `Sessione. Per impostare un valore si invoca:
+L'oggetto sessione è visibile ovunque come `Session`. Per impostare un valore si invoca:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A different title');
@@ -84,9 +84,9 @@ helloWorld = function() {
 
 Anche se stiamo utilizzando una variabile di sessione, il *contesto* in cui viene usata non è reattivo, e dunque non saranno mostrati nuovi `alert` ogni volta che modifichiamo la variabile.
 
-E' in queste circostante che torna utile [Autorun](http://docs.meteor.com/#deps_autorun). Come dice il nome stesso, il codice all'interno di un blocco `autorun` sarà eseguito e rieseguito ogni volta che le sorgenti dati reattive all'interno vengono modificate.
+E' in queste circostanze che torna utile [Autorun](http://docs.meteor.com/#deps_autorun). Come dice il nome stesso, il codice all'interno di un blocco `autorun` sarà eseguito e rieseguito ogni volta che le sorgenti dati reattive all'interno vengono modificate.
 
-Scriviamo questo nella console del browser:
+Scriviamo nella console del browser:
 
 ~~~js
 ❯ Deps.autorun( function() { console.log('Value is: ' + Session.get('pageTitle')); } );
@@ -104,7 +104,7 @@ Value is: Yet another value
 
 Magia! Al variare del valore di sessione `autorun` sapeva di dover rieseguire il codice, ristampando il nuovo valore nella console.
 
-Dunque tornando al nostro esempio di prima, se vogliamo produrre un alert ogni volta che la variabile di sessione cambia dobbiamo inserire il nostro codice in un blocco `autorun`:
+Dunque tornando al nostro esempio di prima, se vogliamo produrre un alert ogni volta che la variabile di sessione cambia dobbiamo inserire il codice in un blocco `autorun`:
 
 ~~~js
 Deps.autorun(function() {
@@ -116,7 +116,7 @@ Come abbiamo appena visto l'autorun del codice è molto utile per monitorare i d
 
 ### Hot Code Reload
 
-Durante il nostro sviluppo di Microscope abbiamo usato una delle caratteristiche di Meteor che fanno risparmiare tempo: il ricaricamento a caldo del codice (hot code reload, HCR). Ogni volta che salviamo le modifiche ad un file sorgente, Meteor se ne accorge e riavvia il server in maniera trasparente, informando ogni client che è necessario ricaricare la pagina.
+Durante lo sviluppo di Microscope abbiamo usato una delle caratteristiche di Meteor che fanno risparmiare tempo: il ricaricamento a caldo del codice (hot code reload, HCR). Ogni volta che salviamo un file sorgente, Meteor se ne accorge e riavvia il server in maniera trasparente, informando ogni client che è necessario ricaricare la pagina.
 
 Questo meccanismo è simile al ricarimento automatico della pagina, ma con una importante differenza.
 
@@ -129,7 +129,7 @@ Per capire quale, azzeriamo la variabile di sessione che abbiamo usato finora:
 ~~~
 <%= caption "Browser console" %>
 
-Se ricaricassimo la pagina nella finestra del browser manualmente, le variabili contenute nell'oggetto Session andrebbero perse (in quanto si creerebbe una intera nuova sessione). Invece quando modifichiamo e salviamo un sorgente scatenando un ricaricamento a caldo del codice, la variabile di sessione non perde il suo valore. Proviamo!
+Se ricaricassimo la pagina nella finestra del browser manualmente, le variabili contenute nell'oggetto Session andrebbero perse (in quanto si creerebbe un'intera nuova sessione). Invece quando modifichiamo e salviamo un sorgente scatenando un ricaricamento a caldo del codice, la variabile di sessione non perde il suo valore. Proviamo!
 
 ~~~js
 ❯ Session.get('pageTitle');
@@ -137,7 +137,7 @@ Se ricaricassimo la pagina nella finestra del browser manualmente, le variabili 
 ~~~
 <%= caption "Browser console" %>
 
-Questo significa che se stiamo usando le variabili di sessione per tenere traccia di cosa sta facendo l'utente, il ricaricamento a caldo sarà trasparente per l'utente, perchè il valore delle variabili di sessione rimane inalterato. Possiamo quindi rilasciare nuove versioni di una applicazione Meteor ed aspettarci che gli utenti ne saranno solo minimamente disturbati.
+Questo significa che se stiamo usando le variabili di sessione per tenere traccia di cosa sta facendo l'utente, il ricaricamento a caldo sarà trasparente per l'utente, perché il valore delle variabili di sessione rimane inalterato. Possiamo quindi rilasciare nuove versioni di una applicazione Meteor ed aspettarci che gli utenti ne saranno solo minimamente disturbati.
 
 Pensaci un attimo. Se possiamo gestire tutto lo stato tramite URL e sessione, possiamo modificare in maniera trasparente *il codice in esecuzione* di ogni applicazione sotto il naso dell'utente mentre è in esecuzione e con problemi minimi.
 
