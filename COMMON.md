@@ -40,6 +40,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **built-in** -> *integrato*
  * **collection** -> *collezione*
  * **console** -> *terminale*
+ * **data store** -> *archivio dati*
  * **dropdown menu** -> *menù a discesa*, *menù a tendina*
  * **features** -> *funzionalità/caratteristiche*
  * **helper** -> *supporto* depending on the context
