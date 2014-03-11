@@ -1,25 +1,25 @@
 ---
-title: Errors
+title: Errori
 slug: errors
 date: 0009/01/01
 number: 9
-contents: Create a better mechanism for displaying errors and messages.|Learn how to use `Template.rendered` to know when a user has seen an error.|Use a router filter to make sure errors are only seen once.
+contents: Creare un sistema di visualizzazione di errori e messaggi.|Come usare `Template.rendered` per sapere quando un utente ha visualizzato un errore.|Usare un filtro nel router per mostrare gli errori una sola volta.
 paragraphs: 31
 ---
 
-////
+Usare una finestra di dialogo `alert()` per avvisare un utente che c'è stato un problema con l'inserimento di un post è abbastanza insoddifacente e di sicuro non contribuisce ad un'ottimale user experience. Si può fare certamente di meglio.
 
-////
+Si può costruire un meccanismo più versatile per riportare gli errori che di sicuro è una scelta migliore che farlo bloccando il flusso di utilizzo del browser.
 
-### Introducing Local Collections
+### Collezioni Locali
 
-////
+Verrà implementato un semplice sistema che tiene traccia di quali errori un utente ha visto e mostra quelli nuovi in un'area "flash" del sito. Questo pattern è utile per informare l'utente che è successo qualcosa senza però infastidire la sua esperienza nell'uso dell'applicazione.
 
-////
+Quello che verrà creato è un sistema simile ai messaggi flash che si trovano spesso nelle applicazioni Ruby on Rails, ma è più ingegnoso per il fatto che è implementato lato client e riconosce quando l'utente visualizza il messaggio.
 
-////
+Per iniziare, si crea una collezione per contenere gli errori. Dato che gli errori sono rilevanti solo nella sessione corrente e non devono in alcun modo essere persistenti, si crea qualcosa di nuovo, una _collezione locale_. Ciò significa che la collezione `Errors` esisterà solo nel browser, e non tenterà di sincronizzarsi sul server.
 
-////
+Per fare ciò, si crea l'errore in un file disponibile solo al client, con in nome della collezione impostato a `null`. Grazie a una funzione `throwError`, con la quale gli errori vengono inseriti nella nuova collezione locale:
 
 ~~~js
 // Local (client-only) collection
