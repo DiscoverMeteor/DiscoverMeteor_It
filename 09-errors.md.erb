@@ -27,7 +27,7 @@ Errors = new Meteor.Collection(null);
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-////
+Ora che la collezione è creata, si aggiunge una funzione `throwError` per inserirvi gli errori. Non bisogna preoccuparsi di `allow`, `deny` o altro, perchè si tratta di una collezione locale e non verrà salvata sul database di Mongo.
 
 ~~~js
 throwError = function(message) {
@@ -36,11 +36,11 @@ throwError = function(message) {
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-////
+Il vantaggio di usare una collezione locale per contenere gli errori è che, come tutte le collezioni, è un elemento reattivo -- il che significa che si possono mostrare gli errori nello stesso modo in cui si mostrano i dati delle altre collezioni.
 
-### Displaying errors
+### Mostrare gli errori
 
-////
+Gli errori verranno mostrati al di sopra del layout principale:
 
 ~~~html
 <template name="layout">
@@ -56,7 +56,7 @@ throwError = function(message) {
 <%= caption "client/views/application/layout.html" %>
 <%= highlight "7" %>
 
-////
+Si creino ora i template `errors` e `error` nel file `errors.html`:
 
 ~~~html
 <template name="errors">
@@ -78,15 +78,15 @@ throwError = function(message) {
 
 <% note do %>
 
-### Twin Templates
+### Template gemelli
 
-////
+Si noti che sono stati inseriti due template in un solo file. Fino ad ora si è cercato di mantenere la convenzione "un file, un template", ma per come è fatto Meteor è possibile mettere tutti i template in un file solo e non ci sarebbero problemi di funzionamento (anche se si avrebbe un file `main.html` molto confuso!).
 
-////
+In questo caso, dato che entrambi i template degli errori sono molto piccoli, si fa un'eccezione e si inseriscono nello stesso file per avere un repository un po' più pulito.
 
 <% end %>
 
-////
+Ora si deve solo creare l'helper dei template e si è pronti per proseguire!
 
 ~~~js
 Template.errors.helpers({
@@ -99,11 +99,11 @@ Template.errors.helpers({
 
 <%= commit "9-1", "Basic error reporting." %>
 
-### Creating errors
+### Creare gli errori
 
-////
+Ora che si sa come mostrare gli errori, si deve crearne qualcuno perchè si possa vedere qualcosa. Gli errori spesso si generano quando un utente inserisce nuovi contenuti, per cui il controllo viene inserito nella callback della creazione di un post per mostrare un messaggio per ogni errori che viene generato.
 
-////
+In aggiunta, se ritorna un errore `302` (che significa che esiste già un post con lo stesso URL), l'utente verrà reindirizzato al post esistente. Si ottiene l'`_id` del post esistenete da `error.details` (si ricordi che l'`_id` del post è passato come terzo argomento `details` nella classe `Error` nel capitolo 7).
 
 ~~~js
 Template.postSubmit.events({
