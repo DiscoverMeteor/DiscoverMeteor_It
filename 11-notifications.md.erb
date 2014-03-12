@@ -191,19 +191,19 @@ Template.notification.events({
 ~~~
 <%= caption "client/views/notifications/notifications.js" %>
 
-<%= commit "11-2", "Visualizza le notifiche in cima." %>
+<%= commit "11-2", "Visualizza le notifiche nel header." %>
 
 ////
 
 ////
 
-<%= screenshot "11-1", "Displaying notifications." %>
+<%= screenshot "11-1", "Visuaizzazione delle notifiche." %>
 
-### Controlling access to notifications
+### Controllo dell'accesso alle notifiche
 
-////
+Le notifiche stanno funzionando bene. Tuttavia c'è solo un piccolo problema: le nostre notifiche sono pubbliche. 
 
-////
+Se avete ancora il secondo browser aperto, provate ad eseguire il seguente codice nella console del browser:
 
 ~~~js
 ❯ Notifications.find().count();
@@ -211,15 +211,15 @@ Template.notification.events({
 ~~~
 <%= caption "Browser console" %>
 
-////
+Questo nuovo utente (quella che *ha commentato*) non dovrebbe avere alcuna notifica. La notifica che si può vedere nella collection `Notifications` in realtà appartiene al nostro utente *originario*. 
 
-////
+Oltre a potenziali problemi di privacy, non possiamo permetterci di avere le notifiche di ogni utente caricati nel browser di ogni altro utente. In un sito abbastanza grande, questo potrebbe sovraccaricare la memoria disponibile del browser e iniziare a causare seri problemi di prestazioni. 
 
-////
+Risolviamo questo problema con **pubblicazioni**. Possiamo usare le nostre pubblicazioni per specificare esattamente quale parte di una collezione vogliamo condividere con ciascun browser. 
 
-////
+Per fare questo, abbiamo bisogno di restituire un cursore diverso alla nostra pubblicazione di `Notifications.find ()`. Vale a dire, vogliamo restituire un cursore che corrisponde alle notifiche dell'utente corrente. 
 
-////
+In questo modo è abbastanza semplice, visto che una funzione `publish` ha disponibile l'`_id` dell'utente corrente in `this.userId`:
 
 ~~~js
 Meteor.publish('notifications', function() {
@@ -228,9 +228,9 @@ Meteor.publish('notifications', function() {
 ~~~
 <%= caption "server/publications.js" %>
 
-<%= commit "11-3", "Only sync notifications that are relevant to the user." %>
+<%= commit "11-3", "Sincronizza solo le notifiche che sono rilevanti per l'utente." %>
 
-////
+Ora se controlliamo le nostre due finestre del browser, dovremmo vedere due diverse collection per le notifiche:
 
 ~~~js
 ❯ Notifications.find().count();
@@ -244,6 +244,5 @@ Meteor.publish('notifications', function() {
 ~~~
 <%= caption "Browser console (user 2)" %>
 
-////
-
-////
+In realtà, l'elenco delle notifiche dovrebbe anche cambiare a seconda se si è autenticati o meno. Questo perché le pubblicazioni automaticamente ri-pubblicano ogni volta che l'account utente cambia. 
+La nostra applicazione sta diventando sempre più funzionale, e via via che più gli utenti si registrano e iniziano a postare link si rischia di finire con una homepage senza fine. Affronteremo questo problema nel prossimo capitolo implementando la paginazione.
