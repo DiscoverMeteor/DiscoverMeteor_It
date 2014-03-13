@@ -43,11 +43,11 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **data store** -> *archivio dati*
  * **dropdown menu** -> *menù a discesa*, *menù a tendina*
  * **features** -> *funzionalità/caratteristiche*
- * **helper** -> *supporto* depending on the context
+ * **helper** -> *utilità/classe di utilità* depending on the context
  * **link(s)** -> *collegamento/collegamenti*
  * **package** -> *pacchetto*
  * **path** -> *percorso*, *indirizzo*
- * **pattern** -> *schema*
+ * **pattern** -> *schema ricorrente*
  * **publication** -> *pubblicazione*
  * **real-time** -> *tempo reale*
  * **subscription** -> *sottoscrizione*
