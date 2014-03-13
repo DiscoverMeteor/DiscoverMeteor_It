@@ -39,10 +39,10 @@ In questo capitolo vedremo molte caratteristiche del router. Se hai già esperie
 - **Route**: Una route è il mattone base del routing. E' il set di istruzioni che dice all'applicazione dove andare e cosa fare quando incontra un URL.
 - **Path**: Un path è il percorso indicato da un URL all'interno dell'applicazione. Può essere statico (`/terms_of_service`) o dinamico (`/posts/xyz`), e può anche includere parametri di ricerca (`/search?keyword=meteor`).
 - **Segment**: Le diverse parti di un path, delimitato da slashes (`/`).
-- **Hook**: Le hooks sono le azioni che desideri fare prima, dopo, o anche durante il processo di routing. Un esempio tipico è il controllo dei diritti di accesso dell'utente prima di mostrare una determinata pagina.
+- **Hook**: Gli hook sono azioni che desideri fare prima, dopo, o anche durante il processo di routing. Un esempio tipico è il controllo dei diritti di accesso dell'utente prima di mostrare una determinata pagina.
 - **Filter**: I filtri sono semplicemente hook definiti globalmente per una o più route.
 - **Route Template**: Ogni route deve puntare ad un template. Se non ne specifichi uno, il router cercherà un template con lo stesso nome della route.
-- **Layout**: Puoi immaginare i layouts come una di quelle cornici digitali. Contengono tutto il codice HTML che avvolge l'attuale template, e rimarrà invariato anche se il template cambia.
+- **Layout**: Puoi immaginare i layout come una di quelle cornici digitali. Contengono tutto il codice HTML che avvolge l'attuale template, e rimarrà invariato anche se il template cambia.
 - **Controller**: A volte potresti renderti conto che molti dei tuoi template riutilizzano gli stessi parametri. Piuttosto che duplicare il codice, puoi ereditare queste route da un unico *routing controller* che contiene tutta la logica di routing.
 
 Per altre informazioni su Iron Router, consulta [la documentazione completa su GitHub](https://github.com/EventedMind/iron-router).
@@ -51,7 +51,7 @@ Per altre informazioni su Iron Router, consulta [la documentazione completa su G
 
 ### Routing: Mappare gli URL sui Template
 
-Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto. 
+Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto.
 
 Iron Router permette di superare questa staticità prendendo il controllo di ciò che viene mostrato nel tag HTML <body>. Non definiremo noi il contenuto di questo tag, come faremmo con una normale pagina HTML. Faremo invece puntare il router ad uno speciale template di struttura che contiene un helper `{{yield}}`.
 
@@ -119,7 +119,7 @@ Una piccola avvertenza: poiché la cartella `/lib` non si trova né dentro `/cli
 
 Chiariamo un aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `postsList`, ma abbiamo anche un *template* chiamato `postsList`. Dunque che significa?
 
-L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. Difatti cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`. 
+L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. Difatti cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`.
 
 Potresti chiederti perché abbiamo bisogno di dare un nome alle route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
 
@@ -161,7 +161,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "3,4" %>
 
-Esaminiamo pezzo per pezzo. Per prima cosa abbiamo modificato il blocco `Router.configure()` per indicare il nome di un template (che creeremo tra un attimo) da mostrare durante il caricamento e l'attesa dei dati. 
+Esaminiamo pezzo per pezzo. Per prima cosa abbiamo modificato il blocco `Router.configure()` per indicare il nome di un template (che creeremo tra un attimo) da mostrare durante il caricamento e l'attesa dei dati.
 
 Secondo abbiamo aggiunto una funzione `waitOn` che ritorna la sottoscrizione ai nostri `posts`. Ciò significa che il router si assicurerà che la sottoscrizione `posts` sia completamente caricata prima di portare l'utente alla route richiesta.
 
@@ -218,7 +218,7 @@ Creiamo poi un'altra route a cui assegniamo un nome, questa volta mappando il pa
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id'
   });
@@ -230,7 +230,7 @@ Router.map(function() {
 
 La sintassi speciale `:_id` dice al router due cose: primo di riconoscere ogni route nella forma `/posts/xyz`, dove "xyz" può essere qualsiasi cosa. Secondo di mettere qualunque cosa trovi al posto di "xyz" dentro una proprietà `_id` dell'array `params` del router.
 
-Nota che stiamo usando `_id` solo per chiarezza. Il router non ha modo di sapere se stai passando un vero `_id` o solo una sequenza casuale di caratteri. 
+Nota che stiamo usando `_id` solo per chiarezza. Il router non ha modo di sapere se stai passando un vero `_id` o solo una sequenza casuale di caratteri.
 
 A questo punto stiamo instradando al template corretto, ma ci manca ancora qualcosa: il router conosce l'`_id` del post che vogliamo mostrare, ma il template no. Come risolviamo?
 
@@ -243,7 +243,7 @@ Nel nostro caso possiamo ottenere il giusto contesto dati cercando il nostro pos
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }
@@ -262,7 +262,7 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 
 ### Approfondiamo i Contesti Dati
 
-Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpes all'interno del template. 
+Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpes all'interno del template.
 
 Normalmente lo si imposta implicitamente con l'iteratore `{{each}}`, che imposta automaticamente il contesto dati all'elemento su cui stiamo iterando:
 
@@ -328,6 +328,6 @@ Una cosa da tener presente è che questa gestione degli URL avviene attraverso [
 
 Il router intercetta i click sugli URL che sono interni al sito e impedisce al browser di gestirli come fossero link esterni, preoccupandosi invece di modificare opportunamente solo lo stato dell'applicazione.
 
-Se tutto funziona a dovere la pagina dovrebbe modificarsi istantaneamente. Addirittura a volte le cose cambiano così rapidamente che potrebbe essere opportuno inserire delle transizioni di pagina. Pur essendo fuori dall'ambito di questo capitolo è un argomento molto interessante. 
+Se tutto funziona a dovere la pagina dovrebbe modificarsi istantaneamente. Addirittura a volte le cose cambiano così rapidamente che potrebbe essere opportuno inserire delle transizioni di pagina. Pur essendo fuori dall'ambito di questo capitolo è un argomento molto interessante.
 
 <% end %>

@@ -7,7 +7,7 @@ contents: Creare un sistema di visualizzazione di errori e messaggi.|Come usare 
 paragraphs: 31
 ---
 
-Usare una finestra di dialogo `alert()` per avvisare un utente che c'è stato un problema con l'inserimento di un post è abbastanza insoddifacente e di sicuro non contribuisce ad un'ottimale user experience. Si può fare certamente di meglio.
+Usare una finestra di dialogo `alert()` per avvisare un utente che c'è stato un problema con l'inserimento di un post è abbastanza insoddisfacente e di sicuro non contribuisce ad un'ottimale user experience. Si può fare certamente di meglio.
 
 Si può costruire un meccanismo più versatile per riportare gli errori che di sicuro è una scelta migliore che farlo bloccando il flusso di utilizzo del browser.
 
@@ -27,7 +27,7 @@ Errors = new Meteor.Collection(null);
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-Ora che la collezione è creata, si aggiunge una funzione `throwError` per inserirvi gli errori. Non bisogna preoccuparsi di `allow`, `deny` o altro, perchè si tratta di una collezione locale e non verrà salvata sul database di Mongo.
+Ora che la collezione è creata, si aggiunge una funzione `throwError` per inserirvi gli errori. Non bisogna preoccuparsi di `allow`, `deny` o altro, perché si tratta di una collezione locale e non verrà salvata sul database di Mongo.
 
 ~~~js
 throwError = function(message) {
@@ -101,26 +101,26 @@ Template.errors.helpers({
 
 ### Creare gli errori
 
-Ora che si sa come mostrare gli errori, si deve crearne qualcuno perchè si possa vedere qualcosa. Gli errori spesso si generano quando un utente inserisce nuovi contenuti, per cui il controllo viene inserito nella callback della creazione di un post per mostrare un messaggio per ogni errori che viene generato.
+Ora che si sa come mostrare gli errori, si deve crearne qualcuno perché si possa vedere qualcosa. Gli errori spesso si generano quando un utente inserisce nuovi contenuti, per cui il controllo viene inserito nella callback della creazione di un post per mostrare un messaggio per ogni errori che viene generato.
 
-In aggiunta, se ritorna un errore `302` (che significa che esiste già un post con lo stesso URL), l'utente verrà reindirizzato al post esistente. Si ottiene l'`_id` del post esistenete da `error.details` (si ricordi che l'`_id` del post è passato come terzo argomento `details` nella classe `Error` nel capitolo 7).
+In aggiunta, se ritorna un errore `302` (che significa che esiste già un post con lo stesso URL), l'utente verrà reindirizzato al post esistente. Si ottiene l'`_id` del post esistente da `error.details` (si ricordi che l'`_id` del post è passato come terzo argomento `details` nella classe `Error` nel capitolo 7).
 
 ~~~js
 Template.postSubmit.events({
   'submit form': function(e) {
     e.preventDefault();
-    
+
     var post = {
       url: $(e.target).find('[name=url]').val(),
       title: $(e.target).find('[name=title]').val(),
       message: $(e.target).find('[name=message]').val()
     }
-    
+
     Meteor.call('post', post, function(error, id) {
       if (error) {
         // display the error to the user
         throwError(error.reason);
-        
+
         if (error.error === 302)
           Router.go('postPage', {_id: error.details})
       } else {
@@ -145,7 +145,7 @@ Se avete provato a cliccare sul bottone di chiusura dell'errore, avete visto l'e
 
 Il bottone di chiusura scatena l'evento JavaScript di Twitter Bootstrap: non ha nulla a che fare con Meteor! Quello che sta accadendo è che Bootstrap rimuove il `<div>` dell'errore dal DOM, ma non dalla collezione di Meteor. Ciò significa che l'errore tornerà visibile nel momento in cui Meteor renderizza di nuovo la pagina.
 
-A meno che non si voglia che gli errori tornino senza sosta dall'aldilà per continuare a ricordare agli utenti i loro errori passati portandoli lentamente alla follia, è meglio aggiungere un modo per rimuoverli dalla collezione. 
+A meno che non si voglia che gli errori tornino senza sosta dall'aldilà per continuare a ricordare agli utenti i loro errori passati portandoli lentamente alla follia, è meglio aggiungere un modo per rimuoverli dalla collezione.
 
 Come prima cosa, si modifica la funzione `throwError` per includere una proprietà `seen` (visto). Questo ci aiuterà in seguito a tenere traccia del fatto che un errore sia stato visto o meno da un utente.
 
@@ -179,11 +179,11 @@ Router.before(function() { clearErrors() });
 
 Per fare in modo che la funzione `clearErrors()` faccia il proprio lavoro, gli errori devono essere marcati come `seen`. Per farlo in maniera appropriata dobbiamo tenere conto di un caso limite: quando viene alzato un errore e l'utente viene poi reindirizzato ad un'altra pagina (ad esempio quando si tenta di inserire un link duplicato), il reindirizzamento avviene in maniera istantanea. Ciò significa che l'utente non ha mai avuto modo di vedere l'errore prima che venga cancellato.
 
-Qui è dove la proprietà `seen` viene in aiuto. Dobbiamo assicurarci che sia impostata a `true` solo se l'utente ha realmente visto l'errore. 
+Qui è dove la proprietà `seen` viene in aiuto. Dobbiamo assicurarci che sia impostata a `true` solo se l'utente ha realmente visto l'errore.
 
 Per farlo useremo `Meteor.defer()`. Questa funzione dice a Meteor di eseguire la propria callback "appena dopo" qualsiasi cosa stia accadendo al momento. Se può aiutare, si può considerare che usare `defer()` è come dire al browser di aspettare un millisecondo prima di procedere.
 
-Si sta dicendo a Meteor di impostare `seen` a `true` un millisecondo dopo che il template `errors` e stato renderizzato. Ricordate che abbiamo detto che il reindirizzamento accade in maniera istantanea? Questo siginifica che il reindirizzamento avverrà prima della callback `defer`, che quindi non sarà mai eseguita.
+Si sta dicendo a Meteor di impostare `seen` a `true` un millisecondo dopo che il template `errors` e stato renderizzato. Ricordate che abbiamo detto che il reindirizzamento accade in maniera istantanea? Questo significa che il reindirizzamento avverrà prima della callback `defer`, che quindi non sarà mai eseguita.
 
 E' esattamente ciò che si stava cercando: se non viene eseguita l'errore non sarà mai marcato come `seen`, il che significa che non sarà eliminato, e quindi apparirà sulla pagina alla quale l'utente è stato reindirizzato esattamente come desiderato!
 
