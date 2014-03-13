@@ -105,7 +105,7 @@ Router.configure({
 
 <%= commit "10-1", "Aggiunta la commezione comments, publicazione/sottoscrizione, e dati di esempio." %>
 
-E' bene osservare che, perchè il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database.
+E' bene osservare che, perché il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database.
 Dopo aver eseguito il reset, non dimenticare di creare un nuovo utente ed effettuare di nuovo il login!
 
 Prima di tutto, abbiamo creato un paio di (finti) utenti, li abbiamo inseriti nel database e abbiamo usato i loro `ids` per selezionarli dal database stesso subito dopo. Dopodichè, abbiamo aggiunto dei commenti al primo post, uno per ciascuno degli utenti, collegando il commento al post (con `postId`) e all'utente (con `userId`). Abbiamo anche aggiunto una data di inserimento e un testo per ciascun commento, insieme a un valore per `author`, un campo non normalizzato.
@@ -142,7 +142,7 @@ Template.postPage.helpers({
 
 Inseriamo il blocco `{{#each comments}}` dentro al template post, così `this` si riferisce a un post dentro all'helper `comments`. Per selezionare quali commenti mostrare, filtriamo la collezione selezionando quelli collegati allo specifico post tramite l'attributo `postId`.
 
-Considerato quanto abbiamo già imparato riguardo agli helpers e ad handlebar, visualizzare un commento é abbastanza semplice. Creiamo una nuova cartella `comments` dentro a `views` per salvare il template del dettaglio commenti:
+Considerato quanto abbiamo già imparato riguardo agli helpers e ad handlebar, visualizzare un commento è abbastanza semplice. Creiamo una nuova cartella `comments` dentro a `views` per salvare il template del dettaglio commenti:
 
 ~~~html
 <template name="comment">
@@ -326,7 +326,7 @@ Non stiamo facendo nessun controllo particolare, solo verificando che l'utente s
 
 ### Ottimizzare la sottoscrizione Comments
 
-Allo stato attuale, Meteor manda tutti i commenti di tutti i post a tutti gli utenti collegati; ci sembra uno spreco, perchè alla fin fine, ciascun utente usa solo una piccola parte di tutti questi dati (i commenti del post che sta visualizzando).
+Allo stato attuale, Meteor manda tutti i commenti di tutti i post a tutti gli utenti collegati; ci sembra uno spreco, perché alla fin fine, ciascun utente usa solo una piccola parte di tutti questi dati (i commenti del post che sta visualizzando).
 Ottimizziamo la pubblicazione e la sottoscrizione così da controllare meglio quali commenti sono inviati.
 
 A pensarci bene, l'applicazione ha bisogno di sottoscrivere la pubblicazione `comments` solo quando un utente accede alla pagina che visualizza un post, e ha bisogno di caricare solo i commenti relativi a quel particolare post.
@@ -335,7 +335,7 @@ Il primo passo sarà cambiare il modo in cui effettuiamo la sottoscrizione alla 
 
 Ma ora vogliamo che la nostra sottoscrizione dipenda dal particolare indirizzo della pagina che stiamo visualizzando, e tale indirizzo può ovviamente cambiare. Dunque dobbiamo spostare il codice che effettua la sottoscrizione dal livello di _router_ a quello di _route_.
 
-Questo ha un'altra conseguenza: invece di caricare tutti i dati quando inizializziamo l'applicazione per la prima volta, questi verranno caricati quando la particolare _route_ viene chiamata; questo significa che ora l'applicazione sarà più lenta in fase di navigazione (perchè i dati vengono caricati man mano che servono), ma è inevitabile, a meno che non si vogliano precaricare **tutti** i dati all'avvio.
+Questo ha un'altra conseguenza: invece di caricare tutti i dati quando inizializziamo l'applicazione per la prima volta, questi verranno caricati quando la particolare _route_ viene chiamata; questo significa che ora l'applicazione sarà più lenta in fase di navigazione (perché i dati vengono caricati man mano che servono), ma è inevitabile, a meno che non si vogliano precaricare **tutti** i dati all'avvio.
 
 Ecco com'é la funzione `waitOn` a livello di route:
 
@@ -381,7 +381,7 @@ Osserviamo ora un ultimo problema: quando torniamo alla pagina principale, l'app
 
 ### Contare i commenti
 
-La ragione di questo comportamento é semplice: noi carichiamo i commenti solo quando entriamo nella pagina di visualizzazione del post, dunque, quando viene eseguita l'istruzione `Comments.find({postId: this._id})` nell'helper `commentsCount` del manager `post_item`, Meteor non riesce a trovare il dato da mostrare.
+La ragione di questo comportamento è semplice: noi carichiamo i commenti solo quando entriamo nella pagina di visualizzazione del post, dunque, quando viene eseguita l'istruzione `Comments.find({postId: this._id})` nell'helper `commentsCount` del manager `post_item`, Meteor non riesce a trovare il dato da mostrare.
 
 La maniera migliore per risolvere il problema è _denormalizzare_, salvando il numero dei commenti dentro al post stesso (se non sei del tutto sicuro cosa significhi, non preoccuparti: questo argomento viene spiegato nel prossimo approfondimento). Anche se, come vedremo, il nostro codice diventerà un po' più complesso, questo aumento di complessità sarà giustificato dall'aumento delle prestazioni dell'applicazione, per non dover pubblicare _tutti_ i commenti già nella pagina che mostra i post.
 
@@ -433,7 +433,7 @@ return Comments.insert(comment);
 ~~~
 <%= caption "collections/comments.js "%>
 
-Possiamo dunque rimuovere l'helper commentsCount dal file client/views/posts/post_item.js, dal momento che il campo é disponibile nel post stesso.
+Possiamo dunque rimuovere l'helper commentsCount dal file client/views/posts/post_item.js, dal momento che il campo è disponibile nel post stesso.
 
 <%= commit "10-5", "Numero totale di commenti denormalizzato dentro al post." %>
 
