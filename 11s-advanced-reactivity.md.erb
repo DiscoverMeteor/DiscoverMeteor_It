@@ -1,20 +1,23 @@
 ---
-title: Advanced Reactivity
+title: Reattività avanzata
 slug: advanced-reactivity
 date: 0011/01/02
 number: 11.5
+points: 10
 sidebar: true
-contents: Learn about how to create reactive data sources in Meteor.|Create a simple example of a reactive data source.|See how Deps compares to AngularJS.
-paragraphs: 29
+photoUrl: http://www.flickr.com/photos/ikewinski/8676146109/
+photoAuthor: Mike Lewinski
+contents: 
+Impara a creare sorgenti di dati reattive in Meteor.| Crea un semplice esempio di sorgente di dati reattiva.| Vedi come Deps si compara ad AngularJS.
 ---
 
-////
+È raro aver bisogno di scrivere da soli il codice per risolvere le dipendenze, ma è certamente utile per capire come avviene il flusso di risoluzione delle dipendenze.
 
-////
+Immaginate di voler monitorare il numero di amici di Facebook dell'utente corrente che hanno messo "Mi piace" su ogni post su Microscope. Supponiamo che abbiamo già definito i dettagli su come autenticare l'utente con Facebook, le opportune chiamate alle API, e estrarre i dati rilevanti. Ora abbiamo una funzione asincrona lato client che restituisce il numero di mi piace, `getFacebookLikeCount(utente, url, callback)`.
 
-////
+La cosa importante da ricordare su questa funzione è che è *non-reattiva* e non-realtime. Farà una richiesta HTTP a Facebook per recuperare dei dati, e li renderà disponibili per l'applicazione in una richiamata asincrona, ma la funzione non si ri-eseguirà da sola quando il contatore cambia su Facebook, e la nostra interfaccia non cambierà quando i dati sottostanti lo faranno.
 
-////
+Per risolvere questo problema, possiamo iniziare utilizzando `setInterval` per chiamare la nostra funzione ogni pochi secondi:
 
 ~~~js
 currentLikeCount = 0;
@@ -30,7 +33,7 @@ Meteor.setInterval(function() {
 }, 5 * 1000);
 ~~~
 
-////
+Ogni volta che controlliamo la variabile `currentLikeCount`, possiamo aspettarci di ottenere il numero corretto con un margine di errore di cinque secondi. Possiamo ora utilizzare questa variabile in un helper in questo modo:
 
 ~~~js
 Template.postItem.likeCount = function() {
@@ -38,19 +41,19 @@ Template.postItem.likeCount = function() {
 }
 ~~~
 
-////
+Tuttavia, nulla ancora dice al nostro template di ri-disegnare quando `currentLikeCount` cambia. Anche se la variabile è ora pseudo-realtime, nel senso che cambia da sola, non è *reattiva* così ancora non può comunicare correttamente con il resto dell'ecosistema Meteor.
 
-### Tracking Reactivity: Computations
+### Tracciare la reattività: Computation
 
-////
+La reattività di Meteor è mediata dalle *dipendenze*, strutture di dati che tracciano una serie di calcoli. 
 
-////
+Come abbiamo visto nel precedente approfondimento reattività, una computation è una sezione di codice che utilizza i dati reattivi. Nel nostro caso, c'è una computation che è stata creata in modo implicito per il modello `PostItem`. Ogni helper sul gestore del template sta lavorando all'interno di tale computation. 
 
-////
+Si può pensare alla computation, come la sezione di codice che "si interessa" dei dati reattivi. Quando i dati cambiano, sarà questa computation che sarà informata (via `invalidate ()`), ed è la computation che decide se c'é bisogno di fare qualcosa.
 
-### Turning a Variable Into a Reactive Function
+### Trasformare una variabile in una funzione reattiva
 
-////
+Per trasformare la nostra variabile `currentLikeCount` variabile in una fonte di dati reattiva, abbiamo bisogno di tenere traccia di tutte le computation che la utilizzano in una dipendenza. Ciò richiede di trasformarla da variabile a funzione (che restituirà un valore):
 
 ~~~js
 var _currentLikeCount = 0;
