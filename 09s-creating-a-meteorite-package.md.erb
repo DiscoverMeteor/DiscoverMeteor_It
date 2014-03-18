@@ -1,18 +1,18 @@
 ---
-title: Creating a Meteorite Package
+title: Creare un pacchetto con Meteorite
 slug: creating-a-meteorite-package
 date: 0009/01/02
 number: 9.5
 sidebar: true
-contents: Write a local in-app package.|Write some tests for your package.|Release your package on Atmosphere.
+contents: Creare un pacchetto per l'appilcazione.|Scrivere dei test per il pacchetto.|Rilasciare il pacchetto su Atmosphere.
 paragraphs: 22
 ---
 
-////
+Dopo che abbiamo creato uno schema riutilizzabile per la gestione dei nostri errori, possiamo creare un pacchetto e condividerlo con gli altri sviluppatori della comunità di Meteor.
 
-////
+Come prima cosa dobbiamo preparare la struttura del pacchetto. Lo inseriamo in una cartella chiamate `packages/errors/`, in questo modo si crea un pacchetto personalizzato che l'applicazione utilizzerà automaticamente. (E' possibile che abbiate notato che Meteorite installa i pacchetto tramite symlinks nella cartella `packages/`).
 
-////
+In seguito, creiamo il file `package.js`, nel quale viene detto a Meteor come deve utilizzare il pacchetto e quali oggetti vengono esportati e resi disponibili all'applicazione.
 
 ~~~js
 Package.describe({
