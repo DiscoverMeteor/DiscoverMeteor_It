@@ -1,25 +1,25 @@
 ---
-title: Errors
+title: Errori
 slug: errors
 date: 0009/01/01
 number: 9
-contents: Create a better mechanism for displaying errors and messages.|Learn how to use `Template.rendered` to know when a user has seen an error.|Use a router filter to make sure errors are only seen once.
+contents: Creare un sistema di visualizzazione di errori e messaggi.|Come usare `Template.rendered` per sapere quando un utente ha visualizzato un errore.|Usare un filtro nel router per mostrare gli errori una sola volta.
 paragraphs: 31
 ---
 
-////
+Usare una finestra di dialogo `alert()` per avvisare un utente che c'è stato un problema con l'inserimento di un post è abbastanza insoddisfacente e di sicuro non contribuisce ad un'ottimale user experience. Si può fare certamente di meglio.
 
-////
+Si può costruire un meccanismo più versatile per riportare gli errori che di sicuro è una scelta migliore che farlo bloccando il flusso di utilizzo del browser.
 
-### Introducing Local Collections
+### Collezioni Locali
 
-////
+Verrà implementato un semplice sistema che tiene traccia di quali errori un utente ha visto e mostra quelli nuovi in un'area "flash" del sito. Questo pattern è utile per informare l'utente che è successo qualcosa senza però infastidire la sua esperienza nell'uso dell'applicazione.
 
-////
+Quello che verrà creato è un sistema simile ai messaggi flash che si trovano spesso nelle applicazioni Ruby on Rails, ma è più ingegnoso per il fatto che è implementato lato client e riconosce quando l'utente visualizza il messaggio.
 
-////
+Per iniziare, si crea una collezione per contenere gli errori. Dato che gli errori sono rilevanti solo nella sessione corrente e non devono in alcun modo essere persistenti, si crea qualcosa di nuovo, una _collezione locale_. Ciò significa che la collezione `Errors` esisterà solo nel browser, e non tenterà di sincronizzarsi sul server.
 
-////
+Per fare ciò, si crea l'errore in un file disponibile solo al client, con in nome della collezione impostato a `null`. Grazie a una funzione `throwError`, con la quale gli errori vengono inseriti nella nuova collezione locale:
 
 ~~~js
 // Local (client-only) collection
@@ -27,7 +27,7 @@ Errors = new Meteor.Collection(null);
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-////
+Ora che la collezione è creata, si aggiunge una funzione `throwError` per inserirvi gli errori. Non bisogna preoccuparsi di `allow`, `deny` o altro, perché si tratta di una collezione locale e non verrà salvata sul database di Mongo.
 
 ~~~js
 throwError = function(message) {
@@ -36,11 +36,11 @@ throwError = function(message) {
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-////
+Il vantaggio di usare una collezione locale per contenere gli errori è che, come tutte le collezioni, è un elemento reattivo -- il che significa che si possono mostrare gli errori nello stesso modo in cui si mostrano i dati delle altre collezioni.
 
-### Displaying errors
+### Mostrare gli errori
 
-////
+Gli errori verranno mostrati al di sopra del layout principale:
 
 ~~~html
 <template name="layout">
@@ -56,7 +56,7 @@ throwError = function(message) {
 <%= caption "client/views/application/layout.html" %>
 <%= highlight "7" %>
 
-////
+Si creino ora i template `errors` e `error` nel file `errors.html`:
 
 ~~~html
 <template name="errors">
@@ -78,15 +78,15 @@ throwError = function(message) {
 
 <% note do %>
 
-### Twin Templates
+### Template gemelli
 
-////
+Si noti che sono stati inseriti due template in un solo file. Fino ad ora si è cercato di mantenere la convenzione "un file, un template", ma per come è fatto Meteor è possibile mettere tutti i template in un file solo e non ci sarebbero problemi di funzionamento (anche se si avrebbe un file `main.html` molto confuso!).
 
-////
+In questo caso, dato che entrambi i template degli errori sono molto piccoli, si fa un'eccezione e si inseriscono nello stesso file per avere un repository un po' più pulito.
 
 <% end %>
 
-////
+Ora si deve solo creare l'helper dei template e si è pronti per proseguire!
 
 ~~~js
 Template.errors.helpers({
@@ -99,28 +99,28 @@ Template.errors.helpers({
 
 <%= commit "9-1", "Basic error reporting." %>
 
-### Creating errors
+### Creare gli errori
 
-////
+Ora che si sa come mostrare gli errori, si deve crearne qualcuno perché si possa vedere qualcosa. Gli errori spesso si generano quando un utente inserisce nuovi contenuti, per cui il controllo viene inserito nella callback della creazione di un post per mostrare un messaggio per ogni errori che viene generato.
 
-////
+In aggiunta, se ritorna un errore `302` (che significa che esiste già un post con lo stesso URL), l'utente verrà reindirizzato al post esistente. Si ottiene l'`_id` del post esistente da `error.details` (si ricordi che l'`_id` del post è passato come terzo argomento `details` nella classe `Error` nel capitolo 7).
 
 ~~~js
 Template.postSubmit.events({
   'submit form': function(e) {
     e.preventDefault();
-    
+
     var post = {
       url: $(e.target).find('[name=url]').val(),
       title: $(e.target).find('[name=title]').val(),
       message: $(e.target).find('[name=message]').val()
     }
-    
+
     Meteor.call('post', post, function(error, id) {
       if (error) {
         // display the error to the user
         throwError(error.reason);
-        
+
         if (error.error === 302)
           Router.go('postPage', {_id: error.details})
       } else {
@@ -135,21 +135,21 @@ Template.postSubmit.events({
 
 <%= commit "9-2", "Actually use the error reporting." %>
 
-////
+Facciamo una prova: creiamo un post inserendo come URL `http://meteor.com`. Dato che questo URL è già collegato ad un altro post, dovrebbe vedersi un errore:
 
 <%= screenshot "9-1", "Triggering an error" %>
 
-### Clearing Errors
+### Rimuovere gli errori
 
-////
+Se avete provato a cliccare sul bottone di chiusura dell'errore, avete visto l'errore sparire per poi ritornare visibile appena caricate un'altra pagina. Cosa sta succedendo?
 
-////
+Il bottone di chiusura scatena l'evento JavaScript di Twitter Bootstrap: non ha nulla a che fare con Meteor! Quello che sta accadendo è che Bootstrap rimuove il `<div>` dell'errore dal DOM, ma non dalla collezione di Meteor. Ciò significa che l'errore tornerà visibile nel momento in cui Meteor renderizza di nuovo la pagina.
 
-////
+A meno che non si voglia che gli errori tornino senza sosta dall'aldilà per continuare a ricordare agli utenti i loro errori passati portandoli lentamente alla follia, è meglio aggiungere un modo per rimuoverli dalla collezione.
 
-////
+Come prima cosa, si modifica la funzione `throwError` per includere una proprietà `seen` (visto). Questo ci aiuterà in seguito a tenere traccia del fatto che un errore sia stato visto o meno da un utente.
 
-////
+Una volta fatto, si può scrivere una semplice funzione `clearErrors` che rimuove gli errori "visti":
 
 ~~~js
 // Local (client-only) collection
@@ -166,7 +166,7 @@ clearErrors = function() {
 <%= caption "client/helpers/errors.js" %>
 <%= highlight "5,8~10" %>
 
-////
+Ripuliamo ora gli errori nel router in modo che navigando su un'altra pagina questi errori spariscano per sempre:
 
 ~~~js
 // ...
@@ -177,15 +177,15 @@ Router.before(function() { clearErrors() });
 <%= caption "lib/router.js" %>
 <%= highlight "4" %>
 
-////
+Per fare in modo che la funzione `clearErrors()` faccia il proprio lavoro, gli errori devono essere marcati come `seen`. Per farlo in maniera appropriata dobbiamo tenere conto di un caso limite: quando viene alzato un errore e l'utente viene poi reindirizzato ad un'altra pagina (ad esempio quando si tenta di inserire un link duplicato), il reindirizzamento avviene in maniera istantanea. Ciò significa che l'utente non ha mai avuto modo di vedere l'errore prima che venga cancellato.
 
-////
+Qui è dove la proprietà `seen` viene in aiuto. Dobbiamo assicurarci che sia impostata a `true` solo se l'utente ha realmente visto l'errore.
 
-////
+Per farlo useremo `Meteor.defer()`. Questa funzione dice a Meteor di eseguire la propria callback "appena dopo" qualsiasi cosa stia accadendo al momento. Se può aiutare, si può considerare che usare `defer()` è come dire al browser di aspettare un millisecondo prima di procedere.
 
-////
+Si sta dicendo a Meteor di impostare `seen` a `true` un millisecondo dopo che il template `errors` e stato renderizzato. Ricordate che abbiamo detto che il reindirizzamento accade in maniera istantanea? Questo significa che il reindirizzamento avverrà prima della callback `defer`, che quindi non sarà mai eseguita.
 
-////
+E' esattamente ciò che si stava cercando: se non viene eseguita l'errore non sarà mai marcato come `seen`, il che significa che non sarà eliminato, e quindi apparirà sulla pagina alla quale l'utente è stato reindirizzato esattamente come desiderato!
 
 ~~~js
 Template.errors.helpers({
@@ -206,16 +206,16 @@ Template.error.rendered = function() {
 
 <%= commit "9-3", "Monitor which errors have been seen, and clear on routing." %>
 
-////
+La callback `rendered` viene chiamata quando i template è renderizzato nel browser. Dentro la callback, `this` si riferisce all'istanza corrente del template, e `this.data` permette di accedere ai dati dell'oggetto che è al momento renderizzato (in questo caso, un errore).
 
-////
+Wow! Abbiamo fatto un sacco di lavoro per qualcosa che si spera gli utenti non vedano mai!
 
 <% note do %>
 
-### The `rendered` callback
+### La callbak `rendered`
 
-////
+La callback `rendered` di un template si scatena ogni volta questo viene renderizzato nel browser. Questo avviene ovviamente la prima volta che viene visualizzato ma è importante ricordare che viene eseguita ogni volta che il template viene renderizzato di nuovo, ad esempio ogni volta qualcuno dei suoi dati cambia.
 
-////
+Le callback di renderizzazione vengono normalmente eseguite almeno due volte: la prima quando l'applicazione viene caricata e la seconda quando vengono caricati i dati della collezione. Bisogna stare quindi molto attenti a non inserire del codice che non deve essere eseguito due volte (come un alert, o un codice di tracciamenti di analytics).
 
 <% end %>

@@ -4,7 +4,7 @@ slug: meteor-vocabulary
 date: 0014/01/02
 number: 14.5
 sidebar: true
-contents: Approfondimento della terminologia più comune in Meteor. 
+contents: Approfondimento della terminologia più comune in Meteor.
 paragraphs: 24
 ---
 
@@ -20,12 +20,12 @@ In Meteor una collezione è un contenitore di dati che si sincronizzano automati
 
 #### Computazione
 
-Una computazione è un blocco di codice che viene eseguito ogni volta che una delle fonti di dati reattivi dalle quali dipende subisce un cambiamento. Se avete un sorgente di dati reattivi (ad esempio, una variabile di sessione), e volete rispondere in maniera reattiva, dove predisporre su di essa una computazione. 
+Una computazione è un blocco di codice che viene eseguito ogni volta che una delle fonti di dati reattivi dalle quali dipende subisce un cambiamento. Se avete un sorgente di dati reattivi (ad esempio, una variabile di sessione), e volete rispondere in maniera reattiva, dove predisporre su di essa una computazione.
 
 #### Cursore
 
 Un cursore è il risultato di effettuare una query su una collezione di Mongo. Lato client, un cursore non è solamente un'array di risultati, ma un oggetto *reattivo* che può essere rilevato quando vengono aggiunti, eliminati e modificati gli oggetti nella collezione.
- 
+
 #### DDP
 
 DDP è il Protocollo di Dati Distribuiti di Meteor, il protocollo di rete usato per sincronizzare le collezioni ed eseguire chiamate ai metodi. DDP va inteso come un protocollo generico, che prende il posto dell'HTTP per applicazioni in tempo reale che fanno uso intensivo di dati.
@@ -36,7 +36,7 @@ Deps è il sistema di reattività di Meteor. Deps è usato dietro le quinte per 
 
 #### Documento
 
-Mongo è un database che si basa sui documenti, ogni oggetto che fa parte di una collezioni si chiama infatti "documento". Sono semplici oggetti Javascript (anche se non possono contenere funzioni) con una speciale proprietà, l'`_id`, che Meteor utilizza per tener traccia delle loro proprietà atraverso il protocollo DDP.
+Mongo è un database che si basa sui documenti, ogni oggetto che fa parte di una collezioni si chiama infatti "documento". Sono semplici oggetti Javascript (anche se non possono contenere funzioni) con una speciale proprietà, l'`_id`, che Meteor utilizza per tener traccia delle loro proprietà attraverso il protocollo DDP.
 
 #### Helpers
 
@@ -44,7 +44,7 @@ Quando un template deve renderizzare qualcosa di più complesso della proprietà
 
 #### Compensazione di Latenza
 
-E' la tecnica che permette la simulazione delle chimate dei metodi lato client per evitare ritardi in attesa che il server risponda.
+E' la tecnica che permette la simulazione delle chiamate dei metodi lato client per evitare ritardi in attesa che il server risponda.
 
 #### Method
 
@@ -78,13 +78,13 @@ La Sessione in Meteor si riferisce alla fonte di dati reattivi presente sul clie
 
 #### Sottoscrizione
 
-Una sottoscrizione è una connessione ad una pubblicazione per uno specifico client. La sottoscrizione è il codice che viene esguito nel browser che comunica con una pubblicazione sul server e mantiene sincronizzati i dati.
+Una sottoscrizione è una connessione ad una pubblicazione per uno specifico client. La sottoscrizione è il codice che viene eseguito nel browser che comunica con una pubblicazione sul server e mantiene sincronizzati i dati.
 
 #### Template
 
-Un template è un modo per generare HTML tramite Javascript. Per impostazione predefinita, Meteor supporta Handlebars, un sistema di templating *logic-less*, cioè privo di istruzioni if o cicli for, 
+Un template è un modo per generare HTML tramite Javascript. Per impostazione predefinita, Meteor supporta Handlebars, un sistema di templating *logic-less*, cioè privo di istruzioni if o cicli for,
 anche si prevede di supportarne altri in futuro.
 
 #### Contesto dei dati di un Template
 
-Quando un template viene renderizzato, fa riferimento ad un oggetto Javascript che fornisce dati specifici per quella particolare renderizzazione. Nella maggior parte dei casi si tratta di semplici oggetti Javascript (POJOs, plain-old-JavaScript-objects), di solito documenti da una collection, ma a volte possono essere anche più complessi e contenere all'interno delle funzioni.
+Quando un template viene renderizzato, fa riferimento ad un oggetto Javascript che fornisce dati specifici per quella particolare renderizzazione. Nella maggior parte dei casi si tratta di semplici oggetti Javascript (POJOs, plain-old-JavaScript-objects), di solito documenti da una collezione, ma a volte possono essere anche più complessi e contenere all'interno delle funzioni.

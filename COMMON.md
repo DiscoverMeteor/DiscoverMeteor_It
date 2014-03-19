@@ -18,13 +18,18 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * front-end
   * handlebars (as all library names)
   * live
+  * markup
   * open-source
+  * prompt
   * refresh
   * repository
   * root
+  * route (to avoid confusion with path)
   * router
   * server
+  * shell
   * stylesheet
+  * template
   * wrapper
 
 
@@ -32,15 +37,21 @@ Should you have better proposals or doubts, please feel free to comment ono each
 
  * **app** -> *applicazione*
  * **boilerplate** -> *modello standard*
+ * **built-in** -> *integrato*
  * **collection** -> *collezione*
+ * **console** -> *terminale*
+ * **data store** -> *archivio dati*
+ * **dropdown menu** -> *menù a discesa*, *menù a tendina*
  * **features** -> *funzionalità/caratteristiche*
- * **helper** -> *supporto* depending on the context
+ * **helper** -> *utilità/classe di utilità* depending on the context
  * **link(s)** -> *collegamento/collegamenti*
  * **package** -> *pacchetto*
- * **pattern** -> *schema*
+ * **path** -> *percorso*, *indirizzo*
+ * **pattern** -> *schema ricorrente*
  * **publication** -> *pubblicazione*
  * **real-time** -> *tempo reale*
- * **subscriptioin** -> *sottoscrizione*
+ * **subscription** -> *sottoscrizione*
+ * **terminal** -> *terminale*
  * **web** -> *rete*
 
 
@@ -49,7 +60,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **a note on** -> *una considerazione su*
  * **getting started** -> *primi passi*
  * **you'll be good to go** -> *sarai pronto a partire*
- * **has you covered** -> *ha ciò che ti serve*
+ * **has you covered** -> *ha ciò che ti serve*, *ha la soluzione*
  * **mind experiment** -> *esperimento concettuale*
  * **sidebar** -> *approfondimento*
  * **up and running** -> *operativo*

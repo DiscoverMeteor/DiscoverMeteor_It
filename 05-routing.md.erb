@@ -7,9 +7,9 @@ contents: Il routing in Meteor.|Creazione di pagine di discussione dei post, con
 paragraphs: 72
 ---
 
-Ora che abbiamo una lista di post (che nella versione finale saranno inseriti dagli utenti), abbiamo bisogno di una pagina specifica per ogni post dove gli utetni possono discutere del singolo post.
+Ora che abbiamo una lista di post (che nella versione finale saranno inseriti dagli utenti), abbiamo bisogno di una pagina specifica per ogni post dove gli utenti possono discutere del singolo post.
 
-Sarebbe bene rendere queste pagine accessibili tramite *permalink*, un URL nella forma `http://myapp.com/posts/xyz` (dove `xyz` è un identificatore `_id` di MongoDB)
+Sarebbe bene rendere queste pagine accessibili tramite *permalink*, un URL nella forma `http://myapp.com/posts/xyz` (dove `xyz` è un identificatore `_id` di MongoDB).
 
 Dunque abbiamo bisogno di un meccanismo di indirizzamento detto *routing* per leggere la barra dell'URL del browser e mostrare il contenuto corrispondente.
 
@@ -17,7 +17,7 @@ Dunque abbiamo bisogno di un meccanismo di indirizzamento detto *routing* per le
 
 [Iron Router](https://github.com/EventedMind/iron-router) è un pacchetto di gestione routing progettato appositamente per le applicazioni Meteor.
 
-Non è utile solo per il routing (impostare il percorso), ma può gestire i filtri (assegnando azioni ad alcuni di questi persorsi) ed anche gestire le sottoscrizioni (controllare quale percorso ha accesso a quali dati). (Nota: Iron Router è sviluppato in parte da Tom Coleman, co-autore di *Discover Meteor*.)
+Non è utile solo per il routing (impostare il percorso), ma può gestire i filtri (assegnando azioni ad alcuni di questi percorsi) ed anche gestire le sottoscrizioni (controllare quale percorso ha accesso a quali dati). (Nota: Iron Router è sviluppato in parte da Tom Coleman, co-autore di *Discover Meteor*.)
 
 Per prima cosa installiamo il package da Atmosphere:
 
@@ -36,22 +36,22 @@ Si noti che Iron Router è un pacchetto di terze parti, quindi serve Meteorite p
 
 In questo capitolo vedremo molte caratteristiche del router. Se hai già esperienza con un framework tipo Rails, hai già familiarità con la maggior parte di questi concetti. Se no, ecco un veloce glossario per farti imparare rapidamente:
 
-- **Routes**: Una route è il mattone base del routing. E' il set di istruzioni che dicono all'applicazione dove andare e cosa fare quando incontra un URL.
-- **Paths**: Un path è un URL all'interno dell'applicazione. Può essere statico (`/terms_of_service`) o dinamico (`/posts/xyz`), e può anche includere parametri di ricerca (`/search?keyword=meteor`).
-- **Segments**: Le diverse parti di un path, delimitato da slashes (`/`).
-- **Hooks**: Le hooks sono le azioni che desideri fare prima, dopo, o anche durante il processo di routing. Un esempio tipico è il controllo dei diritti di accesso dell'utente prima di mostrare una determinata pagina.
-- **Filters**: I filtri sono semplicemente hook definiti globalmente per una o più route.
-- **Route Templates**: Ogni route deve puntare ad un template. Se non ne specifichi uno, il router cercherà un template con lo stesso nome della route.
-- **Layouts**: Puoi immaginare i layouts come una di quelle cornici digitali. Contengono tutto il codice HTML che avvolge l'attuale template, e rimarrà invariato anche se il template cambia.
-- **Controllers**: A volte potresti renderti conto che molti dei tuoi template riutilizzano gli stessi parametri. Piuttosto che duplicare il codice, puoi ereditare queste route da un unic *routing controller* che contiene tutta la logica di routing.
+- **Route**: Una route è il mattone base del routing. E' il set di istruzioni che dice all'applicazione dove andare e cosa fare quando incontra un URL.
+- **Path**: Un path è il percorso indicato da un URL all'interno dell'applicazione. Può essere statico (`/terms_of_service`) o dinamico (`/posts/xyz`), e può anche includere parametri di ricerca (`/search?keyword=meteor`).
+- **Segment**: Le diverse parti di un path, delimitato da slashes (`/`).
+- **Hook**: Gli hook sono azioni che desideri fare prima, dopo, o anche durante il processo di routing. Un esempio tipico è il controllo dei diritti di accesso dell'utente prima di mostrare una determinata pagina.
+- **Filter**: I filtri sono semplicemente hook definiti globalmente per una o più route.
+- **Route Template**: Ogni route deve puntare ad un template. Se non ne specifichi uno, il router cercherà un template con lo stesso nome della route.
+- **Layout**: Puoi immaginare i layout come una di quelle cornici digitali. Contengono tutto il codice HTML che avvolge l'attuale template, e rimarrà invariato anche se il template cambia.
+- **Controller**: A volte potresti renderti conto che molti dei tuoi template riutilizzano gli stessi parametri. Piuttosto che duplicare il codice, puoi ereditare queste route da un unico *routing controller* che contiene tutta la logica di routing.
 
-Per altre informazioni su Iron Router, consulta [la documentazione comlpeta su GitHub](https://github.com/EventedMind/iron-router).
+Per altre informazioni su Iron Router, consulta [la documentazione completa su GitHub](https://github.com/EventedMind/iron-router).
 
 <% end %>
 
-### Routing: Mappare le URL sui Template
+### Routing: Mappare gli URL sui Template
 
-Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto. 
+Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto.
 
 Iron Router permette di superare questa staticità prendendo il controllo di ciò che viene mostrato nel tag HTML <body>. Non definiremo noi il contenuto di questo tag, come faremmo con una normale pagina HTML. Faremo invece puntare il router ad uno speciale template di struttura che contiene un helper `{{yield}}`.
 
@@ -90,7 +90,7 @@ Il nuovo file `layout.html` conterrà invece lo schema generale di pagina:
 
 Come puoi notare abbiamo sostituito l'inclusione del template `postsList` con una chiamata all'helper `yield`. Dopo questa modifica a video non apparirà più nulla. Succede perché non abbiamo detto al router cosa mostrare con l'URL `/` e quindi mostra semplicemente un template vuoto.
 
-Per iniziare possiamo tornare alla situazione di prima mappando l'URL radice `/` sul template `postsList`. Creeremo una cartella `/lib` nella radice del nostro progetto ed all'interno il file `router.js` :
+Per iniziare possiamo tornare alla situazione di prima mappando l'URL radice `/` sul template `postsList`. Creiamo una cartella `/lib` nella radice del nostro progetto ed all'interno il file `router.js` :
 
 ~~~js
 Router.configure({
@@ -111,19 +111,19 @@ Abbiamo appena fatto due cose importanti. Primo, abbiamo detto al router di usar
 
 Tutto ciò che metti dentro la cartella `/lib` è garantito che sarà caricato prima di qualsiasi altra cosa nell'applicazione (con la sola potenziale eccezione dei pacchetti smart). E' quindi il posto migliore dove mettere il codice degli helper che deve essere disponibile sempre.
 
-Una piccola avvertenza: poichè la cartella `/lib` non si trova ne dentro `/client` ne dentro `/server` il suo contenuto sarà visibile in entrambi gli ambienti.
+Una piccola avvertenza: poiché la cartella `/lib` non si trova né dentro `/client` né dentro `/server` il suo contenuto sarà visibile in entrambi gli ambienti.
 
 <% end %>
 
-### Named Routes
+### Nomi delle Route
 
-////
+Chiariamo un aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `postsList`, ma abbiamo anche un *template* chiamato `postsList`. Dunque che significa?
 
-////
+L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. Difatti cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`.
 
-////
+Potresti chiederti perché abbiamo bisogno di dare un nome alle route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
 
-////
+Noi vogliamo che il link alla home principale punti alla lista di post, e quindi invece di indicare una URL statica `/`, possiamo usare l'helper di Handlebars. Il risultato finale sarà lo stesso, ma avremo maggiore flessibilità visto che l'helper fornirà sempre l'URL corretta anche se cambiassimo il path della route nel router.
 
 ~~~html
 <header class="navbar">
@@ -139,13 +139,13 @@ Una piccola avvertenza: poichè la cartella `/lib` non si trova ne dentro `/clie
 
 <%= commit "5-1", "Very basic routing." %>
 
-### Waiting on Data
+### In Attesa dei Dati
 
-////
+Se si implementa l'attuale versione dell'applicazione (o la si lancia dal link qui sopra), potrai notare come la lista appaia vuota per alcuni istanti prima che appaiano i post. Succede perché quando la pagina viene caricata per la prima volta non ci sono post da mostrare finché la sottoscrizione `posts` non ha completato il recupero dei dati dal server.
 
-////
+Sarebbe molto meglio dal punto di vista dell'esperienza d'uso dare un feedback visuale che indica che qualcosa sta succedendo, e quindi l'utente deve aspettare un attimo.
 
-////
+Fortunatamente Iron Router fornisce un modo semplice per farlo -- basta mettersi in attesa della sottoscrizione con `waitOn`:
 
 ~~~js
 Router.configure({
@@ -161,17 +161,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "3,4" %>
 
-////
+Esaminiamo pezzo per pezzo. Per prima cosa abbiamo modificato il blocco `Router.configure()` per indicare il nome di un template (che creeremo tra un attimo) da mostrare durante il caricamento e l'attesa dei dati.
 
-////
+Secondo abbiamo aggiunto una funzione `waitOn` che ritorna la sottoscrizione ai nostri `posts`. Ciò significa che il router si assicurerà che la sottoscrizione `posts` sia completamente caricata prima di portare l'utente alla route richiesta.
 
-////
+Osserva che poiché stiamo definendo la nostra funzione `waitOn` globalmente a livello del router, questa sequenza avverrà solo una volta quando l'utente accede per la prima volta all'applicazione. Dopo i dati saranno già presenti nella memoria del browser ed il router non dovrà aspettarli di nuovo.
 
-////
+Inoltre poiché lasciamo che sia il router a gestire la sottoscrizione, la puoi tranquillamente rimuovere da `main.js` (che ora dovrebbe essere vuota).
 
-////
+Normalmente è una buona idea attendere il caricamento della sottoscrizione, non solo per l'esperienza d'uso, ma anche perché ti permette di contare sulla disponibilità dei dati all'interno del template. Così facendo infatti non dobbiamo più gestire la situazione in cui un template viene mostrato prima che i dati contenuti siano disponibili, con tutti i problemi che ne conseguono.
 
-////
+L'ultimo pezzo del puzzle è il template di caricamento vero e proprio. Useremo il pacchetto `spin` per creare una simpatica animazione di attesa caricamento. Aggiungilo con `mrt add spin` e poi crea il template di caricamento così:
 
 ~~~html
 <template name="loading">
@@ -180,29 +180,29 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/includes/loading.html" %>
 
-////
+Nota che `{{spinner}}` è un parziale contenuto nel pacchetto `spin`. Sebbene questo parziale arrivi "dall'esterno" dell'applicazione, possiamo includerlo come qualsiasi altro template.
 
 <%= commit "5-2", "Wait on the post subscription." %>
 
 <% note do %>
 
-### A First Glance At Reactivity
+### Un Primo Sguardo alla Reattività
 
-////
+La reattività è una delle caratteristiche principali di Meteor, e sebbene non l'abbiamo ancora veramente affrontata, il template di caricamento ci dà una prima idea di questo concetto.
 
-////
+Mostrare all'utente un template di caricamento se i dati non sono ancora disponibili è cosa buona e giusta, ma come fa il router a sapere quando mostrare all'utente la pagina *completa* quando i dati sono arrivati?
 
-////
+Per ora diciamo che è esattamente ciò che la reattività ci permette di fare, e fermiamoci qui. Ma non preoccuparti, ne saprai di più molto presto!
 
 <% end %>
 
-### Routing To A Specific Post
+### Routing ad un Post Specifico
 
-////
+Adesso che abbiamo visto come mostrare il template `postsList`, creiamo una route per mostrare i dettagli di un singolo post.
 
-////
+C'è solo una difficoltà: non possiamo pensare di creare una route per ogni post visto che potrebbero essercene centinaia. Quindi creiamo una sola route ma di tipo *dinamico*, e facciamo in modo che mostri qualsiasi post desideriamo.
 
-////
+Per iniziare creiamo un nuovo template che semplicemente mostra lo stesso template di post che abbiamo usato prima nella lista dei post.
 
 ~~~html
 <template name="postPage">
@@ -211,14 +211,14 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/posts/post_page.html" %>
 
-////
+Aggiungeremo altri elementi a questo template più avanti (come ad esempio dei commenti), ma per ora ci servirà semplicemente come contenitore per il nostro `{{> postItem}}`.
 
-////
+Creiamo poi un'altra route a cui assegniamo un nome, questa volta mappando il path dell'URL nella forma `/posts/<ID>` sul template `postPage`:
 
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id'
   });
@@ -228,22 +228,22 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~6" %>
 
-////
+La sintassi speciale `:_id` dice al router due cose: primo di riconoscere ogni route nella forma `/posts/xyz`, dove "xyz" può essere qualsiasi cosa. Secondo di mettere qualunque cosa trovi al posto di "xyz" dentro una proprietà `_id` dell'array `params` del router.
 
-////
+Nota che stiamo usando `_id` solo per chiarezza. Il router non ha modo di sapere se stai passando un vero `_id` o solo una sequenza casuale di caratteri.
 
-////
+A questo punto stiamo instradando al template corretto, ma ci manca ancora qualcosa: il router conosce l'`_id` del post che vogliamo mostrare, ma il template no. Come risolviamo?
 
-////
+Fortunatamente il router ha una soluzione intelligente già integrata: permette di specificare il **contesto dati** (data context) del template. Puoi immaginare il contesto dati come la farcitura di una torta fatta di template e layout della pagina. Messa in maniera semplice è ciò con cui riempiamo il template:
 
 <%= diagram "router-diagram-2", "The data context.", "pull-center" %>
 
-////
+Nel nostro caso possiamo ottenere il giusto contesto dati cercando il nostro post in base all'`_id` che abbiamo ricavato dall'URL:
 
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }
@@ -254,17 +254,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~7" %>
 
-////
+Così ogni volta che l'utente accede a questa route, noi troveremo il post corrispondente e lo passeremo al template. Ricorda che `findOne` ritorna un solo post che soddisfa la ricerca, e che fornire solo un `_id` come argomento è una abbreviazione di `{_id: id}`.
 
-////
+All'interno della funzione `data` di una route, `this` corrisponde alla route attuale e possiamo usare `this.params` per accedere alle proprietà della route (che abbiamo indicato usando il prefisso `:` all'interno del nostro path).
 
 <% note do %>
 
-### More About Data Contexts
+### Approfondiamo i Contesti Dati
 
-////
+Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpes all'interno del template.
 
-////
+Normalmente lo si imposta implicitamente con l'iteratore `{{each}}`, che imposta automaticamente il contesto dati all'elemento su cui stiamo iterando:
 
 ~~~html
 {{#each widgets}}
@@ -272,7 +272,7 @@ Router.map(function() {
 {{/each}}
 ~~~
 
-////
+Ma possiamo anche impostarlo esplicitamente usando `{{with}}`, che dice semplicemente: "considera questo oggetto e applicalo al seguente template". Ad esempio possiamo scrivere:
 
 ~~~html
 {{#with myWidget}}
@@ -280,7 +280,7 @@ Router.map(function() {
 {{/with}}
 ~~~
 
-////
+Si può ottenere lo stesso risultato passando il contesto come *argomento* nell'invocazione del template. In questo caso il precedente codice può essere riscritto così:
 
 ~~~js
 {{> widgetPage myWidget}}
@@ -288,11 +288,11 @@ Router.map(function() {
 
 <% end %>
 
-### Using a Dynamic Named Route Helper
+### Utilizzare un Helper nella Route Dinamica
 
-////
+Per concludere dobbiamo essere certi di puntare al giusto percorso ogni volta che desideriamo linkare un singolo post. Potremmo scrivere qualcosa del tipo `<a href="/posts/{{_id}}">`, ma usare un route helper è più affidabile.
 
-////
+Abbiamo chiamato la route del singolo post `postPage`, quindi possiamo utilizzare un helper `{{pathFor 'postPage'}}`:
 
 ~~~html
 <template name="postItem">
@@ -308,15 +308,15 @@ Router.map(function() {
 <%= highlight "6" %>
 <%= commit "5-3", "Routing to a single post page." %>
 
-////
+Ma, un attimo! Come fa esattamente il router a sapere dove prendere la parte `xyz` in `/posts/xyz`? In fondo non stiamo passando nessun `_id`.
 
-////
+Scopriamo che Iron Router è sufficientemente intelligente da capirlo da solo. Infatti stiamo dicendo al router di usare la route `postPage`, ed il router sa già che questa route richiede un `_id` di qualche tipo (in quanto è così che abbiamo definito il `path`).
 
-////
+Quindi il router cercherà questo `_id` nel posto più logico: il contesto dati dell'helper {{pathFor 'postPage'}}, cioè `this`. Succede proprio che il nostro `this` corrisponde ad un post che (sorpresa!) possiede una proprietà `_id`.
 
-////
+In alternativa puoi anche dire esplicitamente al router dove vuoi che cerchi la proprietà `_id` passando un secondo argomento all'helper (es. `{{pathFor 'postPage' unAltroPost}}`). Nell'uso reale possiamo usare questa possibilità per avere un link al post precedente o successivo della lista, ad esempio.
 
-////
+Per vedere se funziona tutto correttamente, naviga alla lista di post e clicca sui link `Discuss`. Dovresti vedere qualcosa del genere:
 
 <%= screenshot "5-2", "A single post page." %>
 
@@ -324,10 +324,10 @@ Router.map(function() {
 
 ### HTML5 pushState
 
-////
+Una cosa da tener presente è che questa gestione degli URL avviene attraverso [HTML5 pushState](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history?redirectlocale=en-US&redirectslug=Web%2FGuide%2FDOM%2FManipulating_the_browser_history).
 
-////
+Il router intercetta i click sugli URL che sono interni al sito e impedisce al browser di gestirli come fossero link esterni, preoccupandosi invece di modificare opportunamente solo lo stato dell'applicazione.
 
-////
+Se tutto funziona a dovere la pagina dovrebbe modificarsi istantaneamente. Addirittura a volte le cose cambiano così rapidamente che potrebbe essere opportuno inserire delle transizioni di pagina. Pur essendo fuori dall'ambito di questo capitolo è un argomento molto interessante.
 
 <% end %>
