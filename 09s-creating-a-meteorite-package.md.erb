@@ -30,7 +30,7 @@ Package.on_use(function (api, where) {
 ~~~
 <%= caption "packages/errors/package.js" %>
 
-////
+Aggiungiamo tre file al pacchetto, prendendoli direttamente da Microscope e aggiungendo solo un namespace appropriato e un API leggeremente più chiara:
 
 ~~~js
 Errors = {
@@ -82,7 +82,7 @@ Template.meteorError.rendered = function() {
 
 ### Testing the package out with Microscope
 
-////
+Ora testeremo le modifiche localmente per assicurarci che tutto funzioni. Per aggiungere il pacchetto all'applicazione, eseguiamo nel terminale `meteor add errors` ed eliminiamo i file esistenti che ora sono superflui:
 
 ~~~bash
 $ rm client/helpers/errors.js
