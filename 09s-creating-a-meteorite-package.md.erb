@@ -12,7 +12,7 @@ Dopo che abbiamo creato uno schema riutilizzabile per la gestione dei nostri err
 
 Come prima cosa dobbiamo preparare la struttura del pacchetto. Lo inseriamo in una cartella chiamate `packages/errors/`, in questo modo si crea un pacchetto personalizzato che l'applicazione utilizzerà automaticamente. (E' possibile che abbiate notato che Meteorite installa i pacchetto tramite symlinks nella cartella `packages/`).
 
-In seguito, creiamo il file `package.js`, nel quale viene detto a Meteor come deve utilizzare il pacchetto e quali oggetti vengono esportati e resi disponibili all'applicazione.
+In seguito, creiamo il file `package.js`, nel quale viene detto a Meteor come deve utilizzare il pacchetto e quali simboli vengono esportati, cioè quali oggetti vengono resi disponibili all'applicazione.
 
 ~~~js
 Package.describe({
@@ -91,7 +91,7 @@ $ rm client/views/includes/errors.js
 ~~~
 <%= caption "removing old files on the bash console" %>
 
-////
+Dobbiamo fare qualche piccola modifica per utilizzare correttamente l'API:
 
 ~~~js
 Router.before(function() { Errors.clearSeen(); });
@@ -123,13 +123,13 @@ Posts.update(currentPostId, {$set: postProperties}, function(error) {
 
 <%= scommit "9-5-1", "Created basic errors package and linked it in." %>
 
-////
+Una volta terminate queste modifiche, la situazione dovrebbe essere tornata a com'era prima della creazione del pacchetto.
 
-### Writing tests
+### Come scrivere dei test
 
-////
+Il primo passo nello sviluppo di un pacchetto è quello di testarlo in un'applicazione, ma quello successivo è di scrivere una serie di test per verificarne il corretto funzionamento. Meteor fornisce Tinytest, un sistema di test integrato, che semplifica l'esecuzione di questi test e ci aiuta a stare tranquillo al momento di condividere il nostro pacchetto con altri sviluppatori.
 
-////
+Creiamo ora un file nel quale, utilizzando Tinytest, faremo dei test sul codice creato per gestire gli errori:
 
 ~~~js
 Tinytest.add("Errors collection works", function(test) {
