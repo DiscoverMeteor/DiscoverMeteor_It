@@ -1,18 +1,18 @@
 ---
-title: Creating a Meteorite Package
+title: Creare un pacchetto con Meteorite
 slug: creating-a-meteorite-package
 date: 0009/01/02
 number: 9.5
 sidebar: true
-contents: Write a local in-app package.|Write some tests for your package.|Release your package on Atmosphere.
+contents: Creare un pacchetto per l'appilcazione.|Scrivere dei test per il pacchetto.|Rilasciare il pacchetto su Atmosphere.
 paragraphs: 22
 ---
 
-////
+Dopo che abbiamo creato uno schema riutilizzabile per la gestione dei nostri errori, possiamo creare un pacchetto e condividerlo con gli altri sviluppatori della comunità di Meteor.
 
-////
+Come prima cosa dobbiamo preparare la struttura del pacchetto. Lo inseriamo in una cartella chiamate `packages/errors/`, in questo modo si crea un pacchetto personalizzato che l'applicazione utilizzerà automaticamente. (E' possibile che abbiate notato che Meteorite installa i pacchetto tramite symlinks nella cartella `packages/`).
 
-////
+In seguito, creiamo il file `package.js`, nel quale viene detto a Meteor come deve utilizzare il pacchetto e quali simboli vengono esportati, cioè quali oggetti vengono resi disponibili all'applicazione.
 
 ~~~js
 Package.describe({
@@ -30,7 +30,7 @@ Package.on_use(function (api, where) {
 ~~~
 <%= caption "packages/errors/package.js" %>
 
-////
+Aggiungiamo tre file al pacchetto, prendendoli direttamente da Microscope e aggiungendo solo un namespace appropriato e un API leggeremente più chiara:
 
 ~~~js
 Errors = {
@@ -82,7 +82,7 @@ Template.meteorError.rendered = function() {
 
 ### Testing the package out with Microscope
 
-////
+Ora testeremo le modifiche localmente per assicurarci che tutto funzioni. Per aggiungere il pacchetto all'applicazione, eseguiamo nel terminale `meteor add errors` ed eliminiamo i file esistenti che ora sono superflui:
 
 ~~~bash
 $ rm client/helpers/errors.js
@@ -91,7 +91,7 @@ $ rm client/views/includes/errors.js
 ~~~
 <%= caption "removing old files on the bash console" %>
 
-////
+Dobbiamo fare qualche piccola modifica per utilizzare correttamente l'API:
 
 ~~~js
 Router.before(function() { Errors.clearSeen(); });
@@ -123,13 +123,13 @@ Posts.update(currentPostId, {$set: postProperties}, function(error) {
 
 <%= scommit "9-5-1", "Created basic errors package and linked it in." %>
 
-////
+Una volta terminate queste modifiche, la situazione dovrebbe essere tornata a com'era prima della creazione del pacchetto.
 
-### Writing tests
+### Come scrivere dei test
 
-////
+Il primo passo nello sviluppo di un pacchetto è quello di testarlo in un'applicazione, ma quello successivo è di scrivere una serie di test per verificarne il corretto funzionamento. Meteor fornisce Tinytest, un sistema di test integrato, che semplifica l'esecuzione di questi test e ci aiuta a stare tranquillo al momento di condividere il nostro pacchetto con altri sviluppatori.
 
-////
+Creiamo ora un file nel quale, utilizzando Tinytest, faremo dei test sul codice creato per gestire gli errori:
 
 ~~~js
 Tinytest.add("Errors collection works", function(test) {
