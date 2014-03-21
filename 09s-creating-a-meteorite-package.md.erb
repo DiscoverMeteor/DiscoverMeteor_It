@@ -163,11 +163,11 @@ Tinytest.addAsync("Errors template works", function(test, done) {
 ~~~
 <%= caption "packages/errors/errors_tests.js" %>
 
-////
+In questi test stiamo verificando le funzioni di base di `Meteor.Errors` e controllando che il codice renderizzato nel template funzioni ancora.
 
-////
+Non ci dilungheremo nella spiegazione di come scrivere i test per i pacchetti di Meteor (dato che l'API non è ancora definitiva), ma speriamo che si capisca sufficientemente come funziona il codice precedente.
 
-////
+Per dire a Meteor come eseguire i testi, aggiungiamo nel file `package.js` il seguente codice:
 
 ~~~js
 Package.on_test(function(api) {
@@ -181,7 +181,7 @@ Package.on_test(function(api) {
 
 <%= scommit "9-5-2", "Added tests to the package." %>
 
-////
+Possiamo poi eseguirli da terminale con:
 
 ~~~bash
 $ meteor test-packages errors
@@ -190,11 +190,11 @@ $ meteor test-packages errors
 
 <%= screenshot "s7-1", "Passing all tests" %>
 
-### Releasing the package
+### Come rilasciare il pacchetto
 
-////
+Rendiamo ora disponibile in nostro pacchetto al mondo intero attraverso Atmosphere.
 
-////
+Come prima cosa, aggiungiamo un file `smart.json` per passare a Meteorite e Atmosphere i dettagli più importanti del pacchetto:
 
 ~~~json
 {
@@ -212,11 +212,11 @@ $ meteor test-packages errors
 
 <%= scommit "9-5-3", "Added a smart.json" %>
 
-////
+Inseriamo dei metadati per segnalare informazioni sul pacchetto, fra i quali una descrizione per spiegare a cosa è utile, l'indirizzo di dove è posizionata la repository Git e un numero di versione iniziale. Se il nostro pacchetto dipendesse da altri presenti su Atmosphere, possiamo creare una sezione  `"packages"` per descrivere le dipendenze.
 
-////
+Una volta sistemato tutto, il rilascio è molto semplice. Dobbiamo creare un repository Git, caricarlo su di un server Git remoto e mettere il link nel file `smart.json`.
 
-////
+Per fare questi passaggi con [GitHub](http://github.com) bisogna creare un nuovo repository e seguire il procedimento standard per caricare il codice del pacchetto in quella repository. Infine utilizzare il comando `mrt release` per pubblicarlo:
 
 ~~~bash
 $ git init
@@ -229,11 +229,11 @@ Done!
 ~~~
 <%= caption "Terminal (run from within `packages/errors`)" %>
 
-////
+Nota: i nomi dei pacchetti devono essere unici. Se avete seguito il procedimento parola per parola e utilizzato lo stesso nome per il pacchetto, verrà segnalato un conflitto e il rilascio non avrà successo. Tuttavia nel prossimo futuro i pacchetti Atmosphere saranno preceduti da quello dell'autore in modo che questo non si verifichi.
 
-////
+Seconda Nota: dovrete crearvi un utente su http://atmosphere.meteor.com, perchè all'esecuzione di `mrt release .` vi verranno richiesti username e password.
 
-////
+Ora che abbiamo rilasciato il pacchetto, possiamo eliminarlo dal progetto e installarlo di nuovo usando Meteorite:
 
 ~~~bash
 $ rm -r packages/errors
@@ -243,4 +243,4 @@ $ mrt add errors
 
 <%= scommit "9-5-4", "Removed package from development tree." %>
 
-////
+Meteorite ora dovrebbe scaricare il nostro pacchetto per la prima volta, ottimo lavoro!
