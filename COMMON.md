@@ -13,6 +13,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * callback
   * client
   * commit
+  * deploy
   * filesystem
   * framework
   * front-end
