@@ -4,97 +4,97 @@ slug: deploying
 date: 0002/01/02
 number: 2.5
 sidebar: true
-contents: Learn how to deploy on Meteor.com.|Learn how to deploy on Modulus.|Learn how to deploy on your own server using Meteor Up.
+contents: Come fare il deploy su Meteor.com.|Come fare il deploy su Modulus.|Come fare il deploy sul proprio server utilizzando Meteor Up.
 paragraphs: 46
 ---
 
-////
+Alcune persone preferiscono lavorare silenziosamente su di un progetto finché non è perfetto, mentre altre non vedono l'ora di farlo vedere al mondo intero. 
 
-////
+Se appartenete alla prima categoria di persone, e per ora preferite sviluppare in locale, sentitevi liberi di saltare questo capitolo. Diversamente, se volete prendervi un po' di tempo per imparare come fare il *deploy* (trasferire il progetto funzionante su di un server) online della la vostra applicazione Meteor, abbiamo la soluzione per te. 
 
-////
+Impareremo come fare il deploy di un'applicazione Meteor in diversi modi. Sentitevi liberi di utilizzare ciascuno di esse in ogni momento del vostro processo di sviluppo, sia che stiate lavorando a Microscope che a qualsiasi altra app Meteor. Iniziamo!
 
 <% note do %>
 
-### Introducing Sidebars
+### Introduzione agli Approfondimenti
 
-////
+Questo è un capitolo di **approfondimento**. Gli approfondimenti forniscono uno sguardo più approfondito ad argomenti di Meteor più generali, in modo indipendente dal resto del libro.
 
-////
+Se preferite continuare a costruire Microscope, potete quindi saltare temporaneamente questo capitolo e tornare indietro più avanti. 
 
 <% end %>
 
-### Deploying On Meteor
+### Fare il Deploy Su Meteor
 
-////
+Fare il deploy su di un sotto-dominio di Meteor (ad esempio `http://myapp.meteor.com`) è la soluzione più semplice, e la prima che che vogliamo presentare. Questo approccio può essere utile per presentare la vostra applicazione ad altri durante i primissimi sviluppi, oppure per configurare velocemente un server di pre-produzione.
 
-////
+Fare il deploy sul server di Meteor è piuttosto semplice. Aprite semplicemente il vostro terminale, spostatevi nella cartella della vostra applicazione Meteor, e scrivete:
 
 ~~~bash
 $ meteor deploy myapp.meteor.com
 ~~~
 
-////
+Ovviamente dovrete sostituire "myapp" con un nome di vostra scelta e preferibilmente con uno che non sia già in uso. Nel caso il nome scelto sia già in uso, Meteor potrebbe chiedervi una password. Se capita, annullate semplicemente l'operazione con `ctrl+c` e provate nuovamente con un nome diverso. 
 
-////
+Se tutto va a buon fine, dopo alcuni secondi potrete accedere alla vostra applicazione all'indirizzo `http://myapp.meteor.com`.
 
-### Password Protection
+### Protezione con Password
 
-////
+Per i sotto-domini di Meteor, di default, non ci sono restrizioni. Chiunque può utilizzare un nome di dominio di sua scelta, sovrascrivendo anche applicazioni esistenti. Probabilmente vorrete quindi proteggere il vostro nome di dominio con l'opzione `-p`, come mostrato qui:
 
 ~~~~bash
 $ meteor deploy myapp.meteor.com -p
 ~~~~
 
-////
+Meteor vi chiederà poi di impostare una password, e da quel momento in poi la password inserita sarà richiesta ogni volta che farete il deploy su questa applicazione. 
 
-////
+Per avere maggiori informazioni riguardo cose come l'accesso diretto al database della vostra istanza in produzione, o per configurare un dominio personalizzato per la vostra applicazione, potete far riferimento alla [documentazione ufficiale](http://docs.meteor.com/#deploying). 
 
-### Deploying On Modulus
+### Fare il Deploy Su Modulus
 
-////
+[Modulus](https://modulus.io/) è un'opzione fantastica per fare il deploy di applicazioni NodeJS. È anche uno dei pochi provider PaaS (platform-as-a-service) che supportano Meteor ufficialmente, e ci sono già molte persone che ci fanno girare applicazioni Meteor in produzione.
 
 <% note do %>
 
 ### Demeteorizer
 
-////
+Modulus ha rilasciato uno strumento open-source chiamato [demeteorizer](https://github.com/onmodulus/demeteorizer) che converte la vostra applicazione Meteor in un'applicazione NodeJS standard.
 
 <% end %>
 
-////
+Iniziamo [creando un account](https://modulus.io/register). Per fare il deploy della vostra app su Modulus, dovete poi installare gli strumenti di Modulus per la riga di comando:
 
 ~~~bash
 $ npm install -g modulus
 ~~~
 
-////
+Dopodiché dovete autenticarvi con:
 
 ~~~bash
 $ modulus login
 ~~~
 
-////
+Creeremo ora un progetto di Modulus (nota: è possibile farlo anche dal pannello di controllo web di Modulus):
 
 ~~~bash
 $ modulus project create
 ~~~
 
-////
+Dovrete poi creare un database MongoDB per la vostra app. Potete anche creare un database MongoDB con [Modulus stesso](https://modulus.io/codex/database/getting_started), [MongoHQ](https://www.mongohq.com/) o con qualsiasi altro provider MongoDB nel cloud.
 
-////
+Una volta creato il vostro database MongoDB, potete ottenere il `MONGO_URL` per il vostro database dalla UI web di Modulus (andate in Dashboard > Databases > Select your database > Administration), e utilizzatelo poi per configurare la vostra app in questo modo:
 
 ~~~bash
 $ modulus env set MONGO_URL "mongodb://<user>:<pass>@mongo.onmodulus.net:27017/<database_name>"
 ~~~
 
-////
+È giunto il momento di fare il deploy della vostra app. Non potrebbe essere più semplice, scrivete: 
 
 ~~~bash
 $ modulus deploy
 ~~~
 
-////
+Avrete così fatto con successo il deploy della vostra applicazione su Modulus. Fate riferimento alla [documentazione di Modulus](https://modulus.io/codex/projects) per avere maggiori informazioni riguardo l'accesso ai log, l'impostazione di un nome di dominio personalizzato e l'accesso con SSL.
 
 ### Meteor Up
 
@@ -106,7 +106,7 @@ $ modulus deploy
 
 ////
 
-### Initializing Meteor Up
+### Inizializzare Meteor Up
 
 ////
 
@@ -128,13 +128,13 @@ $ mup init
 
 <% note do %>
 
-### Sharing with Dropbox
+### Condividere con Dropbox
 
 ////
 
 <% end %>
 
-### Meteor Up Configuration
+### Configurare Meteor Up
 
 ////
 
@@ -169,23 +169,23 @@ $ mup init
 
 ////
 
-**Server Authentication**
+**Autenticazione del Server**
 
 ////
 
 ////
 
-**MongoDB Configuration**
+**Configurazione di MongoDB**
 
 ////
 
 ////
 
-**Meteor App Path**
+**Il Percorso della App Meteor**
 
 ////
 
-**Environment Variables**
+**Variabili d'Ambiente**
 
 ////
 
@@ -205,7 +205,7 @@ $ mup deploy
 
 ////
 
-### Displaying Logs
+### Visualizzare i Log
 
 ////
 
