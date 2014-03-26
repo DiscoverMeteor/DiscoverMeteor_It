@@ -17,7 +17,7 @@ Dunque abbiamo bisogno di un meccanismo di indirizzamento detto *routing* per le
 
 [Iron Router](https://github.com/EventedMind/iron-router) è un pacchetto di gestione routing progettato appositamente per le applicazioni Meteor.
 
-Non è utile solo per il routing (impostare il percorso), ma può gestire i filtri (assegnando azioni ad alcuni di questi percorsi) ed anche gestire le sottoscrizioni (controllare quale percorso ha accesso a quali dati). (Nota: Iron Router è sviluppato in parte da Tom Coleman, co-autore di *Discover Meteor*.)
+Non è utile solo per il routing (impostando il percorso), ma può gestire i filtri (assegnando azioni ad alcuni di questi percorsi) ed anche gestire le sottoscrizioni (controllando quale percorso ha accesso a quali dati). (Nota: Iron Router è sviluppato in parte da Tom Coleman, co-autore di *Discover Meteor*.)
 
 Per prima cosa installiamo il package da Atmosphere:
 
@@ -103,7 +103,7 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js"%>
 
-Abbiamo appena fatto due cose importanti. Primo, abbiamo detto al router di usare l'impaginazione appena creata come default per tutte le route. Secondo, abbiamo definito una una nuova route chiamata `postsList` e mappata sul path `/`.
+Abbiamo appena fatto due cose importanti. Primo, abbiamo detto al router di usare l'impaginazione appena creata come default per tutte le route. Secondo, abbiamo definito una nuova route chiamata `postsList` e mappata sul path `/`.
 
 <% note do %>
 
@@ -119,9 +119,9 @@ Una piccola avvertenza: poiché la cartella `/lib` non si trova né dentro `/cli
 
 Chiariamo un aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `postsList`, ma abbiamo anche un *template* chiamato `postsList`. Dunque che significa?
 
-L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. Difatti cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`.
+L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. A dire il vero cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`.
 
-Potresti chiederti perché abbiamo bisogno di dare un nome alle route prima di tutto. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
+Potresti chiederti perché abbiamo bisogno di dare un nome alle route come prima cosa. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
 
 Noi vogliamo che il link alla home principale punti alla lista di post, e quindi invece di indicare una URL statica `/`, possiamo usare l'helper di Handlebars. Il risultato finale sarà lo stesso, ma avremo maggiore flessibilità visto che l'helper fornirà sempre l'URL corretta anche se cambiassimo il path della route nel router.
 
@@ -141,7 +141,7 @@ Noi vogliamo che il link alla home principale punti alla lista di post, e quindi
 
 ### In Attesa dei Dati
 
-Se si implementa l'attuale versione dell'applicazione (o la si lancia dal link qui sopra), potrai notare come la lista appaia vuota per alcuni istanti prima che appaiano i post. Succede perché quando la pagina viene caricata per la prima volta non ci sono post da mostrare finché la sottoscrizione `posts` non ha completato il recupero dei dati dal server.
+Se installi ed esegui l'attuale versione dell'applicazione (o la lanci dal link qui sopra), potrai notare come la lista appaia vuota per alcuni istanti prima che appaiano i post. Succede perché quando la pagina viene caricata per la prima volta non ci sono post da mostrare finché la sottoscrizione `posts` non ha completato il recupero dei dati dal server.
 
 Sarebbe molto meglio dal punto di vista dell'esperienza d'uso dare un feedback visuale che indica che qualcosa sta succedendo, e quindi l'utente deve aspettare un attimo.
 
@@ -202,7 +202,7 @@ Adesso che abbiamo visto come mostrare il template `postsList`, creiamo una rout
 
 C'è solo una difficoltà: non possiamo pensare di creare una route per ogni post visto che potrebbero essercene centinaia. Quindi creiamo una sola route ma di tipo *dinamico*, e facciamo in modo che mostri qualsiasi post desideriamo.
 
-Per iniziare creiamo un nuovo template che semplicemente mostra lo stesso template di post che abbiamo usato prima nella lista dei post.
+Per iniziare creiamo un nuovo template che semplicemente mostra lo stesso template di singolo post che abbiamo usato prima nella lista dei post.
 
 ~~~html
 <template name="postPage">
@@ -262,7 +262,7 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 
 ### Approfondiamo i Contesti Dati
 
-Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpes all'interno del template.
+Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpers all'interno del template.
 
 Normalmente lo si imposta implicitamente con l'iteratore `{{each}}`, che imposta automaticamente il contesto dati all'elemento su cui stiamo iterando:
 
