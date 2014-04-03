@@ -53,13 +53,13 @@ Per altre informazioni su Iron Router, consulta [la documentazione completa su G
 
 Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto.
 
-Iron Router permette di superare questa staticità prendendo il controllo di ciò che viene mostrato nel tag HTML <body>. Non definiremo noi il contenuto di questo tag, come faremmo con una normale pagina HTML. Faremo invece puntare il router ad uno speciale template di struttura che contiene un helper `{{yield}}`.
+Iron Router permette di superare questa staticità prendendo il controllo di ciò che viene mostrato nel tag HTML <body>. Non definiremo noi il contenuto di questo tag, come faremmo con una normale pagina HTML. Faremo invece puntare il router ad uno speciale template di struttura che contiene un helper `{{> yield}}`.
 
-Questo helper `{{yield}}` definirà un'area dinamica speciale che mostrerà automaticamente il template corrispondente all'attuale route (per convenzione chiameremo questo template speciale "route template" d'ora in poi):
+Questo helper `{{> yield}}` definirà un'area dinamica speciale che mostrerà automaticamente il template corrispondente all'attuale route (per convenzione chiameremo questo template speciale "route template" d'ora in poi):
 
 <%= diagram "router-diagram", "Layouts and templates.", "pull-center" %>
 
-Iniziamo creando lo schema di pagina e aggiungendo l'helper `{{yield}}`. Per prima cosa eliminiamo il tag <body> da `main.html` e ne spostiamo il contenuto in un template `layout.html`.
+Iniziamo creando lo schema di pagina e aggiungendo l'helper `{{> yield}}`. Per prima cosa eliminiamo il tag <body> da `main.html` e ne spostiamo il contenuto in un template `layout.html`.
 
 Quindi il nostro `main.html` modificato appare così:
 
@@ -81,7 +81,7 @@ Il nuovo file `layout.html` conterrà invece lo schema generale di pagina:
     </div>
   </header>
   <div id="main" class="row-fluid">
-    {{yield}}
+    {{> yield}}
   </div>
   </div>
 </template>
@@ -157,13 +157,15 @@ Router.configure({
 Router.map(function() {
   this.route('postsList', {path: '/'});
 });
+
+Router.onBeforeAction('loading');
 ~~~
 <%= caption "lib/router.js" %>
 <%= highlight "3,4" %>
 
 Esaminiamo pezzo per pezzo. Per prima cosa abbiamo modificato il blocco `Router.configure()` per indicare il nome di un template (che creeremo tra un attimo) da mostrare durante il caricamento e l'attesa dei dati.
 
-Secondo abbiamo aggiunto una funzione `waitOn` che ritorna la sottoscrizione ai nostri `posts`. Ciò significa che il router si assicurerà che la sottoscrizione `posts` sia completamente caricata prima di portare l'utente alla route richiesta.
+Secondo abbiamo aggiunto una funzione `waitOn` che ritorna la sottoscrizione ai nostri `posts`. Infine abbiamo abilitato l'hook `loading` integrato. Ciò significa che il router si assicurerà che la sottoscrizione `posts` sia completamente caricata prima di portare l'utente alla route richiesta.
 
 Osserva che poiché stiamo definendo la nostra funzione `waitOn` globalmente a livello del router, questa sequenza avverrà solo una volta quando l'utente accede per la prima volta all'applicazione. Dopo i dati saranno già presenti nella memoria del browser ed il router non dovrà aspettarli di nuovo.
 
