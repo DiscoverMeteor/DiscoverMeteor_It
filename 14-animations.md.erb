@@ -55,15 +55,15 @@ Meteor non fornisce una callback `justAfterRendered`, ma può imitarla usando `M
 
 ### Posizionamento con i CSS
 
-////
+Per animare i messaggi che si stanno riordinando per la pagina, dovremo avventurarci nel mondo dei CSS. È quindi d'ordine un breve ripasso sul posizionamento on i CSS.
 
-////
+Gli elementi di una pagina sono predefiniti per avere un posizionamento **statico**. Gli elementi posizionati staticamente si adattano al flusso della pagina e le loro coordinate sullo schermo non possono essere cambiate o animate.
 
-////
+Un posizionamento **relativo** dall'altro canto invece significa che l'elemento anche si adatta al flusso della pagina, ma può essere posizionato *relativamente* alla sua posizione originale*.
 
-////
+Un posizionamento *assoluto* va un passo più in avanti e ti permette di specificare delle coordinate x/y relative al *documento* oppure **al primo elemento padre posizionato relativamente o assolutamente**.
 
-////
+Per animare i nostri messaggi useremo un posizionamento relativo.
 
 ~~~css
 .post{
@@ -73,41 +73,41 @@ Meteor non fornisce una callback `justAfterRendered`, ma può imitarla usando `M
 ~~~
 <%= caption "client/stylesheets/style.css" %>
 
-////
+Questo permette di fare facilmente i punti 5 e 6: dobbiamo semplicemente impostare `top` a `0px` (il suo valore predefinito) così i nostri messaggi scorreranno indietro verso la loro posizione "normale".
 
-////
+Questo vuol dire che la nostra unica sfida è quella di calcolare da *dove* animarli (punti 3 e 4), relativamente alla loro nuova posizione. In altre parole, di quanto compensarli. Ma anche questo non è molto difficile: la giusta compensazione è semplicemente la posizione del messaggio precedente meno quella del nuovo.
 
 <% note do %>
 
 ### Position:absolute
 
-////
+Per posizionare i nostri elementi potremmo anche usare `position:absolute` con un padre relativo. Ma un gran svantaggio degli elementi posizionati assolutamente è che sono completamente rimossi dal flusso della pagina, causando il collasso del loro contenitore padre come se fosse vuoto.
 
-////
+A sua volta questo significa che dovremmo impostare l'altezza del contenitore artificialmente con Javascript, invece di lasciare che il browser aggiusti naturalmente gli elementi. Di conseguenza, ogni qual volta sia possibile è meglio rimanere con il posizionamento relativo.
 
 <% end %>
 
-### Total Recall
+### Richiamo totale
 
-////
+Tuttavia abbiamo ancora un problema. Mentre l'elemento A persiste nel DOM e quindi può "ricordare" la sua posizione precedente, l'elemento B viene reincarnato e riprende vita sotto forma di B', con la memoria cancellata.
 
-////
+Meteor fortunatamente viene alla riscossa dandoci accesso all'oggetto **istanza di template** nella callback `rendered`. La [documentazione di Meteor](http://docs.meteor.com/#template_rendered) illustra:
 
-> //// 
+> Nel body della callback, `this` è un oggetto istanza di template che è unico a questa occorrenza del template ed è persistente tra diversi renderings.
 
-////
+Quello che faremo quindi, è trovare la posizione corrente di un messaggio nella pagina e salvare la posizione nell'oggetto istanza di template. In questa maniera, saremo in grado di sapere da dove animare il messaggio, anche quando viene eliminato e ricreato.
 
-////
+Le istanze di template ci permetteno anche di accedere alla collezione di dati tramite la proprietà `data`. Questo ci tornerà utile per prendere il punteggio di un messaggio.
 
-### Ranking Posts
+### Punteggio dei messaggi
 
-////
+Abbiamo parlato del punteggio dei messaggi, ma questo "valore" effettivamente non esiste come una proprietà del messaggio, sicome è semplicemente una conseguenza dell'ordine dei messaggi che sono elencati nella nostra collezione. Dovremo in qualche maniera trovare un modo per far apparire questa proprietà dall'aria se vogliamo essere in grado di animare i messaggi a seconda del loro punteggio. 
 
-////
+Nota che siccome il punteggio è una proprietà relativa che dipende da come ordini i messaggi (un messaggio può essere valutato primo mentre si ordina per data, ma terzo quando si ordina per punteggio), non possiamo mettere questa proprietà `rank` nel database stesso. 
 
-////
+Idealmente metteremmo la proprietà nelle nostre collezioni `newPosts` e `topPosts`, ma Meteor al momento non offre un meccanismo conveniente per farlo.
 
-////
+Inseriremo invece `rank` all'ultimo momento possibile, nel `postList` template manager:
 
 ~~~js
 Template.postsList.helpers({
@@ -123,9 +123,9 @@ Template.postsList.helpers({
 <%= caption "/client/views/posts/posts_list.js" %>
 <%= highlight "2~8" %>
 
-////
+Invee di ritornare il cursore `Posts.find({}, {sort: {submitted: -1}, limit: postsHandle.limit()})` come nei nostri `posts` helpers precedenti, `postsWithRank` prende il cursore e aggiunge la proprietà `_rank` per ognuno dei suoi documenti.
 
-////
+E non dimenticarti di aggiornare il template `postsList`:
 
 ~~~html
 <template name="postsList">
@@ -146,19 +146,19 @@ Template.postsList.helpers({
 
 <% note do %>
 
-### Be Kind, Rewind
+### Sii cortese, riavvolgi
 
-////
+Meteor è uno dei web frameworks più progressisti e all'avanguardia che ci siano. Ma una delle sue funzionalità, la funzione `rewind()`, sembra essere un ritorno ai giorni passati delle video cassette e dei VCRs.   
 
-////
+Ogni volta che usi un cursore con `forEach()`, `map()`, oppure `fetch()`, dovrai riavvolgerlo prima di poterlo usare di nuovo. 
 
-////
+E in alcuni casi è meglio stare sul sicuro e riavvolgere il cursore in maniera preventiva piuttosto che rischiare un errore.
 
 <% end %>
 
-### Putting it together
+### Mettere tutto insieme
 
-////
+Ora possiamo mettere tutto insieme usando la template callback `rendered` del manager in `post_item.js` per la logica della nostra animazione:
 
 ~~~js
 Template.postItem.helpers({
@@ -166,25 +166,25 @@ Template.postItem.helpers({
 });
 
 Template.postItem.rendered = function(){
-  // animate post from previous position to new position
+  // anima questo messaggio dalla posizione precedente a quella nuova
   var instance = this;
   var rank = instance.data._rank;
   var $this = $(this.firstNode);
   var postHeight = 80;
   var newPosition = rank * postHeight;
  
-  // if element has a currentPosition (i.e. it's not the first ever render)
+  // se l'elemento ha una currentPosition (non è il primo rendering)
   if (typeof(instance.currentPosition) !== 'undefined') {
     var previousPosition = instance.currentPosition;
-    // calculate difference between old position and new position and send element there
+    // calcola la differenza tra vecchia e nuova posizione ed invia lì l'elemento
     var delta = previousPosition - newPosition;
     $this.css("top", delta + "px");
   }
   
-  // let it draw in the old position, then..
+  // lascia che venga disegnato nella vecchia posizione, dopodichè...
   Meteor.defer(function() {
     instance.currentPosition = newPosition;
-    // bring element back to its new original position
+    // porta l'elemento indietro alla sua posizione originale
     $this.css("top",  "0px");
   }); 
 };
@@ -196,26 +196,26 @@ Template.postItem.events({
 <%= caption "/client/views/posts/post_item.js" %>
 <%= highlight "5~27" %>
 
-<%= commit "14-1", "Added post reordering animation." %>
+<%= commit "14-1", "Aggiunta animazione di riordinamento dei messaggi." %>
 
-////
+Seguire non dovrebbe essere troppo difficile se fai riferimento al diagramma precedente.
 
-////
+Nota che siccome abbiamo impostato la proprietà `currentPosition` dell'istanza di template nella callback `defer`, questa proprietà non esisterà al primo rendering del frammento di template. Ma non è un problema siccome in ogni modo non siamo interessati ad animare il primo rendering.
 
-////
+Apri il sito e prova a votare. Dovresti vedere i messaggi, che con grazia da ballerine, si spostano gentilmente su e giù!
 
-### Animating New Posts
+### Animare nuovi messaggi
 
-////
+Ora i nostri messaggi si riordinano correttamente, ma non abbiamo ancora un'animazione per un "nuovo messaggio". Invece di far spuntare immediatamente i nuovi messaggi, facciamoli apparire gradualmente. 
 
-////
+In verità questo è più complesso di quel che sembra. Il problema è che la callback `rendered` di Meteor viene scatenata in due casi separati:
 
-1. ////
-2. ////
+1. Quando un nuovo template viene inserito nel DOM
+2. Quando i dati del template vengono cambiati
 
-////
+Solamente il primo caso dovrebbe essere animato, a meno che tu non voglia un'interfaccia utente che si illumina come un albero di natale ogni volta che i tuoi dati cambiano.
 
-////
+Assicuriamoci quindi di animare solamente i messaggi che sono veramente nuovi e non quelli che vengono ri-renderizzati perchè i loro dati sono cambiati. Stiamo già testando per la presenza di una variabile d'istanza (che è impostata solamente dopo il primo render), quindi dobbiamo solo tornare indietro alla nostra callback `rendered` e aggiungere un blocco `else`:
 
 ~~~js
 Template.postItem.helpers({
@@ -223,28 +223,28 @@ Template.postItem.helpers({
 });
 
 Template.postItem.rendered = function(){
-  // animate post from previous position to new position
+  // anima questo messaggio dalla posizione precedente a quella nuova
   var instance = this;
   var rank = instance.data._rank;
   var $this = $(this.firstNode);
   var postHeight = 80;
   var newPosition = rank * postHeight;
-  
-  // if element has a currentPosition (i.e. it's not the first ever render)
+ 
+  // se l'elemento ha una currentPosition (non è il primo rendering)
   if (typeof(instance.currentPosition) !== 'undefined') {
     var previousPosition = instance.currentPosition;
-    // calculate difference between old position and new position and send element there
+    // calcola la differenza tra vecchia e nuova posizione ed invia lì l'elemento
     var delta = previousPosition - newPosition;
     $this.css("top", delta + "px");
   } else {
-    // it's the first ever render, so hide element
+    // è il primo evento render in assoluto, quindi nascondi l'elemento
     $this.addClass("invisible");
   }
   
-  // let it draw in the old position, then..
+  // lascia che venga disegnato nella vecchia posizione, dopodichè...
   Meteor.defer(function() {
     instance.currentPosition = newPosition;
-    // bring element back to its new original position
+    // porta l'elemento indietro alla sua posizione originale
     $this.css("top",  "0px").removeClass("invisible");
   }); 
 };
@@ -256,18 +256,18 @@ Template.postItem.events({
 <%= caption "/client/views/posts/post_item.js" %>
 <%= highlight "19~22,28" %>
 
-<%= commit "14-2", "Fade items in when they are drawn." %>
+<%= commit "14-2", "Fai apparire gradualmente gli elementi quando vengono disegnati." %>
 
-////
+Nota che la `removeClass("invisible")` che abbiamo aggiunto nella funzione `defer()` verrà eseguita ad ogni rendering. Ma farà qualcosa solamente se la classe `.invisible` è presente sull'elemento, il che è vero solamente la prima volta che è renderizzato.
 
 <% note do %>
 
 ### CSS & JavaScript
 
-////
+Avrai notato che stiamo usando una classe CSS `.invisible` per scatenare l'animazione invece di animare direttamente la proprietà CSS `opacity` come abbiamo fatto per `top`. Questo è perchè per `top` avevamo bisogno di animare la proprietà usando un valore specifico che dipende dai dati dell'istanza.
 
-////
+Dall'altro canto qui vogliamo solo mostrare e nascondere un elemento, indipendentemente dai suoi dati. Siccome è una buona idea lasciare il più possibile CSS fuori da Javascript, qui aggiungeremo e toglieremo solamente la classe e specificheremo i dettagli dell'animazione nel nostro stylesheet.
 
 <% end %>
 
-////
+Finalmente dovremmo avere l'animazione che volevamo! Lancia la tua app e provala! Puoi anche divertirti con le classi `.post` e `.post.invisible` per vedere se riesci a trovare altri modi di animare. Suggerimento: [CSS easing functions](http://matthewlein.com/ceaser/) è un buon punto per cominciare!
