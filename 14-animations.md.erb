@@ -3,54 +3,57 @@ title: Animations
 slug: animations
 date: 0014/01/01
 number: 14
-contents: See what happens behind the scenes when Meteor swaps two DOM elements.|Learn how to animate the reordering of posts.|Learn how to animate the insertion of new posts.
+points: 10
+photoUrl: http://www.flickr.com/photos/ikewinski/8377615133/
+photoAuthor: Mike Lewinski
+contents: Vedi cosa succede nei retroscena quando Meteor scambia due elementi del DOM.|Impara come animare il riordinamento dei messaggi.|Impara come animare l'inserimento dei messaggi.
 paragraphs: 58
 ---
 
-////
+A questo punto abbiamo un sistema di votazione, conto punteggi e valutazione in tempo reale. Questo tuttavia risulta in un'esperienza erratica ed irritante, con messaggi che saltano da una parte all'altra della homepage. Per migliorare questa situazione useremo le animazioni.   
 
 ### Meteor & the DOM
 
-////
+Prima di iniziare la parte divertente (fare che le cose si muovino), dobbiamo capire come Meteor interagisce con il DOM (Document Object Model -- la collezione di elementi HTML che costituiscono i contenuti di una pagina).
 
-////
+È cruciale ricordarsi che gli elementi *non possono essere spostati*. Possono solamente essere eliminati e creati (nota che questa è una limitazione del DOM, non di Meteor). Quindi per dare l'illusione che gli elementi A e B cambino di posto, Meteor cancellerà l'elemento B e inserirà una copia nuova di zecca (B') prima dell'elemento A.
 
-////
+Questo rende l'animazione difficoltosa, siccome non puoi semplicemente animare B per muoverlo in una nuova posizione, perchè B sarà scomparso non appena Meteor renderizza la pagina (che come sappiamo accade instantaneamente, grazie alla reactivity). Dovrai invece animare B' mentre si muove dalla vecchia posizione di B verso la sua nuova posizione prima di A.
 
-////
+Per scambiare i messaggi A e B (posizionati rispettivamente nelle posizioni p1 e p2), dobbiamo seguire i seguenti punti:
 
-1. ////
-2. ////
-3. ////
-4. ////
-5. ////
-6. ////
+1. Elimina B
+2. Nel DOM, prima di A crea B' 
+3. Muovi B' verso p2
+4. Muovi A verso p1
+5. Anima A verso p2
+6. Anima B' verso p1
 
-////
+Questi punti sono esposti in dettaglio nel seguente diagramma: 
 
-<%= diagram "animation_diagram", "Swtiching two posts", "pull-center" %>
+<%= diagram "animation_diagram", "Scambiare due messaggi", "pull-center" %>
 
-////
+Note che nei punti 3 e 4 non stiamo *animando* A e B' verso le loro posizioni, ma li stiamo "teleportando" istantaneamente. Questo darà l'illusione che B non è mai stato cancellato e posizionerà entrambi gli elementi così che possano essere animati verso la loro nuova posizione. 
 
-////
+Fortunatamente Meteor si prende cura dei punti 1 & 2, quindi ci dobbiamo preoccupare solamente dei punti da 3 a 6.
 
-////
+Nei punti 5 e 6 inoltre, stiamo semplicemente spostando gli elementi nelle loro giuste posizioni. Quindi le uniche parti di cui ci dobbiamo veramente preoccupare sono i punti 3 e 4, cioè mandare gli elementi verso il punto iniziale dell'animazione.
 
-### Proper Timing
+### Tempismo giusto
 
-////
+Fino ad ora abbiamo parlato di *come* animare i nostri messaggi, ma non di *dove* animarli.
 
-////
+Per i punti 3 e 4, la risposta sta nella template callback `rendered` all'interno del gestore `post_item.js`, che è scatenato ogni volta che cambia la proprietà di un messaggio (nel nostro caso il punteggio).
 
-////
+I punti 5 e 6 sono un pò più complessi. Pensaci su: se tu dicessi ad un automata di correre verso nord per 5 minuti, dopodichè di correre verso sud per 5 minuti, probabilmente l'automata dedurrà che siccome finirà nello stesso posto, potrebbe risparmiarsi le sue forze e non correre per niente.  
 
-////
+Quindi se vuoi assicurarti che il tuo automata corra per tutti e 10 i minuti, devi *aspettare* fino a che non ha corso i primi 5 minuti, e *dopo* dirgli di tornare indietro.
 
-////
+Il browser funziona in una simile maniera: se simultaneamente gli diamo entrambe le istruzioni, le nuove coordinate semplicemente sostituirebbero quelle vecchie e non accadrebbe nulla. In altre parole, il browser ha bisogno di registrare i cambiamenti di posizione come punti separati nel tempo, altrimenti non sarà in grado di animarli.
 
-////
+Meteor non fornisce una callback `justAfterRendered`, ma può imitarla usando `Meteor.defer()`, che semplicemente prende una funzione e pospone la sua esecuzione appena in tempo per registrarsi come un evento diverso. 
 
-### CSS Positioning
+### Posizionamento con i CSS
 
 ////
 
