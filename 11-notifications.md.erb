@@ -11,11 +11,11 @@ Ora che gli utenti possono commentare sui rispettivi post, sarebbe bene far loro
 
 Per farlo, informeremo il proprietario del post che c'è stato un commento al proprio post, e forniremo un link per visualizzare quel commento.
 
-Questo è il tipo di caratteristica in cui Meteor brilla davvero: poichè Meteor è in realtime di default, mostreremo quelle notifiche _istantaneamente_. Non abbiamo bisogno di aspettare che l'utente aggiorni la pagina o che la controlli, possiamo semplicemente far apparire le notifiche senza dover mai scrivere codice specifico.
+Questo è il tipo di caratteristica in cui Meteor davvero eccelle: poichè Meteor è in realtime di default, mostreremo quelle notifiche _istantaneamente_. Non abbiamo bisogno di aspettare che l'utente aggiorni la pagina o che la controlli, possiamo semplicemente far apparire le notifiche senza dover mai scrivere codice specifico.
 
 ### Creare le notifiche
 
-Creeremo una notifica quando qualcuno commenta sui tuoi post. In futuro, le notifiche potrebbero essere estese per coprire molti altri scenari, ma per ora questo sarà sufficiente per tenere gli utenti informati su quello che sta succedendo.
+Creeremo una notifica quando qualcuno commenta sui tuoi post. In futuro, le notifiche potrebbero essere estese per coprire molti altri scenari, ma per ora questo basterà per tenere gli utenti informati su quello che sta succedendo.
 
 Creiamo la nostra collezione `Notifications`, così come una funzione `createCommentNotification` che inserirà una notifica in corrispondenza di ogni nuovo commento su uno dei tuoi post:
 
@@ -43,9 +43,9 @@ createCommentNotification = function(comment) {
 
 Così come per i post e i commenti, questa collezione `Notifications` sarà condivisa tra client e server. Così come abbiamo bisogno di aggiornare le notifiche, una volta che un utente le ha viste, dobbiamo anche abilitare gli aggiornamenti, assicurando come al solito di limitare le autorizzazioni di aggiornamento ai soli dati in possesso dell'utente.
 
-Abbiamo anche creato una semplice funzione che osserva il post che l'utente sta commentando, scopre chi dovrebbe essere notificato, e inserisce una nuova notifica.
+Abbiamo anche creato una semplice funzione che osserva il post che l'utente sta commentando, trova chi dovrebbe essere notificato, e inserisce una nuova notifica.
 
-Stiamo già creando i commenti in un metodo lato server, quindi possiamo solo estendere tale metodo in modo da chiamare la nostra funzione. Sostituiremo `return Comments.insert(comment);` con `comment._id = Comments.insert(comment)`, al fine di salvare l'`_id` del commento appena creato in una variabile, quindi chiamare la nostra funzione `createCommentNotification`:
+Stiamo già creando i commenti con un metodo lato server, quindi possiamo solo estendere tale metodo in modo da chiamare la nostra funzione. Sostituiremo `return Comments.insert(comment);` con `comment._id = Comments.insert(comment)`, al fine di salvare l'`_id` del commento appena creato in una variabile, quindi chiamare la nostra funzione `createCommentNotification`:
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -68,7 +68,7 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "8~14" %>
 
-Pubblichiamo anche le notifiche e abboniamoci sul cliclient:
+Pubblichiamo anche le notifiche e abboniamoci sul client:
 
 ~~~js
 // [...]
@@ -95,7 +95,7 @@ Router.configure({
 
 ### Visualizzare le notifiche
 
-Ora possiamo andare avanti e aggiungere una lista di notifiche nel header.
+Ora possiamo andare avanti e aggiungere una lista di notifiche nell' header.
 
 ~~~html
 <template name="header">
@@ -129,7 +129,7 @@ Ora possiamo andare avanti e aggiungere una lista di notifiche nel header.
 <%= caption "client/views/includes/header.html" %>
 <%= highlight "12~19" %>
 
-E creiamo i template `notifications` e `notification` (entrambi condivideranno il file `notifications.html`):
+E creiamo i template `notifications` e `notification` (entrambi saranno sul file `notifications.html`):
 
 ~~~html
 <template name="notifications">
@@ -191,10 +191,9 @@ Template.notification.events({
 
 <%= commit "11-2", "Visualizza le notifiche nel header." %>
 
-Si può pensare che le notifiche siano non troppo differenti dagli errori, ed è vero la loro struttura è molto simile. C'é solo una differenza chiave: abbiamo creato una classica collezione sincronizzata client-server. Questo significa che le nostre notifiche sono *persistenti* e, fin quando usiamo lo stesso account utente, esisteranno ricaricamento di pagina e su differenti dispositivi.
+Si può pensare che le notifiche siano non troppo differenti dagli errori, ed è vero la loro struttura è molto simile. C'é solo una differenza importante: abbiamo creato una classica collezione sincronizzata client-server. Questo significa che le nostre notifiche sono *persistenti* e, fin quando usiamo lo stesso account utente, esisteranno ricaricamento della pagina e su differenti dispositivi.
 
 Facciamo una prova: apri un altro browser (diciamo Firefox), creiamo un altro utente, e commentiamo sul post creato con l'account principale (quello che hai lasciato aperto in Chrome). Dovresti vedere qualcosa tipo questo:
-
 
 <%= screenshot "11-1", "Visualizzazione delle notifiche." %>
 
@@ -216,7 +215,7 @@ Oltre a potenziali problemi di privacy, non possiamo permetterci di avere le not
 
 Risolviamo questo problema con le **pubblicazioni**. Possiamo usare le nostre pubblicazioni per specificare esattamente quale parte di una collezione vogliamo condividere con ciascun browser.
 
-Per fare questo, abbiamo bisogno di restituire nella nostra pubblicazione un cursore diverso da `Notifications.find ()`. Vale a dire, vogliamo restituire un cursore che corrisponde alle notifiche dell'utente corrente.
+Per fare questo, abbiamo bisogno di restituire nella nostra pubblicazione un cursore diverso da `Notifications.find()`. Vale a dire, vogliamo restituire un cursore che corrisponde alle notifiche dell'utente corrente.
 
 Farlo è abbastanza semplice, visto che la funzione `publish` dispone dell'`_id` dell'utente corrente in `this.userId`:
 
