@@ -68,7 +68,7 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "8~14" %>
 
-////
+Pubblichiamo anche le notifiche e abboniamoci sul cliclient:
 
 ~~~js
 // [...]
@@ -129,7 +129,7 @@ Ora possiamo andare avanti e aggiungere una lista di notifiche nel header.
 <%= caption "client/views/includes/header.html" %>
 <%= highlight "12~19" %>
 
-////
+E creiamo i template `notifications` e `notification` (entrambi condivideranno il file `notifications.html`):
 
 ~~~html
 <template name="notifications">
@@ -161,9 +161,9 @@ Ora possiamo andare avanti e aggiungere una lista di notifiche nel header.
 ~~~
 <%= caption "client/views/notifications/notifications.html" %>
 
-////
+Possiamo vedere che il piano è per ogni notifica di contenere un link al post che è stato commentato e il nome dell'utente che l'ha commentato.
 
-////
+Poi, dobbiamo essere sicuri di selezionare nel nostro manager la giusta lista di notifiche e aggiornare le notifiche come "lette" quando un utente clicca sul link alle quale puntano.
 
 ~~~js
 Template.notifications.helpers({
@@ -191,11 +191,12 @@ Template.notification.events({
 
 <%= commit "11-2", "Visualizza le notifiche nel header." %>
 
-////
+Si può pensare che le notifiche siano non troppo differenti dagli errori, ed è vero la loro struttura è molto simile. C'é solo una differenza chiave: abbiamo creato una classica collezione sincronizzata client-server. Questo significa che le nostre notifiche sono *persistenti* e, fin quando usiamo lo stesso account utente, esisteranno ricaricamento di pagina e su differenti dispositivi.
 
-////
+Facciamo una prova: apri un altro browser (diciamo Firefox), creiamo un altro utente, e commentiamo sul post creato con l'account principale (quello che hai lasciato aperto in Chrome). Dovresti vedere qualcosa tipo questo:
 
-<%= screenshot "11-1", "Visuaizzazione delle notifiche." %>
+
+<%= screenshot "11-1", "Visualizzazione delle notifiche." %>
 
 ### Controllo dell'accesso alle notifiche
 
