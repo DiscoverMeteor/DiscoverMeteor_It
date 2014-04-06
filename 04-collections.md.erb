@@ -297,7 +297,7 @@ Dopodiché, nella console JavaScript, inseriamo un altro post. Tornando al DOM i
 
 ### Collegare le Collezioni: Pubblicazioni e Sottoscrizioni
 
-Fino a questo punto abbiamo avuto il pacchetto `autopublish` abilitato, il che non è previsto per applicazioni in fase di produzione. Come indica il nome stesso, questo pacchetto fa sì che ogni collezione sia interamente condivisa con ogni client connesso. Visto che questo non è ciò che vigliamo, disabilitiamolo.
+Fino a questo punto abbiamo avuto il pacchetto `autopublish` abilitato, il che non è previsto per applicazioni in fase di produzione. Come indica il nome stesso, questo pacchetto fa sì che ogni collezione sia interamente condivisa con ogni client connesso. Visto che questo non è ciò che vogliamo, disabilitiamolo.
 
 Apriamo una nuova finestra del terminale e scriviamo:
 
@@ -305,7 +305,7 @@ Apriamo una nuova finestra del terminale e scriviamo:
 $ meteor remove autopublish
 ~~~
 
-Questo ha un effetto istantaneo. Se ora guardiamo il browser, vedremo che tutti i post sono scomparti! Questo perché stavamo sfruttando `autopublish` per assicurarci che la collezione lato client dei post fosse una copia esatta di tutti i post presenti nel database.
+Questo ha un effetto istantaneo. Se ora guardiamo il browser, vedremo che tutti i post sono scomparsi! Questo perché stavamo sfruttando `autopublish` per assicurarci che la collezione lato client dei post fosse una copia esatta di tutti i post presenti nel database.
 
 Alla fine dello sviluppo dovremo fare in modo che vengano trasferiti solo i post che l'utente deve vedere (anche considerando cose come la paginazione). Ma per ora faremo in modo che la collezione `Posts` venga interamente pubblicata.
 
