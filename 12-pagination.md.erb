@@ -1,9 +1,9 @@
 ---
-title: Impaginazione
+title: Paginazione
 slug: pagination
 date: 0012/01/01
 number: 12
-contents: Maggiori informazioni sulle sottoscrizioni in Meteor e su come utilizzarle per controllare i dati.|Implementare una impaginazione infinita.|Usare il pacchetto `iron-router-progress` per implementare una barra di stato simile a quella di iOS.|Creare una particolare sottoscrizione per gestire i link diretti alle pagine dei post.
+contents: Maggiori informazioni sulle sottoscrizioni in Meteor e su come utilizzarle per controllare i dati.|Implementare una paginazione infinita.|Usare il pacchetto `iron-router-progress` per implementare una barra di stato simile a quella di iOS.|Creare una particolare sottoscrizione per gestire i link diretti alle pagine dei post.
 paragraphs: 67
 ---
 
@@ -13,11 +13,11 @@ Dovremmo quindi pensare a quali implicazioni ci saranno sulla performance dato i
 
 Abbiamo parlato di come una collezione lato client può contenere solo una parte dei dati presenti sul server, e abbiamo già utilizzato questa particolarità con le collezioni di notifiche e commenti.
 
-Al momento stiamo ancora pubblicando tutti i post insieme, a tutti gli utenti connessi e se ci saranno migliaia di post pubblicati, questo potrebbe diventare un problema. Per risolverlo dobbiamo impaginare i nostri post.
+Al momento stiamo ancora pubblicando tutti i post insieme, a tutti gli utenti connessi e se ci saranno migliaia di post pubblicati, questo potrebbe diventare un problema. Per risolverlo dobbiamo paginare i nostri post.
 
 ### Aggiungere Post
 
-Prima di tutto, nei nostri dati di partenza, carichiamo abbastanza post perchè l'impaginazione abbia senso:
+Prima di tutto, nei nostri dati di esempio, carichiamo abbastanza post perchè la paginazione abbia senso:
 
 ~~~js
 // Fixture data 
@@ -49,25 +49,25 @@ if (Posts.find().count() === 0) {
 <%= caption "server/fixtures.js" %>
 <%= highlight "15~24" %>
 
-////
+Dopo aver eseguito `meteor reset`, dovreste vedere un risultato simile a questo: 
 
 <%= screenshot "12-1", "Displaying dummy data. " %>
 
 <%= commit "12-1", "Added enough posts that pagination is necessary." %>
 
-### Infinite Pagination
+### Paginazione infinita
 
-////
+Implementeremo un paginazione "infinita", il che significa che caricheremo inizialmente 10 post, con un bottone "carica più post" in fondo alla pagina. Cliccando sul bottone verranno aggiunti altri 10 post e così via, *ad infinitum*. In questo modo possiamo controllare tutto il sistema di paginazione con un solo parametro, che rappresenta il numero di post da visualizzare sullo schermo.
 
-////
+Ora dobbiamo trovare un modo per passare al server questo parametro così che sappia quanti post deve inviare al client. Dato che abbiamo già fatto una sottoscrizione alla pubblicazione `posts` nel router, ne trarremo vantaggio lasciando che sia il router a gestire la nostra paginazione.
 
-////
+Il metodo più semplice è quello di aggiungere il parametro del limite di post direttamente nel path, con URL di questo tipo `http://localhost:3000/25`. Un vantaggio di usare questa tecnica è che se già si stanno visualizzando 25 post e capita di ricaricare la finestra del browser per errore, verranno visualizzati 25 post anche quando la pagina si ricarica.
 
-////
+Per farlo in maniera appropriata, dobbiamo cambiare il modo in cui eseguiamo la sottoscrizione ai post. Come abbiamo fatto nel capitolo *Commenti*, dobbiamo spostare il codice della nostra sottoscrizione dal livello del *router* al livello della *route*.
 
-////
+Potrebbe sembrare un gran lavoro da fare tutto in una volta, ma diventerà tutto chiaro procedendo col codice.
 
-////
+Come prima cosa, fermiamo la sottoscrizione alla pubblicazione `posts` nel blocco `Router.configure()`. Eliminiamo `Meteor.subscribe('posts')`, lasciando solo la sottoscrizione `notifications`:
 
 ~~~js
 Router.configure({
@@ -81,7 +81,7 @@ Router.configure({
 <%= caption "lib/router.js" %>
 <%= highlight "5" %>
 
-////
+Aggiugiamo un parametro `postsLimit` al percorso della route. Aggiungendo un `?` dopo il nome del parametro stiamo indicando che è opzionale. In questo modo la route non solo riconoscerà un url come `http://localhost:3000/50`, ma anche `http://localhost:3000`.
 
 ~~~js
 Router.map(function() {
@@ -95,11 +95,11 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "5" %>
 
-////
+E' importante contare che un percorso come `/:parameter?` combacerà con ogni possibile percorso. Siccome ogni route viene analizzata in maniera successiva per vedere se corrisponde al percorso attuale, dobbiamo organizzare le nostre route in ordine di specificità decrescente.
 
-////
+In altre parole, le route più specifiche come `/posts/:_id` devono essere messe per prime, e la route `postsList` dev'essere posizionata alla fine del file dato che si combina praticamente con tutti i percorsi.
 
-////
+E' ora di gestire il problema più complesso di sottoscrivere e trovare i dati corretti. Dobbiamo gestire il caso in cui il parametro `postsLimit` non sia presente, assegnando un valore di default. Useremo come limite "5", che ci da la possibilità di giocare abbastanza con la paginazione.
 
 ~~~js
 Router.map(function() {
