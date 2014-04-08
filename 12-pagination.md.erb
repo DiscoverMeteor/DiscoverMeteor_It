@@ -1,23 +1,23 @@
 ---
-title: Paginazione
+title: Impaginazione
 slug: pagination
 date: 0012/01/01
 number: 12
-contents: Maggiori informazioni sulle sottoscrizioni in Meteor e su come utilizzarle per controllare i dati.|Implementare una paginazione infinita.|Usare il pacchetto `iron-router-progress` per implementare una barra di stato simile a quella di iOS.|Creare una particolare sottoscrizione per gestire i link diretti alle pagine dei post.
+contents: Maggiori informazioni sulle sottoscrizioni in Meteor e su come utilizzarle per controllare i dati.|Implementare una impaginazione infinita.|Usare il pacchetto `iron-router-progress` per implementare una barra di stato simile a quella di iOS.|Creare una particolare sottoscrizione per gestire i link diretti alle pagine dei post.
 paragraphs: 67
 ---
 
-////
+Le cose stanno andando alla grande con Microscope e dovremmo aspettarci un ottimo riscontro quando verrà finalmente rilasciato.
 
-////
+Dovremmo quindi pensare a quali implicazioni ci saranno sulla performance dato il numero di nuovi post che verranno inseriti appena il sito prenderà il volo!
 
-////
+Abbiamo parlato di come una collezione lato client può contenere solo una parte dei dati presenti sul server, e abbiamo già utilizzato questa particolarità con le collezioni di notifiche e commenti.
 
-////
+Al momento stiamo ancora pubblicando tutti i post insieme, a tutti gli utenti connessi e se ci saranno migliaia di post pubblicati, questo potrebbe diventare un problema. Per risolverlo dobbiamo impaginare i nostri post.
 
-### Adding More Posts
+### Aggiungere Post
 
-////
+Prima di tutto, nei nostri dati di partenza, carichiamo abbastanza post perchè l'impaginazione abbia senso:
 
 ~~~js
 // Fixture data 
