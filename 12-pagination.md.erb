@@ -117,7 +117,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "6~9" %>
 
-////
+Notate che stiamo passando un oggetto JavaScript ({limit: postsLimit}) insieme al nome della nostra pubblicazione `posts`. Questo oggetto ci servirà come parametro `options` per l'asserzione lato sevrer `Posts.find()`. Passiamo al codice lato server per implementarlo:
 
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -137,15 +137,15 @@ Meteor.publish('notifications', function() {
 
 <% note do %>
 
-### Passing Parameters
+### Passare Parametri
 
-////
+Il codice delle nostre pubblicazioni sta dicendo al server che può fidarsi di ogni oggetto JavaScript che gli venga inviato dal client (nel nostro caso, `{limit: postsLimit}`) per passarlo all'asserzione `find()` come parametor `options`. Questo rende possibile agli utenti di inviare qualsiasi opzione tramite la console del browser.
 
-////
+Nel nostro caso si tratta di una cosa relativamente senza pericoli dato che tutto quello che può fare un utente è di riordinare i post in maniera diversa o cambiare il limite (che è quello che volevamo abilitare inizialmente).
 
-////
+Non dovete usare questo schema quando archiviate dati privati in campi non pubblicati, dato che l'utente può modificare l'opzione `fields` per accedervi, e dovete probabilmente evitare di usarla come argomento di selezione dell'asserzione `find()` per le stesse ragioni di sicurezza.
 
-////
+Uno schema più sicuro è quello di passare i parametri individualmente al posto dell'intero oggetto, per essere sicuri di avere completo controllo sui dati:
 
 ~~~js
 Meteor.publish('posts', function(sort, limit) {
@@ -155,9 +155,9 @@ Meteor.publish('posts', function(sort, limit) {
 
 <% end %>
 
-////
+Ora che stiamo eseguendo la sottoscrizione al livello della route, dobbiamo spostare il contesto dei dati nello stesso posto. Facciamo una deviazione dal nostro precedente schema e facciamo in modo che la funzione `data` ritorni un oggetto JavaScript invece di un cursore. Questo ci permette di creare un contesto dati *nominato*, che chiameremo `posts`.
 
-////
+Questo significa che invece di essere implicitamente disponibile come `this` all'interno del template, il nostro contesto dati sarà disponibile come `posts`. Oltre a questa piccola modifica, il codice dovrebbe risultare familiare:
 
 ~~~js
 Router.map(function() {
@@ -181,9 +181,9 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "8~13" %>
 
-////
+Ora che stiamo spostando il contesto dati al livello del router, possiamo con sicurezza eliminare l'helper del template `posts` all'interno del file `posts_list.js` e siccome abbiamo chiamato il contesto dati `posts` (come l'helper), non dobbiamo nemmeno toccare il template `postsList`!
 
-////
+Facciamo il punto della situazione. Il codice modificato di `router.js` dovrebbe essere così:
 
 ~~~js
 Router.configure({
