@@ -1,42 +1,42 @@
 ---
-title: Voting
-slug: voting
+title: Votazioni
+slug: votazioni
 date: 0013/01/01
 number: 13
-contents: Build a system where users can vote on posts.|Rank our posts by vote on a "best" post page.|Learn how to write a general handlebars helper.|Learn a little more about data security in Meteor.|Cover some interesting performance considerations in MongoDB.
+contents: Implementare un sistema che consenta agli utenti di votare i post.|Classificare i post in base al voto su una pagina dei post "migliori".|Scrivere un generico handlebar helper.|Approfondimento sulla sicurezza dei dati.|Alcune interessanti considerazioni riguardanti MongoDB.
 paragraphs: 49
 ---
 
-////
+Adesso che il sito sta guadagnando popolarità, trovare i link migliori sta rapidamente diventando complicato. E' necessario un qualche sistema di classificazione con cui ordinare i post.
 
-////
+Si potrebbe implementare un complesso sistema di classificazione basato su karma, decadimento del punteggio a tempo, e svariati altri parametri (la maggior parte dei quali implementati in (Telescope)[http://telesc.pe/], il fratello maggiore di Microscope). Nella nostra applicazione invece si punta alla semplicità, per cui i post saranno classificati in base al numero di voti ricevuti.
 
-////
+Per cominciare, verrà fornita agli utenti la possibilità di votare un post.
 
-### Data Model
+### Modello dei Dati
 
-////
+Per determinare se visualizzare agli utenti il pulsante di upvote o meno, per ciascun post verrà salvata la lista degli utenti che lo hanno votato, consentendo allo stesso tempo di evitare che un utente voti più di una volta.
 
 <% note do %>
 
-### Data Privacy & Publications
+### Riservatezza dei Dati & Pubblicazioni
 
-////
+Le liste dei votanti saranno pubblicate a tutti gli utenti, che di conseguenza renderà i dati automaticamente e pubblicamente accedibili dalla console del browser.
 
-////
+Questo è il tipico problema di riservatezza dei dati causato dalla modalità in cui le collezioni funzionano. Ad esempio, si vuole consentire agli utenti la ricerca di coloro che hanno votato i loro post? Nel caso in questione rendere tali informazioni pubblicamente accedibili non ha reali conseguenze, ma è importante avere almeno consapevolezza del problema.
 
-////
+Da notare che se si volesse limitare l'accesso ad alcune di queste informazioni, ci si dovrebbe assicurare che al client non sia consentito smanettare con le opzioni dei campi `fields` della pubblicazione, sia rimuovento la proprietà lato server, sia evitando di passare per intero le opzioni dal client al server.
 
 <% end %>
 
-////
+Per semplificare il conteggio del numero di voti per ciascun post, il totale dei voti per ciascun post verrà denormalizzato. Verranno quindi aggiunti due attributi ai post, `upvoters` e `votes`. 
 
 ~~~js
-// Fixture data 
+// Dati di esempio 
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
   
-  // create two users
+  // crea 2 utenti
   var tomId = Meteor.users.insert({
     profile: { name: 'Tom Coleman' }
   });
@@ -113,14 +113,14 @@ if (Posts.find().count() === 0) {
 ~~~js
 //...
 
-// check that there are no previous posts with the same link
+// verifica che non ci siano post precedenti con lo stesso link
 if (postAttributes.url && postWithSameLink) {
   throw new Meteor.Error(302, 
     'This link has already been posted', 
     postWithSameLink._id);
 }
 
-// pick out the whitelisted keys
+// reperisce le chiavi abilitate
 var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
   userId: user._id, 
   author: user.username, 
@@ -139,9 +139,9 @@ return postId;
 <%= caption "collections/posts.js" %>
 <%= highlight "16~17" %>
 
-### Building our Voting Templates
+### Implementazione dei template per le votazioni
 
-////
+Per prima cosa, verrà aggiunto un pulsante al post parziale:
 
 ~~~html
 <template name="postItem">
@@ -163,9 +163,9 @@ return postId;
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "3,7" %>
 
-<%= screenshot "13-1", "The upvote button" %>
+<%= screenshot "13-1", "Il pulsante per votare" %>
 
-////
+Verrà quindi chiamato un metodo lato server per eseguire l'upvote quando l'utente clicca sul pulsante:
 
 ~~~js
 //...
@@ -190,7 +190,7 @@ Meteor.methods({
   
   upvote: function(postId) {
     var user = Meteor.user();
-    // ensure the user is logged in
+    // verifica che l'utente sia loggato
     if (!user)
       throw new Meteor.Error(401, "You need to login to upvote");
     
@@ -211,15 +211,15 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "6~23" %>
 
-<%= commit "13-1", "Added basic upvoting algorithm." %>
+<%= commit "13-1", "Aggiunto semplice algoritmo per votazione." %>
 
-////
+Questo methodo è autoesplicativo. Si eseguono alcuni controlli preventivi per evitare che l'utente sia loggato e che il post esista realmente. Quindi si controlla che l'utente non abbia già espresso il suo voto per il post, quindi si incrementa il punteggio totale del voto e aggiunge l'utente alla lista dei votanti.
 
-////
+Questa ultima operazione si rivela interessante, in quanto vengono utilizzato due operatori di Mongo speciali. Ce ne sono molti di più da imparare, ma questi sono estremamente utili: `$addToSet` aggiunge un elemento ad un array se non già incluso, mentre `$inc` semplicemente incrementa il valore di un campo di tipo intero.
 
-### User Interface Tweaks
+### Ritocchi all'Interfaccia Utente
 
-////
+Se l'utente non è loggato, oppure ha già votato, non sarà in grado di votare. Per evidenziare questo caso sull'interfaccia, verrà utilizzata una funzione di supporto che aggiunge, ove necessario, la classe CSS `disabled` al pulsante per la votazione.
 
 ~~~html
 <template name="postItem">
@@ -261,13 +261,13 @@ Template.postItem.events({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "8~15, 19" %>
 
-////
+Si sta cambiando la classe da `.upvote` a `.upvotable`, quindi è opportuno non tralasciare di modificare il gestore dell'evento click.
 
-<%= screenshot "13-2", "Greying out upvote buttons." %>
+<%= screenshot "13-2", "Disabilitazione del pulsante per la votazione." %>
 
-<%= commit "13-2", "Grey out upvote link when not logged in / already voted." %>
+<%= commit "13-2", "Link in grigio se non autenticato o già votato." %>
 
-////
+Ora, si può notare che i post con un singolo voto sono etichettati come "1 vote__s__", vediamo quindi come formattare il plurale in modo appropriato. Mettere in forma plurale può essere un processo complicato, ma per adesso verrà affrontato in modo semplice. Si implementerà una funzione di supporto `Handlebars` general, ovunque utilizzabile.
 
 ~~~js
 Handlebars.registerHelper('pluralize', function(n, thing) {
@@ -281,7 +281,7 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
 ~~~
 <%= caption "client/helpers/handlebars.js" %>
 
-////
+Le funzioni che sono state create sono legate ai relativi manager e template. Ma utilizzando `Handlebars.registerHelper` viene creata una funzione di supporto _globale_ che può essere utilizzata in qualunque template:
 
 ~~~html
 <template name="postItem">
@@ -298,23 +298,23 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "4, 6" %>
 
-<%= screenshot "13-3", "Perfecting Proper Pluralization (now say that 10 times)" %>
+<%= screenshot "13-3", "Perfezionamento della forma plurale" %>
 
-<%= commit "13-3", "Added pluralize helper to format text better." %>
+<%= commit "13-3", "Aggiunta funzione per formattare il testo in forma plurale." %>
 
-////
+Adesso si dovrebbe vedere `1 vote`.
 
-### Smarter Voting Algorithm
+### Miglioramento dell'Algoritmo di Votazione
 
-////
+Il codice per votare sembra buono, ma può ancora essere migliorato. Nel metodo `upvote` vengono eseguite 2 chiamate a Mongo: la prima per ottenere il post, l'altra per modificarlo.
 
-////
+Ci sono due problemi. Per prima cosa, è inefficiente accedere al database per 2 volte. Ma ben più importante, introduce una corsa critica. L'algoritmo implementato è il seguente:
 
-1. ////
-2. ////
-3. ////
+1. Legge il post dal database
+2. Verifica se l'utente ha votato
+3. In caso negativo, esegue il voto 
 
-////
+Cosa succede se lo stesso utente vota nuovamente lo stesso post durante i passi 1 e 3? Questa versione consente all'utente di votare 2 volte per lo stesso post. Fortunatamente, Mongo fornisce un metodo più efficace combinando i passi 1-3 in un singolo comando Mongo:
 
 ~~~js
 Meteor.methods({
@@ -341,11 +341,11 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "12~15" %>
 
-<%= commit "13-4", "Better upvoting algorithm." %>
+<%= commit "13-4", "Algoritmo di votazione migliorato." %>
 
-////
+Il codice si traduce in: "trova tutti i post con questo `id` per cui l'utente non ha ancora votato, e aggiornali in questo modo". Se l'utente _non_ ha ancora votato, il post con quell'`id` sarà ovviamente trovato. D'altro canto, se l'utente ha *già* votato, allora la ricerca non troverà alcun documento, e conseguentemente non succederà niente.
 
-////
+Il solo problema adesso adesso è che non si può informare l'utente riguardo la votazione già eseguita per il post (poiché è stata eliminata la chiamata al database che eseguiva la verifica). Ad ogni modo, l'utente dovrebbe esserne a conoscenza dato che il pulsante "upvote" nell'interfaccia utente è disabilitato.
 
 <% note do %>
 

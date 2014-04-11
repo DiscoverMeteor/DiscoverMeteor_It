@@ -21,6 +21,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
   * live
   * markup
   * open-source
+  * privacy
   * prompt
   * refresh
   * repository
@@ -42,6 +43,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **collection** -> *collezione*
  * **console** -> *terminale*
  * **data store** -> *archivio dati*
+ * **data privacy** -> *riservatezza dei dati*
  * **dropdown menu** -> *menù a discesa*, *menù a tendina*
  * **features** -> *funzionalità/caratteristiche*
  * **helper** -> *utilità/classe di utilità* depending on the context
@@ -50,6 +52,7 @@ Should you have better proposals or doubts, please feel free to comment ono each
  * **path** -> *percorso*, *indirizzo*
  * **pattern** -> *schema ricorrente*
  * **publication** -> *pubblicazione*
+ * **race condition** -> *corsa critica*
  * **real-time** -> *tempo reale*
  * **subscription** -> *sottoscrizione*
  * **terminal** -> *terminale*
