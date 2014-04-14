@@ -217,31 +217,31 @@ Router.map(function() {
 
 <%= commit "12-2", "Augmented the postsList route to take a limit." %>
 
-////
+Proviamo il nostro nuovo sistema di paginazione. Abbiamo ora la possibilità di visualizzare un numero arbitrario di post semplicemente cambiando un parametro nell'URL. Ad esempio, proviamo ad accedere a `http://localhost:3000/3`, dovremmo vedere qualcosa di simile:
 
 <%= screenshot "12-2", "Controlling the number of posts on the homepage. " %>
 
 <% note do %>
 
-### Why Not Pages?
+### Perchè non usare delle pagine?
 
-////
+Perchè stiamo usando un approccio a "paginazione infinita" invece di mostare pagine di 10 post ciascuna, come fa Google con i risultati di ricerca? Questo è dovuto al paradigma di un'applicazione in tempo reale utilizzato da Meteor.
 
-////
+Immaginiamo di star paginando la nostra collezione `Posts` utilizzando lo schema di paginazione dei risultati di Google e che siamo al momento in pagina 2, che mostra i post da 10 a 20. Cosa succede se uno degli utenti cancella un post dei precedenti 10?
 
-////
+Dato che la nostra applicazione è in tempo reale, la nostra base dati cambierebbe. Il post numero 10 diventerebbe ora il post numero 9 e sarebbe eliminato dalla nostra vista, mentre il post numero 11 resterebbe nell'intervallo. Il risultato finale sarebbe che l'utente vedrebbe i post cambiare all'improvviso senza motivo!
 
-////
+Anche se tollerassimo questo malfunzionamento nell'esperienza utente, la paginazione tradizionale è anche difficile da implementare per ragioni tecniche.
 
-////
+Torniamo indietro al nostro esempio precedente. Stiamo pubblicando i post da 10 a 20 della collezione `Posts`, ma come troviamo questi post sul client. Non si possono prendere i post da 10 a 20 dato che ci sono solo 10 post al momento nei dati lato client.
 
-////
+Una soluzione sarebbe di pubblicare quei 10 post sul server, e poi fare un `Posts.find()` lato client per prendere *tutti* i post pubblicati.
 
-////
+Questo funziona se avete una sola sottoscrizione. Ma cosa accede se iniziamo ad avere più di una sottoscrizione ai post come capiterà a breve?
 
-////
+Diciamo che una sottoscrizione chiede i post da 10 a 20 e un'altra quelli da 30 a 40. Abbiamo ora 20 post pubblicati lato client in totale, senza modo di sapere quali appartengono a quale sottoscrizione.
 
-////
+Per tutte queste ragioni, la paginazione tradizionale non ha molto senso quando lavoriamo con Meteor.
 
 <% end %>
 
