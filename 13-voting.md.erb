@@ -349,24 +349,24 @@ Il solo problema adesso adesso è che non si può informare l'utente riguardo la
 
 <% note do %>
 
-### Latency Compensation
+### Compensazione della Latenza
 
-////
+Diciamo che si provi a barare inviando uno dei propri post in cima alla lista, intervenendo sui numeri dei voti:
 
 ~~~js
 > Posts.update(postId, {$set: {votes: 10000}});
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Console del browser" %>
 
-////
+(Dove `postId` è l'id di uno dei propri post).
 
-////
+Questo tentativo sfacciato di ingannare il sistema verrebbe intercettato dal callback `deny()` (in `collections/posts.js`) ed immediatamente negato.
 
-////
+Ma esaminando attentamente, è possibile che si veda in azione la compensazione di latenza. Può durare un instante, ma il post sarà temporaneamente spostato in cima alla lista prima di essere rispedito alla sua posizione originaria.
 
-////
+Cosa è successo? Nella collezione locale `Posts`, l'`update` è stato eseguito senza problemi. Ciò accade istantaneamente, per cui il post salta in cima alla lista. Al contempo, sul server l'`update` viene negato. Quindi qualche istante dopo (misurato in millisecondi se Meteor è in esecuzione sul proprio computer), il server restituisce l'errore, informando la collezione locale a ripristinare la modifica.
 
-////
+Risultato finale: durante l'attesa di una risposta da parte del server, l'interfaccia utente non può far altro che considerare attendibile la collezione locale. Non appena il server nega la modifica, l'interfaccia utente si adatta di conseguenza.
 
 <% end %>
 
