@@ -17,7 +17,7 @@ Naturalmente, dovremo salvare questi posta da qualche parte. Meteor installa anc
 
 Dunque, anche se il browser dell'utente può contenere alcune informazioni di stato (ad esempio la pagina corrente, o il commento che sta scrivendo in quel momento), il server, e più precisamente Mongo, contiene la sorgente di dati permanente canonica. *Canonica* significa che è la stessa per tutti gli utenti: ogni utente può essere su di una pagina diversa, ma la lista originale dei post è la stessa per tutti.
 
-Questi dati sono salvati in Meteor all'interno di una **Collezione**. Una collezione è una struttura dati speciale che, per mezzo di pubblicazioni e sottoscrizioni, si prende cura della sincronizzazione tempo reale dei dati tra il database Mongo e ogni browser degli utenti connessi, in entrambe le direzioni. Vediamo come.
+Questi dati sono salvati in Meteor all'interno di una **Collezione**. Una collezione è una struttura dati speciale che, per mezzo di pubblicazioni e sottoscrizioni, si prende cura della sincronizzazione in tempo reale dei dati tra il database Mongo e ogni browser degli utenti connessi, in entrambe le direzioni. Vediamo come.
 
 Vogliamo che i post siano permanenti e condivisi tra gli utenti, inizieremo quindi creando una collezione chiamata `Posts` dentro cui salvarli. Se non lo avete ancora fatto, create la cartella `collections/` dentro la cartella principale della vostra applicazione, e dentro essa il file `posts.js`. Quindi aggiungete:
 
@@ -184,7 +184,7 @@ Scopriamo come.
 
 ### Popolare il Database
 
-Per prima cosa inseriremo un po' di dati all'interno del database. E lo fremo con un file di inizializzazione che carica un insieme di dati strutturati dentro la collezione `Posts` al primo avvio del server.
+Per prima cosa inseriremo un po' di dati all'interno del database. E lo faremo con un file di inizializzazione che carica un insieme di dati strutturati dentro la collezione `Posts` al primo avvio del server.
 
 Prima di tutto assicuriamoci che dentro al database non ci sia nulla. Useremo `meteor reset`, che cancella il database e resetta il progetto. Chiaramente bisogna stare molto attenti ad utilizzare questo comando, soprattutto quando si inizia a lavorare su progetti veri.
 
