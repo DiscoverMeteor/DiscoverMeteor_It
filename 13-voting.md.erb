@@ -370,15 +370,15 @@ Risultato finale: durante l'attesa di una risposta da parte del server, l'interf
 
 <% end %>
 
-### Ranking the Front Page Posts
+### Classifica dei post
 
-////
+Ora che ciascun post ha un punteggio dipendente dal numero dei voti, so può visualizzare una lista dei migliori post. Per far ciò, si vedrà come sia possibile gestire due sottoscrizioni separate operanti sulla collezione dei post, e rendere maggiormente generico il template `postsList`.
 
-////
+Per cominciare, sono necessarie _due_ sottoscrizioni, una per ciascun ordinamento. Il trucco sta nel fatto che  entrambe sranno sottoscritte alla _stessa_ pubblicazione `posts`, solo con parametri differenti.
 
-////
+Verranno inoltre create due nuove route chiamate `newPosts` e `bestPosts`, accedibili tramite le URL rispettivamente `/new` e `/best` (ovviamente insieme a `/new/5` e `/best/5` per la paginazione).
 
-////
+Per realizzare quanto detto, verrà _esteso_ `PostsListController` in due distinti controller `NewPostsListController` e `BestPostsListController`. Questo consentirà il riuso delle medesime opzioni di routing sia per la route `home` che per `newPosts`, a partire da un singolo `NewPostsListController` da cui ereditare. Inoltre, dimostra quanto Iron Router possa essere flessibile.
 
 ~~~js
 PostsListController = RouteController.extend({
@@ -440,11 +440,11 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "8,16,21~34,36~49" %>
 
-////
+Da notare che avendo adesso più di una route, la logica dietro `nextPath` è stata spostata da `PostsListController` a `NewPostsListController` `BestPostsListController`, poiché il percorso sarà diverso in entrambi i casi.
 
-////
+Inoltre, quando si ordina per `votes` si ha un parametro di ordinamento aggiuntivo per timestamp di submit, per assicurare che l'ordinamento sia corretto.
 
-////
+Verranno anche aggiunti i link all'header:
 
 ~~~html
 <template name="header">
@@ -484,17 +484,17 @@ Router.map(function() {
 <%= caption "client/views/include/header.html" %>
 <%= highlight "9, 15~21" %>
 
-////
+Fatto ciò, si ottiene la lista dei migliori post:
 
-<%= screenshot "13-4", "Ranking by points" %>
+<%= screenshot "13-4", "Ordinamento per punteggio" %>
 
-<%= commit "13-5", "Added routes for post lists, and pages to display them." %>
+<%= commit "13-5", "Aggiunte route per le liste di post, e le rispettive pagine per visualizzarle." %>
 
-### A Better Header
+### Migliorare l'Header
 
-////
+Avendo adesso due pagine che elencano i post, non è immediato sapere quale delle due liste è correntemente visualizzata. E' necessario quindi rivisitare l'header per renderlo esplicito. Viene creato un gestore `header.js` e una funzione di supporto che usa il percorso corrente e una o più route per settare aggiungere una classe attiva alle voci di nagivatione. 
 
-////
+La ragione per cui si vuole supportare più route è che sia `home` che `newPosts` (a cui corrispondono le URL rispettivamente `/` e `/new`) puntano allo stesso template. Quindi `activeRouteClass` deve essere sufficientemente intelligente da rendere il tag `<li>`attivo in entrambi i casi.
 
 ~~~html
 <template name="header">
@@ -550,24 +550,24 @@ Template.header.helpers({
 ~~~
 <%= caption "client/views/includes/header.js" %>
 
-<%= screenshot "13-5", "Showing the active page" %>
+<%= screenshot "13-5", "Evidenziazione della pagina attiva" %>
 
 <% note do %>
 
-### Helper Arguments
+### Parametri Helper
 
-////
+Non è stato usato finora questo specifico pattern, ma come ogni tag Handlebar, possono essere forniti parametri ai tag del template helper. 
 
-////
+E se da un lato è possibile passare parametri con nome alla funzione, è possibile anche passare un numero non specificato di parametri anonimi, reperiti tramite l'oggetto `arguments` dentro una funzione.
 
-////
+In quest'ultimo caso, può risultare conveniente convertire l'oggetto `arguments` in un array JavaScript, e quindi utilizzare il metodo `pop()` al fine di liberarsi dell'hash aggiunto da Handlebars
 
 <% end %>
 
-////
+Per ciascuna voce di navigazione, l'helper `activeRouteClass` accetta una lista di nomi di route, e quindi usa la funzione `any()` di Underscore per verificare se il route passa il test (ovvero se la URL corrispondente coincide con il percorso corrente).
 
-////
+Se una qualunque delle route coincide con il path corrente, `any()` restituisce `true`. Al termine, si utilizza il pattern Javascript `boolean && string`, dove `false && myString` restituisce `false`, ma `true && myString` restituisce invece `myString`.
 
-<%= commit "13-6", "Added active classes to the header." %>
+<%= commit "13-6", "Aggiunta classe active all'header" %>
 
-////
+Ora che gli utenti possono votare post in tempo reale, è possibile vedere item muoversi su e giù nella home page in risposta a cambiamenti nel loro punteggio. Non sarebbe meglio se esistesse il modo di rendere il tutto più fluido con alcune animazioni?
