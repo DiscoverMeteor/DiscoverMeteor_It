@@ -245,11 +245,11 @@ Per tutte queste ragioni, la paginazione tradizionale non ha molto senso quando 
 
 <% end %>
 
-### Creating a Route Controller
+### Creare un Controller per una route
 
-////
+Potete notare che abbiamo ripetuto due volte la riga `var limit = parseInt(this.params.postsLimit) || 5;`. Inoltre, non è una buona scelta inserire il valore "5" direttamente nel codice. Non è certo la fine del mondo, ma dato che è sempre meglio seguire il principio DRY (Don't Repeat Yourself - Non ripeterti) quando possibile, vediamo come possiamo riscrivere il nostro codice.
 
-////
+Introduciamo ora un nuovo aspetto dell'Iron Router, i *Controller delle Route*. Un controller di route è semplicemente un modo per raggruppare alcune funzionalità di routing in un pacchetto riutilizzabile, dal quale ogni route può ereditare queste funzionalità. Per ora lo useremo per una sola route, ma vedrete nel prossimo capitolo come questo aspetto diventerà utile.
 
 ~~~js
 PostsListController = RouteController.extend({
@@ -280,13 +280,13 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js" %>
 
-////
+Seguiamo i passaggi: come prima cosa, abbiamo creato il controller estendendo `RouteController`. Poi dichiariamo la proprietà `template` come abbiamo fatto prima e poi la nuova proprietà ìncrement`.
 
-////
+Definiamo poi un nuova funzione `limit` che resituisce il limite corrente, e una funzione `findOptions` che restituisce un oggetto di opzioni. Questo può sembrare un passaggio in più, ma ci verrà utile più avanti.
 
-////
+Definiamo ora le funzioni `waitOn` e `data` come abbiamo fatto prima, eccetto per il fatto che ora utilizziamo in esse la nuova funzione `findOptions`.
 
-////
+L'ultima cosa da fare è di dire alla route `postsList` di puntare al nuovo controller, tramite la proprietà `controller`.
 
 <%= commit "12-3", "Refactored postsLists route into a RouteController." %>
 
