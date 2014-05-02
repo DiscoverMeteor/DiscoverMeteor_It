@@ -3,17 +3,19 @@ title: Editing Posts
 slug: editing-posts
 date: 0008/01/01
 number: 8
-contents: Add a form for editing your posts.|Set up edit permissions.|Restrict which properties can be edited.
+contents: Aggiungere un form per modificare i messaggi.|Imposta la modifica dei permessi.|Limita quali proprietà possono essere modificate.
 paragraphs: 29
 ---
 
-////
+Il prossimo passo, ora che abbiamo creato dei messaggi, è essere in grado di modificarli e cancellarli. Mentre il codice per l'interfaccia utente (UI) è abbastanza semplice, questo sarebbe un momento buono per parlare di come Meteor gestisce i permessi utente.
 
-////
+Prima di tutto agganciamo il nostro router. Aggiungeremo una route per accedere alla pagina per modificare i messaggi e impostare il contesto dei dati (data context)
 
 ~~~js
 Router.configure({
-  layoutTemplate: 'layout'
+  layoutTemplate: 'layout',
+  loadingTemplate: 'loading',
+  waitOn: function() { return Meteor.subscribe('posts'); }
 });
 
 Router.map(function() {
@@ -34,25 +36,25 @@ Router.map(function() {
   });
 });
 
-var requireLogin = function() {
+var requireLogin = function(pause) {
   if (! Meteor.user()) {
     if (Meteor.loggingIn())
       this.render('loading')
     else
       this.render('accessDenied');
   
-    this.stop();
+    pause();
   }
 }
 
-Router.before(requireLogin, {only: 'postSubmit'});
+Router.onBeforeAction(requireLogin, {only: 'postSubmit'});
 ~~~
 <%= caption "lib/router.js" %>
-<%= highlight "12~15" %>
+<%= highlight "14~17" %>
 
-### The Post Edit Template
+### Il template per la modifica messaggio
 
-////
+Ora possiamo concentrarci sul template. Il nostro template `postEdit` sarà un form abbastanza standard:
 
 ~~~html
 <template name="postEdit">
@@ -87,7 +89,7 @@ Router.before(requireLogin, {only: 'postSubmit'});
 ~~~
 <%= caption "client/views/posts/post_edit.html" %>
 
-////
+E qui c'è il gestore `post_edit.js` che và assieme:
 
 ~~~js
 Template.postEdit.events({
@@ -124,7 +126,7 @@ Template.postEdit.events({
 ~~~
 <%= caption "client/views/posts/post_edit.js" %>
 
-////
+A questo punto la maggior parte di questo codice dovrebbe essere familiare. Prima di tutto, abbiamo il nostro template helper che prende il messaggio corrente e lo passa al template.
 
 ////
 
