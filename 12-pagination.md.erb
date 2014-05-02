@@ -290,13 +290,13 @@ L'ultima cosa da fare è di dire alla route `postsList` di puntare al nuovo cont
 
 <%= commit "12-3", "Refactored postsLists route into a RouteController." %>
 
-### Adding A Load More Link
+### Aggiungere un link 'Carica più post'
 
-////
+Abbiamo ora una paginazione funzionante e il nostro codice ha una buona struttura. C'è solo un problema: non c'è ancora un modo per *usare* la paginazione se non cambiando manualmente l'URL. Questo di certo non rende pratica l'esperienza dell'utente, vediamo come poterla sistemare.
 
-////
+Ciò che vogliamo fare è abbastanza semplice. Aggiungiamo un bottone "Carica più post" alla fine della nostra lista di post, che incrementerà di 5 il numero di post visualizzati ogni volta che viene cliccato. Se sto visitando l'URL `http://localhost:3000/5`, cliccando su "Carica più post" dovrebbe portarmi a `http://localhost:3000/10`. Se siete riusciti ad arrivare fino a questo punto del libro, crediamo che possiate cavarvela con un po' di aritmetica!
 
-////
+Come prima, aggiungiamo la logica della paginazione nella nostra route. Ricordate quando abbiamo esplicitamente dato un nome al contesto dati piuttosto che utilizzare un cursore anonimo? Non c'è nessuna regola che dice che la funzione `data` può solo ritornare cursori, così useremo la stessa tecnica per generare l'URL del bottone "Carica più post".
 
 ~~~js
 PostsListController = RouteController.extend({
