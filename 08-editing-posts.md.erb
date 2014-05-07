@@ -128,17 +128,17 @@ Template.postEdit.events({
 
 A questo punto la maggior parte di questo codice dovrebbe essere familiare. Prima di tutto, abbiamo il nostro template helper che prende il messaggio corrente e lo passa al template.
 
-////
+Abbiamo inoltre due callbacks per gli eventi di template: una per l'evento `submit` del form e una per l'evento `click` del link per cancellare.
 
-////
+La callback per cancellare è estremamente semplice: sopprimiamo l'evento click predefinito e chiediamo una conferma. Se la riceviamo, otteniamo l'ID del messaggio corrente dal contesto dei dati (data context) del template, lo cancelliamo, e dopodichè reindirizziamo l'utente alla pagina principale.
 
-////
+La callback di aggiornamento è un pò più lunga, ma non troppo complicata. Dopo aver soppresso l'evento predefinito e aver preso il messaggio corrente, prendiamo i nuovi valori del form dalla pagina e li memorizziamo in un oggetto `postProperties`.
 
-////
+A quel punto passiamo quest'oggetto al metodo `Collection.update()` di Meteor e usiamo una callback che o visualizza un errore nel caso l'aggiornamento fallisce, oppure manda indietro l'utente alla pagina del messaggio se l'aggiornamento riesce.
 
-### Adding Links
+### Aggiungere i links
 
-////
+Dovremmo anche aggiungere dei links di modifica ai nostri messaggi, così che gli utenti possano accedere alla pagina di modifica:
 
 ~~~html
 <template name="postItem">
@@ -146,18 +146,18 @@ A questo punto la maggior parte di questo codice dovrebbe essere familiare. Prim
     <div class="post-content">
       <h3><a href="{{url}}">{{title}}</a><span>{{domain}}</span></h3>
       <p>
-        submitted by {{author}}
-        {{#if ownPost}}<a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
+        inviato da {{author}}
+        {{#if ownPost}}<a href="{{pathFor 'postEdit'}}">Modifica</a>{{/if}}
       </p>
     </div>
-    <a href="{{pathFor 'postPage'}}" class="discuss btn">Discuss</a>
+    <a href="{{pathFor 'postPage'}}" class="discuss btn">Discuti</a>
   </div>
 </template>
 ~~~
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "5~8" %>
 
-////
+Ovviamente non vogliamo mostrare un link di modifica nel form di qualcun'altro. È qui che l'helper `ownPost` entra in scena:
 
 ~~~js
 Template.postItem.helpers({
@@ -174,17 +174,17 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "2~4" %>
 
-<%= screenshot "8-1", "Post edit form." %>
+<%= screenshot "8-1", "Form di modifica messaggio." %>
 
-<%= commit "8-1", "Added edit posts form." %>
+<%= commit "8-1", "Aggiunti i form di modifica messaggi." %>
 
-////
+Il nostro form di modifica sembra buono, ma in realtà non si può modificare niente. Che sta succedendo? 
 
-### Setting Up Permissions
+### Impostare i permessi
 
-////
+Siccome precedentemente abbiamo rimosso il pacchetto (package) `insecure`, tutte le modifiche fatte sulla parte del client vengono negate.
 
-////
+Per risolvere questo problema, imposteremo alcune regole di permessi. Prima di tutto, crea un nuovo `permissions.js` file all'interno di `lib`. Questo carica la nostra logica dei permessi (ed è disponibile in entrambi gli ambienti):
 
 ~~~js
 // check that the userId specified owns the documents
@@ -194,9 +194,9 @@ ownsDocument = function(userId, doc) {
 ~~~
 <%= caption "lib/permissions.js" %>
 
-////
+Nel capitolo [Creare messaggi](/chapter/creating-posts), ci siamo disfati del metodo `allow()` perchè stavamo inserendo messaggi solamente via un metodo nel server (che ignora il metodo `allow()`).
 
-////
+Ma ora stiamo modificando e cancellando dal client, torniamo indietro su `posts.js` e aggiungiamo questo blocco `allow()`:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -212,13 +212,13 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "3~6" %>
 
-<%= commit "8-2", "Added basic permission to check the post's owner." %>
+<%= commit "8-2", "Aggiunti dei permessi base per controllare il proprietario di un messaggio." %>
 
-### Limiting Edits
+### Limitare le modifiche
 
-////
+Solo per il fatto che puoi modificare i tuoi messaggi, non vuol dire che puoi modificare *ogni* proprietà. Per esempio, non vogliamo che gli utenti possano creare un messaggio e assegnarlo a qualcun'altro.
 
-////
+`deny()` è la callback che in Meteor viene usata per assicurarsi che gli utenti possono modificare solamente certi campi.
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -238,31 +238,31 @@ Posts.deny({
 <%= caption "collections/posts.js" %>
 <%= highlight "8~13" %>
 
-<%= commit "8-3", "Only allow changing certain fields of posts." %>
+<%= commit "8-3", "Permetti di cambiare solamente certi campi." %>
 
-////
+Stiamo parlando dell'array `fieldNames` che contiene una lista dei campi modificati, e usando il metodo `without()` di [Underscore](http://underscorejs.org/) per ritornare un sotto-array contenente i campi che *non* sono `url` oppure `title`.
 
-////
+Se tutto è normale, l'array dovrebbe essere vuoto e la sua lunghezza dovrebbe essere 0. Se qualcuno sta cercando di fare qualcosa di bizzarro, la lunghezza dell'array sarà 1 oppure più grande e la callback ritornerà `true` (di conseguenza negando l'aggiornamento).
 
 <% note do %>
 
-### Method Calls vs Client-side Data Manipulation
+### Chiamate dei metodi vs manipolazione dei dati sul lato client.
 
-////
+Per creare dei messaggi, stiamo usando un metodo `post`, mentre per modificarli e cancellarli stiamo chiamando `update` e `remove` direttamente sul client, limitando l'accesso tramite `allow` e `deny`.
 
-////
+Quando è opportuno uno ma non l'altro?
 
-////
+Quando le cose sono relativamente semplici e puoi esprimere adeguatamente le tue regole tramite `allow` e `deny`, è solitamente più semplice fare le cose direttamente sul client.
 
-////
+Manipolare i dati del database direttamente crea una percezione di immediatezza e permette di costruire una user experience migliore, fintanto che ci si ricorda di gestire i casi di fallimento in maniera graziosa (es. quando il server ritorna indietro che i cambiamenti alla fin fine non sono riusciti).
 
-////
+Però è probabilmente meglio usare un metodo non appena inizi ad esigere di dover fare cose che dovrebbero essere fatte senza il controllo dell'utente (ad esempio aggiungere un timestamp per un nuovo messaggio, oppure assegnarlo all'utente giusto).
 
-////
+Le chiamate ai metodi sono anche più appropriate in alcuni altri scenari:
 
-- ////
-- ////
-- ////
+- Quando devi sapere o ritornare dei valori tramite callback anzichè aspettare per la reactivity (reattività) e sincronizzazione si propaghi.
+- Per delle funzioni di database pesanti che sarebbero troppo costose da inviare tramite una grande collection (collezione).
+- Per sommarizzare oppure aggregare dati (es. contare, fare la media, sommare).
 
 <% end %>
 
