@@ -382,9 +382,9 @@ mrt add iron-router-progress
 ~~~
 <%= caption "bash console" %>
 
-////
+Attraverso la magia dei pacchetti, la nostra nuova barra di progresso funziona perfettamente appena installata! La barra di progresoo si attiverà per ogni route e si completerà automaticamente appena la route avrà caricato i dati richiesti.
 
-////
+Facciamo solo una modifica. Disabilitiamo `iron-router-progress` per la route `postSubmit` dato che non deve aspettare per i dati da nessuna sottoscrizione (dopo tutto è solo un form vuoto):
 
 ~~~js
 Router.map(function() {
@@ -402,17 +402,17 @@ Router.map(function() {
 
 <%= commit "12-5", "Use the iron-router-progress package to make pagination nicer." %>
 
-### Accessing Any Post
+### Accedere ad ogni post
 
-////
+Stiamo attualmente caricando i cinque post più recenti come impostazione predefinita, ma cosa accade quando si naviga alla pagina di un post?
 
 <%= screenshot "12-4", "An empty template." %>
 
-////
+Se ci provate, troverete il template di un post vuoto. Questo è corretto: abbiamo detto al router di sottoscrivere la pubblicazione `posts` quando carica la route `postsList`, ma non abbiamo detto cosa vogliamo fare con la route `postPage`.
 
-////
+Finora tutto quello che sappiamo è come sottoscrivere a una lista dei `n` post più recenti. Come facciamo a chiedere al server un post specifico? Vi sveliamo un piccolo segreto: potete avere più di una pubblicazione per ogni collezione!
 
-////
+Per riavere indietro i post mancanti, creiamo semplicemente una nuova pubblicazione `singlePost` che pubblica solo un post, identificato tramite `_id`.
 
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -426,7 +426,7 @@ Meteor.publish('singlePost', function(id) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-////
+OOra, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottoscrivendo alla ppubblicazione `comments` nella funzion `waitOn` della route `postPage`, così possiamo semplicemente aaggiungere qui la sottoscrizione. Non dimentichiamo di aggiungere la sottoscrizione anche alla route `postEdit` dato che necessita degli stessi dati:
 
 ~~~js
 Router.map(function() {
@@ -461,4 +461,4 @@ Router.map(function() {
 
 <%= commit "12-6","Use a single post subscription to ensure that we can always see the right post." %>
 
-////
+Terminata la paginazione, la nostra applicazione non soffre più di problemi di scalabilità, e gli utenti sono sicuri di poter contribuire con molti più link di prima. Non sarebbe carino avere un sistema per poter dare un voto a questi link? E' esattamente l'argomento del prossimo capitolo, *Votare*.
