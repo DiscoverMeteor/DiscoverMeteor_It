@@ -341,11 +341,11 @@ D'altra parte, `this.posts` si riferisce al cursore corrente, così `this.posts.
 
 Quello che stiamo dicendo qui è che se chiediamo `n` post e ne otteniamo `n`, continuiamo a mostrare il bottone "Carica di più". Ma se chiediamo `n` post e otteniamo *meno* di `n`, significa che abbiamo raggiunto il limite e dobbiamo smettere di mostrare quel bottone.
 
-That being said, our system fails in one case: when the number of items in our database is *exactly* `n`. If that happens, the client will ask for `n` posts and get `n` posts back and keep showing the “load more” button, unaware that there are no more items left.
+Detto questo, il nostro sistema ha un problema quando il numero di elemente nel database è *esattamente* `n`. Quando accade il client richiede `n` post, ottiene `n` post e continua a mostrare il bottone "Carica di più", non sapendo che non sono rimasti elementi.
 
-Sadly, there are no simple workarounds to this problem, so for now we'll have to settle with this less-than-perfect implementation.
+Sfortunatamente non ci sono sistemazioni semplici per questo problema, perciò al momento ci accontentiamo di questa implementazione non proprio perfetta.
 
-All that's left to do is to add the “load more” link at the bottom of our posts list, making sure to only show it if we actually have more posts to load:
+Quel che rimane da fare è aggiungere il link "Carica di più" in fondo alla lista di post, facendo in modo che si visualizzi solo se abbiamo più post da caricare:
 
 ~~~html
 <template name="postsList">
@@ -363,27 +363,19 @@ All that's left to do is to add the “load more” link at the bottom of our po
 <%= caption "client/views/posts/posts_list.html" %>
 <%= highlight "7~10" %>
 
-////
+Questo è quello che dovremmo vedere ora:
 
 <%= screenshot "12-3", "The “load more” button. " %>
 
 <%= commit "12-4", "Added nextPath() to the controller and use it to step through posts." %>
 
-<% note do %>
+### Una miglior barra di progresso
 
-### Count vs Length
+La nostra paginazione sta ora funzionando bene, ma soffre di un problema noioso: ogni volta che clicchiamo su "Carica di più" e il router richiede più post, veniamo indirizzati al template `loading` mentre aspettiamo che i nuovi dati arrivino. Il risultato è che veniamo rimandati all'inizio della pagina ogni volta e bisogna scrollare fino in fondo per riprendere la nostra navigazione.
 
-////
+Sarebbe molto meglio se potessimo stare sulla stessa pagina durante l'intera operazione, indicando comunque che i dati si stanno caricando. Fortunatamente è quello che fa il pacchetto `iron-router-progress`.
 
-<% end %>
-
-### A Better Progress Bar
-
-////
-
-////
-
-////
+Come Safari per iOS o siti come Medium e YouTube, `iron-router-progress` aggiunge una sottile barra di caricamento nella parte alta dello schermo. Implementarlo è semplice come aggiungere il pacchetto alla nostra applicazione:
 
 ~~~bash
 mrt add iron-router-progress
