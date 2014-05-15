@@ -1,30 +1,30 @@
 ---
-title: Publications and Subscriptions
+title: Pubblicazioni e Sottoscrizioni
 slug: publications-and-subscriptions
 date: 0004/01/02
 number: 4.5
 sidebar: true
-contents: Understand how publications and subscriptions work.|Learn what the default Autopublish package does.|See a few more examples of publication patterns.
+contents: Come funzionano pubblicazioni e sottoscrizioni.|Cosa fa il pacchetto Autopublish|Alcuni schemi di pubblicazione.
 paragraphs: 52
 ---
 
-////
+Pubblicazioni e sottoscrizioni sono uno dei fondamentali e più importanti concetti di Meteor, ma possono risultare complicati da capire all'inizio.
 
-////
+Questo ha portato a molte incomprensioni, come la convinzione che Meteor sia insicuro o che le applicazioni in Meteor non possono gestire grandi quantità di dati.
 
-////
+Buona parte dei motivi per cui le persone trovano questi concetti un po' confusi inizialmente è la "magia" che Meteor fa per noi. Sebbene questa magia sia molto utile, può oscurare ciò che sta succedendo realmente dietro le scene (come la magia tende a fare). Proviamo a togliere gli strati di magia per capire ciò che sta accadendo.
 
-### The Olden Days
+### I vecchi tempi
 
-////
+Guardiamo prima a ciò che accadeva nel 2011 quando Meteor non era ancora disponibile. Diciamo che state costruendo una semplice applicazione in Rails. Quando un utente raggiunge il vostro sito, il cliente (ad esempio il browser) manda una richiesta all'applicazione che risiede sul server.
 
-////
+Il primo lavoro dell'applicazione è quello di capire che dati l'utente vuole vedere. Potrebbe essere pagina 12 dei risultati di ricerca, le informazioni del profilo di Mary, i 20 ultimi tweet di Bob e così via. Potete figurarla come un commesso di una libreria che cerca negli scaffali il libro che avete richiesto. 
 
-////
+Quando i dati corretti sono stati selezionati, il secondo lavoro dell'applicazione e di tradurre i dati in un formato HTML leggibile da una persona (o JSON nel caso di un API).
 
-////
+Nella metafora della libreria, sarebbe il passaggio di impacchettare il libro che avete appena comprato e metterlo in una bella borsa. Questa è la parte "View" del famoso schema Model-View-Controller.
 
-////
+Infine, l'applicazione prende il codice HTML e lo restituisce al browser. Il lavoro è finito e ora che tutto è stato consegnato l'applicazione può rilassarsi con una birra e aspettare per la prossima richiesta.
 
 ### The Meteor Way
 
