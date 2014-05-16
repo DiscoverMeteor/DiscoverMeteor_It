@@ -26,19 +26,19 @@ Nella metafora della libreria, sarebbe il passaggio di impacchettare il libro ch
 
 Infine, l'applicazione prende il codice HTML e lo restituisce al browser. Il lavoro è finito e ora che tutto è stato consegnato l'applicazione può rilassarsi con una birra e aspettare per la prossima richiesta.
 
-### The Meteor Way
+### Come funziona Meteor
 
-////
+Rivediamo cosa rende Meteor così speciale. Come abbiamo visto, l'innovazione di Meteor sta nel fatto che se un'applicazione Rails vive solo **sul server**, un applicazione Meteor comprende anche una componente lato client che viene eseguite **nel client** (il browser).
 
 <%= diagram "client-server", "Pushing a subset of the database to the client.", "pull-right" %>
 
-////
+Questo è come un commesso che non solo trova il giusto libro per voi, ma vi segue fino a casa per leggerlo di notte (che ammettiamo suona un po' spaventoso).
 
-////
+Questa architettura fa in modo che Meteor faccia molte cose interessanti, prima fra tutte quello che Meteor chiama [database ovunque](http://docs.meteor.com/#sevenprinciples). In parole semplici, Meteor prende una parte del database e lo *copia nel client*.
 
-////
+Ci sono due grandi implicazioni: primo, invece di mandare il codice HTML al client, un'applicazione Meteor invia **i dati grezzi** e lascia che sia il client ad occuparsene ([dati sul filo](http://docs.meteor.com/#sevenprinciples)). In secondo luogo, si è in grado di **accedere i dati istantaneamente** senza dover aspettare un intero giro di scambio con il server ([compensazione di latenza](http://docs.meteor.com/#sevenprinciples)).
 
-### Publishing
+### Pubblicare
 
 ////
 
