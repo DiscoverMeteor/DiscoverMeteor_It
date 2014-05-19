@@ -1,60 +1,60 @@
 ---
-title: Publications and Subscriptions
+title: Pubblicazioni e Sottoscrizioni
 slug: publications-and-subscriptions
 date: 0004/01/02
 number: 4.5
 sidebar: true
-contents: Understand how publications and subscriptions work.|Learn what the default Autopublish package does.|See a few more examples of publication patterns.
+contents: Come funzionano pubblicazioni e sottoscrizioni.|Cosa fa il pacchetto Autopublish|Alcuni schemi di pubblicazione.
 paragraphs: 52
 ---
 
-////
+Pubblicazioni e sottoscrizioni sono uno dei fondamentali e più importanti concetti di Meteor, ma possono risultare complicati da capire all'inizio.
 
-////
+Questo ha portato a molte incomprensioni, come la convinzione che Meteor sia insicuro o che le applicazioni in Meteor non possono gestire grandi quantità di dati.
 
-////
+Buona parte dei motivi per cui le persone trovano questi concetti un po' confusi inizialmente è la "magia" che Meteor fa per noi. Sebbene questa magia sia molto utile, può oscurare ciò che sta succedendo realmente dietro le scene (come la magia tende a fare). Proviamo a togliere gli strati di magia per capire ciò che sta accadendo.
 
-### The Olden Days
+### I vecchi tempi
 
-////
+Guardiamo prima a ciò che accadeva nel 2011 quando Meteor non era ancora disponibile. Diciamo che state costruendo una semplice applicazione in Rails. Quando un utente raggiunge il vostro sito, il cliente (ad esempio il browser) manda una richiesta all'applicazione che risiede sul server.
 
-////
+Il primo lavoro dell'applicazione è quello di capire che dati l'utente vuole vedere. Potrebbe essere pagina 12 dei risultati di ricerca, le informazioni del profilo di Mary, i 20 ultimi tweet di Bob e così via. Potete figurarla come un commesso di una libreria che cerca negli scaffali il libro che avete richiesto. 
 
-////
+Quando i dati corretti sono stati selezionati, il secondo lavoro dell'applicazione e di tradurre i dati in un formato HTML leggibile da una persona (o JSON nel caso di un API).
 
-////
+Nella metafora della libreria, sarebbe il passaggio di impacchettare il libro che avete appena comprato e metterlo in una bella borsa. Questa è la parte "View" del famoso schema Model-View-Controller.
 
-////
+Infine, l'applicazione prende il codice HTML e lo restituisce al browser. Il lavoro è finito e ora che tutto è stato consegnato l'applicazione può rilassarsi con una birra e aspettare per la prossima richiesta.
 
-### The Meteor Way
+### Come funziona Meteor
 
-////
+Rivediamo cosa rende Meteor così speciale. Come abbiamo visto, l'innovazione di Meteor sta nel fatto che se un'applicazione Rails vive solo **sul server**, un applicazione Meteor comprende anche una componente lato client che viene eseguite **nel client** (il browser).
 
 <%= diagram "client-server", "Pushing a subset of the database to the client.", "pull-right" %>
 
-////
+Questo è come un commesso che non solo trova il giusto libro per voi, ma vi segue fino a casa per leggerlo di notte (che ammettiamo suona un po' spaventoso).
 
-////
+Questa architettura fa in modo che Meteor faccia molte cose interessanti, prima fra tutte quello che Meteor chiama [database ovunque](http://docs.meteor.com/#sevenprinciples). In parole semplici, Meteor prende una parte del database e lo *copia nel client*.
 
-////
+Ci sono due grandi implicazioni: primo, invece di mandare il codice HTML al client, un'applicazione Meteor invia **i dati grezzi** e lascia che sia il client ad occuparsene ([dati sul filo](http://docs.meteor.com/#sevenprinciples)). In secondo luogo, si è in grado di **accedere i dati istantaneamente** senza dover aspettare un intero giro di scambio con il server ([compensazione di latenza](http://docs.meteor.com/#sevenprinciples)).
 
-### Publishing
+### Pubblicare
 
-////
+Il database di un'applicazione può contenere decine di migliaia di documenti, alcuni dei quali possono essere dati privati o sensibili. Per questo motivo non dobbiamo ovviamente replicare tutto il database nel client, per ragioni di sicurezza e scalabilità.
 
-////
+Abbiamo bisogno di un modo per dire a Meteor quale **sottoinsieme** di data può essere inviato al client e lo faremo attraverso una **pubblicazione**.
 
-////
+Torniamo a Microscope. Qui abbiamo tutti i post che si trovano nel database dell'applicazione:
 
 <%= diagram "collections-1", "All the posts contained in our database.", "pull-center" %>
 
-////
+Immaginiamo che alcuni dei nostri post sono stati segnalati per linguaggio inappropriato, anche se questa opzione non esiste al momento in Microscope. Anche se vogliamo tenere questi post nel database, non devono essere resi disponibili agli utenti (ad esempio inviati al client).
 
-////
+Il nostro primo compito è di dire a Meteor quali dati *vogliamo* mandare al client. Diciamo a Meteor ce vogliamo **pubblicare** solo i post non segnalati:
 
 <%= diagram "collections-2", "Excluding flagged posts.", "pull-center" %>
 
-////
+Questo è il codice corrispondente, che risiede sul server:
 
 ~~~js
 // on the server
@@ -63,15 +63,15 @@ Meteor.publish('posts', function() {
 });
 ~~~
 
-////
+Questo assicura che non ci sia **nessun modo possibile** che un client possa accedere ai post segnalati. In questo modo si rende sicura l'applicazione Meteor: dovete assicurarvi che state pubblicando solo i dati a cui volete che il client acceda.
 
 <% note do %>
 
 ### DDP
 
-////
+Fondamentalmente potet pensare a pubblicazioni/sottoscrizione come a un tubo che trasferisce i dati da una collezione sul server (sorgente) a una collezione lato client (obiettivo).
 
-////
+Il protocollo che gestisce questo comunicazione è chiamato **DDP** (che sta per Distributed Data Protocol). Per sapere di più sul DPP potete guardare [questo intervento alla Real-time Conference](http://2012.realtimeconf.com/video/matt-debergalis) di Matt DeBergalis (uno dei fondatori di Meteor), o [questo screencast](http://www.eventedmind.com/posts/meteor-subscriptions-and-ddp) di Chris Mather che vi mostra qualche dettaglio in più su questo concetto.
 
 <% end %>
 

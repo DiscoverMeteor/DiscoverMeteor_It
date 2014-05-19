@@ -20,11 +20,11 @@ Al momento stiamo ancora pubblicando tutti i post insieme, a tutti gli utenti co
 Prima di tutto, nei nostri dati di esempio, carichiamo abbastanza post perchè la paginazione abbia senso:
 
 ~~~js
-// Fixture data 
+// Fixture data
 if (Posts.find().count() === 0) {
 
   //...
-  
+
   Posts.insert({
     title: 'The Meteor Book',
     userId: tom._id,
@@ -33,7 +33,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 12 * 3600 * 1000,
     commentsCount: 0
   });
-  
+
   for (var i = 0; i < 10; i++) {
     Posts.insert({
       title: 'Test post #' + i,
@@ -49,7 +49,7 @@ if (Posts.find().count() === 0) {
 <%= caption "server/fixtures.js" %>
 <%= highlight "15~24" %>
 
-Dopo aver eseguito `meteor reset`, dovreste vedere un risultato simile a questo: 
+Dopo aver eseguito `meteor reset`, dovreste vedere un risultato simile a questo:
 
 <%= screenshot "12-1", "Displaying dummy data. " %>
 
@@ -73,7 +73,7 @@ Come prima cosa, fermiamo la sottoscrizione alla pubblicazione `posts` nel blocc
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() { 
+  waitOn: function() {
     return [Meteor.subscribe('notifications')]
   }
 });
@@ -86,7 +86,7 @@ Aggiugiamo un parametro `postsLimit` al percorso della route. Aggiungendo un `?`
 ~~~js
 Router.map(function() {
   //...
-  
+
   this.route('postsList', {
     path: '/:postsLimit?'
   });
@@ -104,11 +104,11 @@ E' ora di gestire il problema più complesso di sottoscrivere e trovare i dati c
 ~~~js
 Router.map(function() {
   //..
-  
+
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var postsLimit = parseInt(this.params.postsLimit) || 5; 
+      var postsLimit = parseInt(this.params.postsLimit) || 5;
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: postsLimit});
     }
   });
@@ -164,17 +164,17 @@ Router.map(function() {
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit});
     },
     data: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return {
         posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
       };
     }
   });
-  
+
   //..
 });
 ~~~
@@ -189,7 +189,7 @@ Facciamo il punto della situazione. Il codice modificato di `router.js` dovrebbe
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() { 
+  waitOn: function() {
     return [Meteor.subscribe('notifications')]
   }
 });
@@ -200,11 +200,11 @@ Router.map(function() {
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit});
     },
     data: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return {
         posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
       };
@@ -245,18 +245,18 @@ Per tutte queste ragioni, la paginazione tradizionale non ha molto senso quando 
 
 <% end %>
 
-### Creating a Route Controller
+### Creare un Controller per una route
 
-////
+Potete notare che abbiamo ripetuto due volte la riga `var limit = parseInt(this.params.postsLimit) || 5;`. Inoltre, non è una buona scelta inserire il valore "5" direttamente nel codice. Non è certo la fine del mondo, ma dato che è sempre meglio seguire il principio DRY (Don't Repeat Yourself - Non ripeterti) quando possibile, vediamo come possiamo riscrivere il nostro codice.
 
-////
+Introduciamo ora un nuovo aspetto dell'Iron Router, i *Controller delle Route*. Un controller di route è semplicemente un modo per raggruppare alcune funzionalità di routing in un pacchetto riutilizzabile, dal quale ogni route può ereditare queste funzionalità. Per ora lo useremo per una sola route, ma vedrete nel prossimo capitolo come questo aspetto diventerà utile.
 
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5, 
-  limit: function() { 
-    return parseInt(this.params.postsLimit) || this.increment; 
+  increment: 5,
+  limit: function() {
+    return parseInt(this.params.postsLimit) || this.increment;
   },
   findOptions: function() {
     return {sort: {submitted: -1}, limit: this.limit()};
@@ -280,30 +280,30 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js" %>
 
-////
+Seguiamo i passaggi: come prima cosa, abbiamo creato il controller estendendo `RouteController`. Poi dichiariamo la proprietà `template` come abbiamo fatto prima e poi la nuova proprietà ìncrement`.
 
-////
+Definiamo poi un nuova funzione `limit` che resituisce il limite corrente, e una funzione `findOptions` che restituisce un oggetto di opzioni. Questo può sembrare un passaggio in più, ma ci verrà utile più avanti.
 
-////
+Definiamo ora le funzioni `waitOn` e `data` come abbiamo fatto prima, eccetto per il fatto che ora utilizziamo in esse la nuova funzione `findOptions`.
 
-////
+L'ultima cosa da fare è di dire alla route `postsList` di puntare al nuovo controller, tramite la proprietà `controller`.
 
 <%= commit "12-3", "Refactored postsLists route into a RouteController." %>
 
-### Adding A Load More Link
+### Aggiungere un link 'Carica più post'
 
-////
+Abbiamo ora una paginazione funzionante e il nostro codice ha una buona struttura. C'è solo un problema: non c'è ancora un modo per *usare* la paginazione se non cambiando manualmente l'URL. Questo di certo non rende pratica l'esperienza dell'utente, vediamo come poterla sistemare.
 
-////
+Ciò che vogliamo fare è abbastanza semplice. Aggiungiamo un bottone "Carica più post" alla fine della nostra lista di post, che incrementerà di 5 il numero di post visualizzati ogni volta che viene cliccato. Se sto visitando l'URL `http://localhost:3000/5`, cliccando su "Carica più post" dovrebbe portarmi a `http://localhost:3000/10`. Se siete riusciti ad arrivare fino a questo punto del libro, crediamo che possiate cavarvela con un po' di aritmetica!
 
-////
+Come prima, aggiungiamo la logica della paginazione nella nostra route. Ricordate quando abbiamo esplicitamente dato un nome al contesto dati piuttosto che utilizzare un cursore anonimo? Non c'è nessuna regola che dice che la funzione `data` può solo ritornare cursori, così useremo la stessa tecnica per generare l'URL del bottone "Carica più post".
 
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5, 
-  limit: function() { 
-    return parseInt(this.params.postsLimit) || this.increment; 
+  increment: 5,
+  limit: function() {
+    return parseInt(this.params.postsLimit) || this.increment;
   },
   findOptions: function() {
     return {sort: {submitted: -1}, limit: this.limit()};
@@ -327,25 +327,25 @@ PostsListController = RouteController.extend({
 <%= caption "lib/router.js" %>
 <%= highlight "16~23" %>
 
-////
+Diamo uno sguardo più approfondito a questa piccola magia del router. Ricordate che la route `postsList` (che eredita dal controller `PostsListController` su cui stiamo attualmente lavorando) accetta un parametro `postsLimit`.
 
-////
+In questo modo quando passiamo `{postsLimit: this.limit() + this.increment}` alla funzione `this.route.path()`, stiamo dicendo alla route `postsList` di costruire il proprio percorso usando questo oggetto JavaScript come contesto di dati.
 
-////
+In altre parole, questa è identico ad utilizzare l'helper di Spacebars `{{pathFor 'postsList'}}`, escluso che stiamo rimpiazzando il `this` implicito con il nostro contesto di dati personalizzato.
 
-////
+Stiamo prendendo quel percorso e lo stiamo aggiungendo al contesto di dati per il nostro template, ma *solo* se ci sono più post da mostrare. Il modo in cui lo facciamo è un po' complesso.
 
-////
+Sappiamo che `this.limit()` ritorna il numero corrente di post che vogliamo mostrare, che può essere sia il valore dell'URL corrente, o del nostro valore di default (5) se l'URL non contiene nessun parametro.
 
-////
+D'altra parte, `this.posts` si riferisce al cursore corrente, così `this.posts.count()` si riferisce al numero di post che sono attualmente nel cursore.
 
-////
+Quello che stiamo dicendo qui è che se chiediamo `n` post e ne otteniamo `n`, continuiamo a mostrare il bottone "Carica di più". Ma se chiediamo `n` post e otteniamo *meno* di `n`, significa che abbiamo raggiunto il limite e dobbiamo smettere di mostrare quel bottone.
 
-////
+Detto questo, il nostro sistema ha un problema quando il numero di elemente nel database è *esattamente* `n`. Quando accade il client richiede `n` post, ottiene `n` post e continua a mostrare il bottone "Carica di più", non sapendo che non sono rimasti elementi.
 
-////
+Sfortunatamente non ci sono sistemazioni semplici per questo problema, perciò al momento ci accontentiamo di questa implementazione non proprio perfetta.
 
-////
+Quel che rimane da fare è aggiungere il link "Carica di più" in fondo alla lista di post, facendo in modo che si visualizzi solo se abbiamo più post da caricare:
 
 ~~~html
 <template name="postsList">
@@ -353,7 +353,7 @@ PostsListController = RouteController.extend({
     {{#each posts}}
       {{> postItem}}
     {{/each}}
-    
+
     {{#if nextPath}}
       <a class="load-more" href="{{nextPath}}">Load more</a>
     {{/if}}
@@ -363,42 +363,34 @@ PostsListController = RouteController.extend({
 <%= caption "client/views/posts/posts_list.html" %>
 <%= highlight "7~10" %>
 
-////
+Questo è quello che dovremmo vedere ora:
 
 <%= screenshot "12-3", "The “load more” button. " %>
 
 <%= commit "12-4", "Added nextPath() to the controller and use it to step through posts." %>
 
-<% note do %>
+### Una miglior barra di progresso
 
-### Count vs Length
+La nostra paginazione sta ora funzionando bene, ma soffre di un problema noioso: ogni volta che clicchiamo su "Carica di più" e il router richiede più post, veniamo indirizzati al template `loading` mentre aspettiamo che i nuovi dati arrivino. Il risultato è che veniamo rimandati all'inizio della pagina ogni volta e bisogna scrollare fino in fondo per riprendere la nostra navigazione.
 
-////
+Sarebbe molto meglio se potessimo stare sulla stessa pagina durante l'intera operazione, indicando comunque che i dati si stanno caricando. Fortunatamente è quello che fa il pacchetto `iron-router-progress`.
 
-<% end %>
-
-### A Better Progress Bar
-
-////
-
-////
-
-////
+Come Safari per iOS o siti come Medium e YouTube, `iron-router-progress` aggiunge una sottile barra di caricamento nella parte alta dello schermo. Implementarlo è semplice come aggiungere il pacchetto alla nostra applicazione:
 
 ~~~bash
 mrt add iron-router-progress
 ~~~
 <%= caption "bash console" %>
 
-////
+Attraverso la magia dei pacchetti, la nostra nuova barra di progresso funziona perfettamente appena installata! La barra di progresoo si attiverà per ogni route e si completerà automaticamente appena la route avrà caricato i dati richiesti.
 
-////
+Facciamo solo una modifica. Disabilitiamo `iron-router-progress` per la route `postSubmit` dato che non deve aspettare per i dati da nessuna sottoscrizione (dopo tutto è solo un form vuoto):
 
 ~~~js
 Router.map(function() {
- 
+
   //...
-  
+
   this.route('postSubmit', {
     path: '/submit',
     disableProgress: true
@@ -410,17 +402,17 @@ Router.map(function() {
 
 <%= commit "12-5", "Use the iron-router-progress package to make pagination nicer." %>
 
-### Accessing Any Post
+### Accedere ad ogni post
 
-////
+Stiamo attualmente caricando i cinque post più recenti come impostazione predefinita, ma cosa accade quando si naviga alla pagina di un post?
 
 <%= screenshot "12-4", "An empty template." %>
 
-////
+Se ci provate, troverete il template di un post vuoto. Questo è corretto: abbiamo detto al router di sottoscrivere la pubblicazione `posts` quando carica la route `postsList`, ma non abbiamo detto cosa vogliamo fare con la route `postPage`.
 
-////
+Finora tutto quello che sappiamo è come sottoscrivere a una lista dei `n` post più recenti. Come facciamo a chiedere al server un post specifico? Vi sveliamo un piccolo segreto: potete avere più di una pubblicazione per ogni collezione!
 
-////
+Per riavere indietro i post mancanti, creiamo semplicemente una nuova pubblicazione `singlePost` che pubblica solo un post, identificato tramite `_id`.
 
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -434,13 +426,13 @@ Meteor.publish('singlePost', function(id) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-////
+OOra, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottoscrivendo alla ppubblicazione `comments` nella funzion `waitOn` della route `postPage`, così possiamo semplicemente aaggiungere qui la sottoscrizione. Non dimentichiamo di aggiungere la sottoscrizione anche alla route `postEdit` dato che necessita degli stessi dati:
 
 ~~~js
 Router.map(function() {
 
   //...
-    
+
   this.route('postPage', {
     path: '/posts/:_id',
     waitOn: function() {
@@ -454,12 +446,12 @@ Router.map(function() {
 
   this.route('postEdit', {
     path: '/posts/:_id/edit',
-    waitOn: function() { 
+    waitOn: function() {
       return Meteor.subscribe('singlePost', this.params._id);
     },
-    data: function() { return Posts.findOne(this.params._id); }    
+    data: function() { return Posts.findOne(this.params._id); }
   });
-  
+
   /...
 
 });
@@ -469,4 +461,4 @@ Router.map(function() {
 
 <%= commit "12-6","Use a single post subscription to ensure that we can always see the right post." %>
 
-////
+Terminata la paginazione, la nostra applicazione non soffre più di problemi di scalabilità, e gli utenti sono sicuri di poter contribuire con molti più link di prima. Non sarebbe carino avere un sistema per poter dare un voto a questi link? E' esattamente l'argomento del prossimo capitolo, *Votare*.
