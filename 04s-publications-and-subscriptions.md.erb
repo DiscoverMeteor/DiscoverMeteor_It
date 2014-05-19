@@ -40,21 +40,21 @@ Ci sono due grandi implicazioni: primo, invece di mandare il codice HTML al clie
 
 ### Pubblicare
 
-////
+Il database di un'applicazione può contenere decine di migliaia di documenti, alcuni dei quali possono essere dati privati o sensibili. Per questo motivo non dobbiamo ovviamente replicare tutto il database nel client, per ragioni di sicurezza e scalabilità.
 
-////
+Abbiamo bisogno di un modo per dire a Meteor quale **sottoinsieme** di data può essere inviato al client e lo faremo attraverso una **pubblicazione**.
 
-////
+Torniamo a Microscope. Qui abbiamo tutti i post che si trovano nel database dell'applicazione:
 
 <%= diagram "collections-1", "All the posts contained in our database.", "pull-center" %>
 
-////
+Immaginiamo che alcuni dei nostri post sono stati segnalati per linguaggio inappropriato, anche se questa opzione non esiste al momento in Microscope. Anche se vogliamo tenere questi post nel database, non devono essere resi disponibili agli utenti (ad esempio inviati al client).
 
-////
+Il nostro primo compito è di dire a Meteor quali dati *vogliamo* mandare al client. Diciamo a Meteor ce vogliamo **pubblicare** solo i post non segnalati:
 
 <%= diagram "collections-2", "Excluding flagged posts.", "pull-center" %>
 
-////
+Questo è il codice corrispondente, che risiede sul server:
 
 ~~~js
 // on the server
@@ -63,15 +63,15 @@ Meteor.publish('posts', function() {
 });
 ~~~
 
-////
+Questo assicura che non ci sia **nessun modo possibile** che un client possa accedere ai post segnalati. In questo modo si rende sicura l'applicazione Meteor: dovete assicurarvi che state pubblicando solo i dati a cui volete che il client acceda.
 
 <% note do %>
 
 ### DDP
 
-////
+Fondamentalmente potet pensare a pubblicazioni/sottoscrizione come a un tubo che trasferisce i dati da una collezione sul server (sorgente) a una collezione lato client (obiettivo).
 
-////
+Il protocollo che gestisce questo comunicazione è chiamato **DDP** (che sta per Distributed Data Protocol). Per sapere di più sul DPP potete guardare [questo intervento alla Real-time Conference](http://2012.realtimeconf.com/video/matt-debergalis) di Matt DeBergalis (uno dei fondatori di Meteor), o [questo screencast](http://www.eventedmind.com/posts/meteor-subscriptions-and-ddp) di Chris Mather che vi mostra qualche dettaglio in più su questo concetto.
 
 <% end %>
 
