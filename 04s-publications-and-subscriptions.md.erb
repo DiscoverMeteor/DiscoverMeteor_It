@@ -75,17 +75,17 @@ Il protocollo che gestisce questo comunicazione è chiamato **DDP** (che sta per
 
 <% end %>
 
-### Subscribing
+### Sottoscrizioni
 
-////
+Anche se vogliamo che gli utenti vedano tutti i post non segnalati, non possiamo inviare migliaia di post alla volta. Abbiamo bisogno di un modo con cui i client possono specificare di quale sottoinsieme di dati hanno bisogno e lo facciamo attraverso le **sottoscrizioni**.
 
-////
+Ogni dati a cui si fa una sottoscrizione viene **replicato** sul client grazie a Minimongo, l'implementazione lato cliente da fa Meteor di MongoDB.
 
-////
+Ad esempio, stiamo navigando sul profilo di Bob Smith e vogliamo mostrare solo i *suoi* post.
 
 <%= diagram "collections-3", "Subscribing to Bob's posts will mirror them on the client.", "pull-center" %>
 
-////
+Come prima cosa sistemiamo le nostre pubblicazioni in modo che accettino un parametro:
 
 ~~~js
 // on the server
@@ -94,7 +94,7 @@ Meteor.publish('posts', function(author) {
 });
 ~~~
 
-////
+Definiamo questo parametro quando facciamo *sottoscrizione* a quella pubblicazione nel codice lato client della nostra applicazione:
 
 ~~~js
 // on the client
