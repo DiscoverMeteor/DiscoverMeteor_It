@@ -101,15 +101,15 @@ Definiamo questo parametro quando facciamo *sottoscrizione* a quella pubblicazio
 Meteor.subscribe('posts', 'bob-smith');
 ~~~
 
-////
+Per rendere scalabile un'applicazione Meteor lato client, invece di sottoscrivere *ogni* dato disponibile, prendiamo e scegliamo le parti che sono necessarie. In questo modo evitiamo il sovraccarico della memoria del browser indipendentemente da quando è grande il database lato server.
 
-### Finding
+### Come trovare i dati
 
-////
+I post di Bob sono divisi in più categorie (per esempio: "JavaScript", "Ruby" e "Phyton"). Potremmo voler ancora caricare tutti i post di Bob in memoria, ma vogliamo mostrare solo quelli della categoria "JavaScript". Vediamo come trovarli. 
 
 <%= diagram "collections-4", "Selecting a subset of documents on the client.", "pull-center" %>
 
-////
+Come abbiamo fatto sul server, useremo la funzione `Posts.find()` per selezionare un sottoinsieme dei nostri dati:
 
 ~~~js
 // on the client
