@@ -120,13 +120,13 @@ Template.posts.helpers({
 });
 ~~~
 
-////
+Ora che abbiamo più informazioni sul ruolo di pubblicazioni e sottoscrizioni, andiamo più a fondo e osserviamo alcuni schemi comuni di implementazione.
 
-### Autopublish
+### Autopubblicazione
 
-////
+Se create un progetto Meteor da zero (ad esempio usando `meteor create`), avrà automaticamente abilitato il pacchetto `autopublish`. Come prima cosa vediamo esattemente cosa fa.
 
-////
+L'obiettivo di `autopublish` è di semplificare molto l'iniziare a scrivere codice di un'applicazione Meteor, replicando automaticamente _tutti i dati_ dal server al client, prendendosi carico di pubblicazioni e sottoscrizioni al posto nostro.
 
 <%= diagram "autopublish", "Autopublish", "pull-center"%>
 
