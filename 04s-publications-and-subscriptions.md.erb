@@ -18,7 +18,7 @@ Buona parte dei motivi per cui le persone trovano questi concetti un po' confusi
 
 Guardiamo prima a ciò che accadeva nel 2011 quando Meteor non era ancora disponibile. Diciamo che state costruendo una semplice applicazione in Rails. Quando un utente raggiunge il vostro sito, il cliente (ad esempio il browser) manda una richiesta all'applicazione che risiede sul server.
 
-Il primo lavoro dell'applicazione è quello di capire che dati l'utente vuole vedere. Potrebbe essere pagina 12 dei risultati di ricerca, le informazioni del profilo di Mary, i 20 ultimi tweet di Bob e così via. Potete figurarla come un commesso di una libreria che cerca negli scaffali il libro che avete richiesto. 
+Il primo lavoro dell'applicazione è quello di capire che dati l'utente vuole vedere. Potrebbe essere pagina 12 dei risultati di ricerca, le informazioni del profilo di Mary, i 20 ultimi tweet di Bob e così via. Potete figurarla come un commesso di una libreria che cerca negli scaffali il libro che avete richiesto.
 
 Quando i dati corretti sono stati selezionati, il secondo lavoro dell'applicazione e di tradurre i dati in un formato HTML leggibile da una persona (o JSON nel caso di un API).
 
@@ -59,7 +59,7 @@ Questo è il codice corrispondente, che risiede sul server:
 ~~~js
 // on the server
 Meteor.publish('posts', function() {
-  return Posts.find({flagged: false}); 
+  return Posts.find({flagged: false});
 });
 ~~~
 
@@ -105,7 +105,7 @@ Per rendere scalabile un'applicazione Meteor lato client, invece di sottoscriver
 
 ### Come trovare i dati
 
-I post di Bob sono divisi in più categorie (per esempio: "JavaScript", "Ruby" e "Phyton"). Potremmo voler ancora caricare tutti i post di Bob in memoria, ma vogliamo mostrare solo quelli della categoria "JavaScript". Vediamo come trovarli. 
+I post di Bob sono divisi in più categorie (per esempio: "JavaScript", "Ruby" e "Phyton"). Potremmo voler ancora caricare tutti i post di Bob in memoria, ma vogliamo mostrare solo quelli della categoria "JavaScript". Vediamo come trovarli.
 
 <%= diagram "collections-4", "Selecting a subset of documents on the client.", "pull-center" %>
 
@@ -130,17 +130,17 @@ L'obiettivo di `autopublish` è di semplificare molto l'iniziare a scrivere codi
 
 <%= diagram "autopublish", "Autopublish", "pull-center"%>
 
-////
+Come funziona? Supponiamo di avere una colezione chiamata `'posts'` sul server: `autopublish` invia automaticamente ogni post che trova nella collezione lato server in Mongo in una collezione chiamata `'posts'` sul client (assumendo che ne esista una).
 
-////
+Se state usando `autopublish`, non dovete preoccuparvi delle pubblicazioni. I dati sono dappertutto e le cose sono semplici. Ci sono ovvie problematiche legate al fatto di avere una copia completa del database dell'applicazione nella cache della macchina di ogni utente.
 
-////
+Per questo motivo autopublish è utile solo quando state iniziando e non avete ancora pensato alle pubblicazioni.
 
-### Publishing Full Collections
+### Pubblicare intere collezioni
 
-////
+Dopo aver rimosso `autopublish` vi accorgerete presto che tutti i vostri dati sono spariti dal client. Un modo semplice per riverderli è di duplicare ciò che fa autopublish e pubblicare una collezione intera. Ad esempio:
 
-~~~js 
+~~~js
 Meteor.publish('allPosts', function(){
   return Posts.find();
 });
@@ -148,13 +148,13 @@ Meteor.publish('allPosts', function(){
 
 <%= diagram "fullcollection", "Publishing a full collection", "pull-center" %>
 
-////
+Stiamo ancora pubblicando le intere collezioni ma abbiamo ora controllo su quali vogliamo pubblicare. In questo caso stiamo pubblicando `Posts` ma non `Comments`.
 
-### Publishing Partial Collections
+### Pubblicare collezioni parziali
 
-////
+Il prossimo livello di controllo è di pubblicare solo _parte_ di una collection. Ad esempio solo i post che appartengono a un certo autore:
 
-~~~js 
+~~~js
 Meteor.publish('somePosts', function(){
   return Posts.find({'author':'Tom'});
 });
@@ -164,29 +164,29 @@ Meteor.publish('somePosts', function(){
 
 <% note do %>
 
-### Behind The Scenes
+### Dietro le quinte
 
-////
+Se avete letto la [documentazione di Meteor sulle pubblicazioni](http://docs.meteor.com/#publishandsubscribe), vi siete forse preoccupati sentendo parlare di come usare `added()` e `ready()` per settare gli attributi dei record sul client e avete faticato a capire come fare guardando le applicazioni di Meteor che non usano mai quei metodi.
 
-////
+Il motivo è che Meteor provvede una convezione molto importante: il metodo `_publishCursor()`. Non l'avete mai visto prima? Forse non direttamente ma se ritornate un [cursore](/chapter/meteor-vocabulary/) (ad esempio `Posts.find({'author':'Tom'})`) in una funzione di pubblicazione, è esattamente ciò che Meteor sta usando.
 
-////
+Quando Meteor vede che la pubblicazione `somePosts` ha ritornato un cursore, chiama `_publishCursor()` per -- avete indovinato -- pubblicare quel cursore automaticamente.
 
-////
+Questo è ciò che fa `_publishCursor()`:
 
-- ////
-- ////
-- ////
+- Controlla il nome della collezione lato server.
+- Prende tutti i documenti risultanti e li invia a una collezione lato client *con lo stesso nome* (Usa `added()` per farlo).
+- Ogni volta che un documento viene aggiunto, rimosso o cambiato, invia questi cambiamenti alla collezione lato client (Usa `.observe()` sul cursore e `.added()`, `.changed()` e `removed()` per farlo).
 
-////
+In questo esempio possiamo essere sicuri di inviare all'utente solo i post a cui sono interessati (quelli scritti da Tom) disponibili nella cache lato client.
 
 <% end %>
 
-### Publishing Partial Properties
+### Pubblicare proprietà parziali
 
-////
+Abbiamo visto come pubblicare alcuni dei nostri post ma possiamo andare ancora più a fondo! Vediamo come pubblicare solo specifiche *proprietà*.
 
-////
+Come prima, usiamo `find()` per ritornare un cursore, ma questa volta escludiamo alcuni campi:
 
 ~~~js
 Meteor.publish('allPosts', function(){
@@ -198,7 +198,7 @@ Meteor.publish('allPosts', function(){
 
 <%= diagram "partialproperties", "Publishing partial properties", "pull-center" %>
 
-////
+Possiamo combinare entrambe le tecniche. Ad esempio, se vogliamo ritornare tutti i post di Tom ma non la loro data di pubblicazione scriviamo:
 
 ~~~js
 Meteor.publish('allPosts', function(){
@@ -208,10 +208,10 @@ Meteor.publish('allPosts', function(){
 });
 ~~~
 
-### Summing Up
+### Riassumendo
 
-////
+Abbiamo visto come andare dal pubblicare ogni proprietà di ogni documento di ogni collezione (con `autopublish`) al pubblicare solo _alcune_ proprietà di _alcuni_ documenti di _alcune_ collezioni.
 
-////
+Questo copre le basi di quello che si può fare con le pubblicazioni in Meteor, e queste semplici tecniche bastano a coprire la maggioranza dei casi.
 
-////
+Qualche volta avrete bisogno di andare oltre combinando, collegando o unendo le pubblicazioni. Vedremo come fare un capitolo successivo!
