@@ -26,24 +26,24 @@ Se questo fosso il modo in cui funziona Meteor ci sarebbe un breve ritardo tra l
 
 <%= diagram "latency2", "With latency compensation", "pull-right" %>
 
-////
+Per evitare questo problema, Meteor introduce un concetto chiamato **Compensazione di latenza**. Quando abbiamo definito il nostro Metodo `post`, l'abbiamo messo un un file nella cartella `collections/`. Questo significa che è disponibile sia sul server che *sul client* -- e verrà eseguito su entrambi allo stesso tempo!
 
-////
+Quando fate una chiamata a un Metodo, il client invia la chiamata al server, ma contemporaneamente *simula* l'azione del Metodo sulle collezioni del client. Il processo ora è questo:
 
-- *+0ms:* ////
-- *+0ms:* ////
-- *+200ms:* ////
-- *+500ms:* ////
+- *+0ms:* L'utente clicca su un bottone di submit e il browser scatena una chiamata al Metodo.
+- *+0ms:*  Il client simula l'azione della chiamata al Metodo sulle collezioni lato client e aggiorna l'interfaccia per visualizzarle.
+- *+200ms:*  Il server esegue le modifiche sul database di Mongo.
+- *+500ms:*  Il client riceve le modifiche e annulla le modifiche simulate rimpiazzandole con quelle del server (che sono di solito le stesse). L'interfaccia si modifica per visualizzarle.
 
-////
+Questo fa in modo che l'utente veda le modifiche istantaneamente. Quanto la risposta del server arriva qualche momento più tardi, possono esserci o meno delle modifiche sensibili ai documenti che il server invia. Una cosa da imparare è che dovete cercare di simulare i reali documenti il più fedelmente possibile.
 
-### Observing Latency Compensation
+### Osservare la compensazione di latenza
 
-////
+Possiamo fare una piccola modifica alla chiamate del Metodo `post` per vederlo in azione. Per farlo dovremo fare un po' di codice avanzato con il pacchetto npm `futures` per ritardare l'inserimento di oggetti nel nostro Metodo.
 
-////
+Useremo `isSimulation` per chiedere a Meteor se il Metodo è chiamato come un abbozzo. Un [abbozzo](http://docs.meteor.com/#methods_header) è la simulazione di un Metodo che Meteor esegue sul client in parallelo, mentre il Metodo "reale" viene eseguito sul server.
 
-////
+In questo modo chiediamo a Meteor se il codice si sta eseguendo sul client. Se è così aggiungiamo la stringa `(client)` alla fine del titolo del post. Se non è così, aggiungiamo la stringa `(server)`:
 
 ~~~js
 Meteor.methods({
