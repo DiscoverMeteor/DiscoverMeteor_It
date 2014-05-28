@@ -1,28 +1,28 @@
 ---
-title: Latency Compensation
+title: Compensazione di latenza
 slug: latency-compensation
 date: 0007/01/02
 number: 7.5
 sidebar: true
-contents: Understand latency compensation.|Slow your app down and see what's going on.|Learn how Meteor Methods call each other.
+contents: Capire la compensazione di latenza.|Rallentare la costruzione l'applicazione per capire meglio come funziona.|Capire come i metodi di Meteor si chiamano tra di loro.
 paragraphs: 28
 ---
 
-////
+Nell'ultimo capitolo abbiamo introdotto un nuovo concetto nell'universo di Meteor: i **Metodi**.
 
 <%= diagram "latency1", "Without latency compensation", "pull-right" %>
 
-////
+Un Metodo di Meteor è un modo per eseguire una serie di comandi sul server in maniera strutturata. Nel nostro esempio abbiamo usato un Metodo perchè vogliamo che i nuovi post siano taggati con il nome e l'id dell'autore e con l'orario corrente del server.
 
-////
+Tuttavia se Meteor eseguisse i Metodi nel modo più semplice avremmo un problema. Considerate questa sequenza di eventi (nota: i timestamp sono valori casuali presi per semplice scopo illustrativo):
 
-- *+0ms:* ////
-- *+200ms:* ////
-- *+500ms:* ////
+- *+0ms:* L'utente clicca su un bottone di submit e il browser scatena una chiamata al Metodo.
+- *+200ms:* Il server esegue le modifiche sul database di Mongo.
+- *+500ms:* Il client riceve le modifiche e aggiorna l'interfaccia utente per visualizzarle.
 
-If this were the way Meteor operated, then there'd be a short lag between performing such actions and seeing the results (that lag being more or less noticeable depending on how close you were to the server). We can't have that in a modern web application!
+Se questo fosso il modo in cui funziona Meteor ci sarebbe un breve ritardo tra l'esecuzione di queste azioni e il risultato (il ritardo sarebbe più o meno sensibile, dipende da quanto vicini siete al server). Non è accettabile in una moderna applicazione web!
 
-### Latency Compensation
+### Compensazione di latenza
 
 <%= diagram "latency2", "With latency compensation", "pull-right" %>
 
