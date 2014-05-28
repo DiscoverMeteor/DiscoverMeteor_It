@@ -77,11 +77,11 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "6, 7, 13~22" %>
 
-////
+Nota: in caso ve lo stiate chiedendo, il `this` in `this.isSimlation` è un [oggetto di invocazione di Metodo](http://docs.meteor.com/#meteor_methods) che provvede accesso a svariate e utili variabili.
 
-////
+Come funziona esattamente [Futures](https://npmjs.org/package/future) esula dagli argomenti di questo libro, ma abbiamo praticamente detto a Meteor di aspettare 5 secondi prima di inserire il documento nella collezione sul server.
 
-////
+Abbiamo fatto anche un reindirizzamento alla lista di post:
 
 ~~~js
 Template.postSubmit.events({
@@ -107,27 +107,27 @@ Template.postSubmit.events({
 
 <%= scommit "7-5-1", "Demonstrate the order that posts appear using a sleep." %>
 
-////
+Se creiamo un post ora vedremo la compensazione di latenza in azione. Prima viene inserito un post con `(client)` nel titolo (il primo post nella lista che rimanda a GitHub):
 
 <%= screenshot "s5-1", "Our post as first stored in the client collection" %>
 
-////
+Cinque secondi più tardi, viene rimpiazzato dal domento reale che è stato inserito sul server:
 
 <%= screenshot "s5-2", "Our post once the client receives the update from the server collection" %>
 
-### Client Collection Methods
+### Metodi delle collezioni sul client
 
-////
+Potete pensare che i Metodi siano complicati dopo di questo, ma in realtà possono essere abbastanza semplici. Abbiamo visto tre semplici Metodi finora: i Metodi dei cambiamenti in una collezione, `insert`, `update` e `remove`.
 
-////
+Quando definite una collezione sul server chiamata `'posts'`, state implicitamente definendo tre Metodi: `posts/insert`, `posts/update` and `posts/delete`. In altre parole, quando chiamate `Posts.insert()` sulla vostra collezione lato client, state eseguendo un Metodo con compensazione di latenza che fa due cose:
 
-1. ////
-2. ////
+1. Controlla che possiamo fare il cambiamento chiamando le callback `allow` e `deny` (questo non avviene durante la simulazione).
+2. Rende effettivi i cambiamenti nel sottostante archivio dati.
   
-### Methods Calling Methods
+### Metodi che chiamano Metodi
 
-////
+Se state riuscendo a seguire, potete aver notato che il nostro Metodo `post` sta chiamando un altro Metodo (`posts/insert`) quando inseriamo un nuovo post. Come funziona?
  
-////
+Quando la simulazione (la versione lato client del Metodo) viene eseguita, eseguiamo la simulazione di `insert` (in modo da inserire il documento nella collezione lato client), ma *non* chiamiamo la versione lato server di `insert`, perchè ci aspettiamo che sia la *versione server* di `post` a farlo.
 
-////
+Di conseguenza quando il Metodo lato server `post` chiama `insert` non c'è bisogno di preoccuparsi della simulazione, e l'inserimento prosegue senza problemi.
