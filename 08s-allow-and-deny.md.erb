@@ -1,22 +1,22 @@
 ---
-title: Allow and Deny
+title: Allow e Deny
 slug: allow-and-deny
 date: 0008/01/02
 number: 8.5
 sidebar: true
-contents: Learn about Allow and Deny callbacks.|Understand in which order callbacks are called.
+contents: Approfondire le callback Allow e Deny.|Capire in quale ordine vengono chiamate le callback.
 paragraphs: 16
 ---
 
-////
+Il sistema di sicurezza di Meteor ci permette di controllare le modifiche al database senza dover definire dei Metodi ogni volta che facciamo una modifica.
 
-////
+Dato che abbiamo bisogno di eseguire operazioni ausiliarie come decorare il post con proprietà aggiuntive a eseguire azioni speciali quando l'URL del post viene pubblicato, ha senso utilizzare uno specifico Metodo `post` quando creiamo un post.
 
-////
+D'altra parte non abbiamo bisogno di creare nuovi Metodi per modificare o eliminare i post. Dobbiamo solo controllare che l'utente abbia i permessi per eseguire queste azioni, e ciò avviene facilmente attraverso le callback `allow` e `deny`.
 
-////
+Usare queste callback ci permette di essere più dichiarativi riguardo alle modifiche al database e di poter dire quali tipi di modifiche possono essere effettuate. Il fatto che si integrino con il sistema di account è un bonus aggiuntivo.
 
-### Multiple callbacks
+### Callback multiple
 
 ////
 
