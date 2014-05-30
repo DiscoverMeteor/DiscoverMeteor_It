@@ -18,9 +18,9 @@ Usare queste callback ci permette di essere più dichiarativi riguardo alle modi
 
 ### Callback multiple
 
-////
+Possiamo definire multiple callback `allow`, l'importante è che _almeno una_ di esse ritorni `true` per la modifica che sta eseguendo. In questo modo quando `Posts.insert` viene chiamata in un browser (non importa che sia dall'interfaccia client o dalla console), il server di conseguenza chiamerà ogni `insert` fino ache non ne trova uno che ritorna `true`. Se non ne trova, non da permesso all'inserimento e ritorna un errore `403` al client.
 
-////
+Allo stesso modo, possiamo definire più di una callback `deny`. Se _una qualunque_ di esse ritorna `true`, le modifiche vengono cancellate e viene ritornato un errore `403`. Questo significa che per rendere effettivo un `insert` , saranno chiamate una o più callback `allow` `insert` e _ogni_ callback `deny` `insert`.
 
 <%= diagram "allow_deny", "Note: n/e stands for Not Executed" %>
 
