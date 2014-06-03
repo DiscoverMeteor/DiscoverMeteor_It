@@ -38,13 +38,13 @@ Fortunatamente, dato che potete condividere il codice dei permessi tra client e 
 
 ### Permessi lato server
 
-////
+Ricordatevi che il sistema di permessi si applica solo alle modifiche del database inizializzate dal client. Sul server Meteor assume che _tutte_ le operazioni siano permesse.
 
-////
+Questo significa che se scrivete un Metodo Meteor `deletePost` lato server che può essere chiamato dal client, ognuno è in grado di cancellare qualsiasi post. Probabilmente non volete che accada a meno che non abbiate verificato i permessi utente all'interno del Metodo.
 
-### Using deny as a callback
+### Usare "deny" come callback
 
-////
+Infine, un trucco che potete fare con `deny` è di usarlo sulle callback "onX". Per esempio potete ottenere un timestamp `lastModified` con il seguente codice:
 
 ~~~js
 Posts.deny({
