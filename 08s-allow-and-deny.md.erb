@@ -24,19 +24,19 @@ Allo stesso modo, possiamo definire più di una callback `deny`. Se _una qualunq
 
 <%= diagram "allow_deny", "Note: n/e stands for Not Executed" %>
 
-////
+In altre parole, Meteor si muove nella lista di callback partendo da quelle di tipo `deny`, in seguito quelle di tipo `allow`, eseguendole fino a che una di esse non ritorna `true`.
 
-////
+Un esempio pratico di questo schema è quello di avere due callback `allow()`, una che controlla se un post appartiene all'utente corrente e una seconda che controlla se questo utente ha i diritti di amministrazione. Se l'utente è un amministratore potrà sicuramente modificare ogni post, dato che almeno una delle callback ritornerà true.
 
-### Latency Compensation
+### Compensazione di latenza
 
-////
+Ricordate che i Metodi che modificano il database (come `.update()`) hanno compensazione di latenza, proprio come ogni altro Metodo. Per esempio, se provate ad eliminare un post di cui non avete i permessi attraverso la console del browser, vedrete il post sparire brevemente nel momento in cui viene cancellato nella collezione locale, ma poi lo vedrete riapparire quando il server informa che il documento non è stato cancellato.
 
-////
+Certamente questo comportamento non è un problema quando viene generato dalla console (se gli utenti provano a mettere mano ai dati tramite console, non è certo un vostro problema quello che succede nei _loro_ browser). Tuttavia dovete assicurarvi che non succeda nell'interfaccia utente. Ad esempio dovete fare in modo che un bottoni "Elimina" non siano visibili agli utenti che non hanno i permessi per eliminare.
 
-////
+Fortunatamente, dato che potete condividere il codice dei permessi tra client e server (ad esempio potete scrivere una funzione in una libreria chiamata `canDeletePost(user, post)` e metterla nella cartella condivisa `/lib`), questo non richiede molto codice extra.
 
-### Server-side permissions
+### Permessi lato server
 
 ////
 
