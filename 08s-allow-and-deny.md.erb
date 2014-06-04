@@ -56,6 +56,6 @@ Posts.deny({
 });
 ~~~
 
-////
+Dato che le callback `deny` vengono eseguite per *ogni* `update` che ha successo, sappiamo che queste callback saranno eseguite e opereranno le modifiche in maniera strutturata.
 
-////
+In realtà questa tecnica è un hack, dato che potreste volere eseguire le modifiche usando un Metodo. Tuttavia è comunque utile saperlo, e in futuro possiamo sperare che diventi disponibile una callback `beforeUpdate`.
