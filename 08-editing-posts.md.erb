@@ -194,9 +194,9 @@ ownsDocument = function(userId, doc) {
 ~~~
 <%= caption "lib/permissions.js" %>
 
-Nel capitolo [Creare messaggi](/chapter/creating-posts), ci siamo disfati del metodo `allow()` perchè stavamo inserendo messaggi solamente via un metodo nel server (che ignora il metodo `allow()`).
+Nel capitolo [Creare post](/chapter/creating-posts) abbiamo rimosso la funzione `allow()` in quanto le modifiche al database avvenivano solamente sul server tramite un metodo Meteor, e, in questi casi, le direttive .allow() e .deny() vengono ignorate.
 
-Ma ora stiamo modificando e cancellando dal client, torniamo indietro su `posts.js` e aggiungiamo questo blocco `allow()`:
+Ora che, invece, editiamo contenuti sul client è necessario specificare chi ha i permessi di modificare gli elementi della collezione inserendo il metodo .allow() nel file `posts.js`.
 
 ~~~js
 Posts = new Meteor.Collection('posts');
