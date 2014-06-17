@@ -14,7 +14,7 @@ A questo punto abbiamo un sistema di votazione, conto punteggi e valutazione in 
 
 ### Meteor & il DOM
 
-Prima di iniziare la parte divertente (fare che le cose si muovino), dobbiamo capire come Meteor interagisce con il DOM (Document Object Model -- la collezione di elementi HTML che costituiscono i contenuti di una pagina).
+Prima di iniziare la parte divertente (fare sì che le cose si muovano), dobbiamo capire come Meteor interagisce con il DOM (Document Object Model -- la collezione di elementi HTML che costituiscono i contenuti di una pagina).
 
 È cruciale ricordarsi che gli elementi *non possono essere spostati*. Possono solamente essere eliminati e creati (nota che questa è una limitazione del DOM, non di Meteor). Quindi per dare l'illusione che gli elementi A e B cambino di posto, Meteor cancellerà l'elemento B e inserirà una copia nuova di zecca (B') prima dell'elemento A.
 
