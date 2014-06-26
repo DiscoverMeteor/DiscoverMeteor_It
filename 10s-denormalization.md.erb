@@ -4,7 +4,7 @@ slug: denormalization
 date: 0010/01/02
 number: 10.5
 sidebar: true
-contents: Cos'è la denormalizzazione.|Comparare Mongo con di tradizionali database relazionali.|Quando *non* devi denormalizzare i tuoi dati. 
+contents: Cos'è la denormalizzazione.|Comparare Mongo con di tradizionali database relazionali.|Quando non devi denormalizzare i tuoi dati. 
 paragraphs: 15
 ---
 
@@ -12,21 +12,21 @@ Denormalizzare i dati significa non archiviare i data in forma "normale". In alt
 
 Nell'ultimo capitolo abbiamo denormalizzato il conteggio del numero di commenti all'interno dell'oggetto 'post' per evitare di dover caricare tutti i commenti ogni volta. Dal punto di vista di una modelizzazione dati questo è ridondante, perchè potremmo contare ogni volta il giusto insieme di commenti per ottenere quel dato (tralasciando le considerazioni sulla performance).
 
-///
+Spesso denormalizzare significa più lavoro per lo sviluppatore. Nel nostro esempio, ogni volta che aggiungiamo o rimuoviamo un commento, dobbiamo ricordarci di aggiornare il post collegato per assicurarci che il campo `commentsCount` resti corretto. Questo è esattamente il motivo per cui i database relazionali come MySQL disapprovano questo approccio.
 
-///
+Tuttavia l'approccio normale ha i suoi contro: senza una proprietà `commentsCount`, dovremmo inviare al client _tutti_ i commenti ogni volta solo per poterli contare, che è quello che facevamo all'inizio. Denormalizzare ci permette di evitarlo del tutto.
 
 <% note do %>
 
-### A Special Publication
+### Una pubblicazione speciale
 
-////
+*Potrebbe* essere possibile creare una pubblicazione speciale che invia solo il conteggio dei commenti a cui siamo interessato (ad esempio il conteggio dei commenti dei post che possiamo attualmente vedere, attraverso query di aggregazione sul server).
 
-////
+Conviene considerare se la complessità del codice di tale pubblicazione non superi di peso le difficoltà create dalla denormalizzazione...
 
 <% end %>
 
-////
+Ovviamente, queste considerazioni sono specifiche per ogni applicazione: se state scrivendo del codice dove l'integrità dei dati è di primaria importanza, allora evitare l'inconsistenza dei dati è molto più importante e di priorità più elevata dei guadagni in performance.
 
 ### Embedding Documents or Using Multiple Collections
 
