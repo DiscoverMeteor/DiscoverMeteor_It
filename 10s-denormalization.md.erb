@@ -28,23 +28,23 @@ Conviene considerare se la complessità del codice di tale pubblicazione non sup
 
 Ovviamente, queste considerazioni sono specifiche per ogni applicazione: se state scrivendo del codice dove l'integrità dei dati è di primaria importanza, allora evitare l'inconsistenza dei dati è molto più importante e di priorità più elevata dei guadagni in performance.
 
-### Embedding Documents or Using Multiple Collections
+### Incorporare documenti o usare collezioni multiple
 
-////
+Se avete dell'esperienza con Mongo, potreste essere stupiti dal fatto che abbiamo creato una seconda collezione solo per i commenti: perchè non incorporare i commenti in una lista all'interno del documento del post?
 
-////
+Si deve al fatto che gli strumenti che Meteor ci fornisce funzionano molto meglio quando intervengono a livello di collezione. Per esempio:
 
-1. ////
-2. ////
-3. ////
-4. ////
+1. L'helper `{{#each}}` è molto efficiente quando si esegue un'iterazione su di un cursore (il risultato di `collection.find()`). Non si può dire lo stesso quando si esegue un'iterazione su un array di oggetti all'interno di un documento più grande.
+2. I metodi `allow` e `deny` operano a livello di documento, il che rende facile assicurarsi che ogni modifica a un singolo commento sia corretta in un modo che sarebbe più complesso se operassimo a livello di post.
+3. Il protocollo DDP opera al livello degli attributi di primo livello di un documento -- questo significa che se `comments` fosse un proprietà di `post`, ogni volta che un commento viene creato su un post, il server invierebbe l'intera lista lista dei commenti del post aggiornata a ogni client connesso.
+4. Le pubblicazioni e le sottoscrizioni sono molto più semplici da controllare a livello dei documenti. Per esempio, se volessimo paginare i commenti di un post, troveremmo difficile farlo se i commenti non fossero in una collezione separata.
 
-////
+Mongo suggerisce di incorporare i documenti per ridurre il numero di richieste dispendiose per recuperare i documenti. Tuttavia, questa non è una problematica quando teniamo conto dell'architettura di Meteor: il più delle volte stiamo interrogando i commenti sul *client*, dove l'accesso al database è praticamente nullo.
 
 <% note do %>
 
-### The Downsides of Denormalization
+### Gli aspetti negativi della denormalizzazione
 
-////
+C'è un interessante discussione sul quando *non dovreste* denormalizzare i dati. Per una buona lettura su questa tesi, raccomandiamo [Why You Should Never Use MongoDB](http://www.sarahmei.com/blog/2013/11/11/why-you-should-never-use-mongodb/) di Sarah Mei.
 
 <% end %>
