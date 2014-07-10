@@ -13,7 +13,7 @@ In questo capitolo, analizzeremo più nel dettaglio questo meccanismo, osservand
 
 Stiamo costruendo un'applicazione sociale di notizie, e la prima cosa che vogliamo fare è creare una lista di link che le persone hanno inserito. Chiameremo "post" ognuno di questi oggetti.
 
-Naturalmente, dovremo salvare questi posta da qualche parte. Meteor installa anche Mongo che viene eseguito sul vostro server e funge da base di dati *persistente*.
+Naturalmente, dovremo salvare questi posts da qualche parte. Meteor installa anche Mongo che viene eseguito sul vostro server e funge da base di dati *persistente*.
 
 Dunque, anche se il browser dell'utente può contenere alcune informazioni di stato (ad esempio la pagina corrente, o il commento che sta scrivendo in quel momento), il server, e più precisamente Mongo, contiene la sorgente di dati permanente canonica. *Canonica* significa che è la stessa per tutti gli utenti: ogni utente può essere su di una pagina diversa, ma la lista originale dei post è la stessa per tutti.
 
@@ -101,7 +101,7 @@ E, tanto che ci siamo, potete anche ottenere i log dell'applicazione scrivendo `
 
 <% end %>
 
-La sintassi di Mongo è familiare, visto che utilizza un'interfaccia JavaScript. Non faremo altre manipolazioni di dati dalla shell di Mongo, ma potremo ritornarci di tanto in tanto giusto per assicurarci di che dati ci sono dentro.
+La sintassi di Mongo è familiare, visto che utilizza un'interfaccia JavaScript. Non faremo altre manipolazioni di dati dalla shell di Mongo, ma potremo ritornarci di tanto in tanto giusto per assicurarci che i dati siano presenti.
 
 ### Collezioni Lato Client
 
