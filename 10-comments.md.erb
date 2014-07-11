@@ -105,8 +105,7 @@ Router.configure({
 
 <%= commit "10-1", "Aggiunta la commezione comments, publicazione/sottoscrizione, e dati di esempio." %>
 
-E' bene osservare che, perché il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database.
-Dopo aver eseguito il reset, non dimenticare di creare un nuovo utente ed effettuare di nuovo il login!
+E' bene osservare che, perché il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database. Dopo aver eseguito il reset, non dimenticare di creare un nuovo utente ed effettuare di nuovo il login!
 
 Prima di tutto, abbiamo creato un paio di (finti) utenti, li abbiamo inseriti nel database e abbiamo usato i loro `ids` per selezionarli dal database stesso subito dopo. Dopodichè, abbiamo aggiunto dei commenti al primo post, uno per ciascuno degli utenti, collegando il commento al post (con `postId`) e all'utente (con `userId`). Abbiamo anche aggiunto una data di inserimento e un testo per ciascun commento, insieme a un valore per `author`, un campo non normalizzato.
 
@@ -326,18 +325,31 @@ Non stiamo facendo nessun controllo particolare, solo verificando che l'utente s
 
 ### Ottimizzare la sottoscrizione Comments
 
-Allo stato attuale, Meteor manda tutti i commenti di tutti i post a tutti gli utenti collegati; ci sembra uno spreco, perché alla fin fine, ciascun utente usa solo una piccola parte di tutti questi dati (i commenti del post che sta visualizzando).
-Ottimizziamo la pubblicazione e la sottoscrizione così da controllare meglio quali commenti sono inviati.
+Allo stato attuale, Meteor manda tutti i commenti di tutti i post a tutti gli utenti collegati; ci sembra uno spreco, perché alla fin fine, ciascun utente usa solo una piccola parte di tutti questi dati (i commenti del post che sta visualizzando). Ottimizziamo la pubblicazione e la sottoscrizione così da controllare meglio quali commenti sono inviati.
 
 A pensarci bene, l'applicazione ha bisogno di sottoscrivere la pubblicazione `comments` solo quando un utente accede alla pagina che visualizza un post, e ha bisogno di caricare solo i commenti relativi a quel particolare post.
 
-Il primo passo sarà cambiare il modo in cui effettuiamo la sottoscrizione alla collezione comments. Finora, l'abbiamo effettuata a livello di _router_, il che significa che carichiamo tutti i dati quando il router viene inizializzato.
+Il primo passo sarà cambiare il modo in cui effettuiamo la sottoscrizione alla collezione comments. Finora, l'abbiamo effettuata a livello di *router*, il che significa che carichiamo tutti i dati quando il router viene inizializzato.
 
 Ma ora vogliamo che la nostra sottoscrizione dipenda dal particolare indirizzo della pagina che stiamo visualizzando, e tale indirizzo può ovviamente cambiare. Dunque dobbiamo spostare il codice che effettua la sottoscrizione dal livello di _router_ a quello di _route_.
 
-Questo ha un'altra conseguenza: invece di caricare tutti i dati quando inizializziamo l'applicazione per la prima volta, questi verranno caricati quando la particolare _route_ viene chiamata; questo significa che ora l'applicazione sarà più lenta in fase di navigazione (perché i dati vengono caricati man mano che servono), ma è inevitabile, a meno che non si vogliano precaricare **tutti** i dati all'avvio.
+Questo ha un'altra conseguenza: invece di caricare tutti i dati quando inizializziamo l'applicazione per la prima volta, questi verranno caricati quando la particolare *route* viene chiamata; questo significa che ora l'applicazione sarà più lenta in fase di navigazione (perché i dati vengono caricati man mano che servono), ma è inevitabile, a meno che non si vogliano precaricare **tutti** i dati all'avvio.
 
-Ecco com'é la funzione `waitOn` a livello di route:
+Prima di tutto, eviteremo di precaricare tutti i commenti all'interno del blocco `configure` rimuovendo `Meteor.subscribe('comments')`:
+
+~~~js
+Router.configure({
+  layoutTemplate: 'layout',
+  loadingTemplate: 'loading',
+  waitOn: function() { 
+    return Meteor.subscribe('posts');
+  }
+});
+~~~
+<%= caption "lib/router.js" %>
+<%= highlight "5" %>
+
+E aggiungeremo una nuova funzione `waitOn` a livello di route:
 
 ~~~js
 Router.map(function() {

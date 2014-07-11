@@ -20,11 +20,11 @@ Al momento stiamo ancora pubblicando tutti i post insieme, a tutti gli utenti co
 Prima di tutto, nei nostri dati di esempio, carichiamo abbastanza post perchè la paginazione abbia senso:
 
 ~~~js
-// Fixture data
+// Fixture data 
 if (Posts.find().count() === 0) {
 
   //...
-
+  
   Posts.insert({
     title: 'The Meteor Book',
     userId: tom._id,
@@ -33,7 +33,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 12 * 3600 * 1000,
     commentsCount: 0
   });
-
+  
   for (var i = 0; i < 10; i++) {
     Posts.insert({
       title: 'Test post #' + i,
@@ -73,7 +73,7 @@ Come prima cosa, fermiamo la sottoscrizione alla pubblicazione `posts` nel blocc
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() {
+  waitOn: function() { 
     return [Meteor.subscribe('notifications')]
   }
 });
@@ -86,7 +86,7 @@ Aggiugiamo un parametro `postsLimit` al percorso della route. Aggiungendo un `?`
 ~~~js
 Router.map(function() {
   //...
-
+  
   this.route('postsList', {
     path: '/:postsLimit?'
   });
@@ -104,11 +104,11 @@ E' ora di gestire il problema più complesso di sottoscrivere e trovare i dati c
 ~~~js
 Router.map(function() {
   //..
-
+  
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var postsLimit = parseInt(this.params.postsLimit) || 5;
+      var postsLimit = parseInt(this.params.postsLimit) || 5; 
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: postsLimit});
     }
   });
@@ -161,25 +161,25 @@ Questo significa che invece di essere implicitamente disponibile come `this` all
 
 ~~~js
 Router.map(function() {
+  //..
+
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var limit = parseInt(this.params.postsLimit) || 5;
+      var limit = parseInt(this.params.postsLimit) || 5; 
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit});
     },
     data: function() {
-      var limit = parseInt(this.params.postsLimit) || 5;
+      var limit = parseInt(this.params.postsLimit) || 5; 
       return {
         posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
       };
     }
   });
-
-  //..
 });
 ~~~
 <%= caption "lib/router.js" %>
-<%= highlight "8~13" %>
+<%= highlight "10~15" %>
 
 Ora che stiamo spostando il contesto dati al livello del router, possiamo con sicurezza eliminare l'helper del template `posts` all'interno del file `posts_list.js` e siccome abbiamo chiamato il contesto dati `posts` (come l'helper), non dobbiamo nemmeno toccare il template `postsList`!
 
@@ -189,7 +189,7 @@ Facciamo il punto della situazione. Il codice modificato di `router.js` dovrebbe
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() {
+  waitOn: function() { 
     return [Meteor.subscribe('notifications')]
   }
 });
@@ -200,11 +200,11 @@ Router.map(function() {
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var limit = parseInt(this.params.postsLimit) || 5;
+      var limit = parseInt(this.params.postsLimit) || 5; 
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit});
     },
     data: function() {
-      var limit = parseInt(this.params.postsLimit) || 5;
+      var limit = parseInt(this.params.postsLimit) || 5; 
       return {
         posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
       };
@@ -254,9 +254,9 @@ Introduciamo ora un nuovo aspetto dell'Iron Router, i *Controller delle Route*. 
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5,
-  limit: function() {
-    return parseInt(this.params.postsLimit) || this.increment;
+  increment: 5, 
+  limit: function() { 
+    return parseInt(this.params.postsLimit) || this.increment; 
   },
   findOptions: function() {
     return {sort: {submitted: -1}, limit: this.limit()};
@@ -301,9 +301,9 @@ Come prima, aggiungiamo la logica della paginazione nella nostra route. Ricordat
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5,
-  limit: function() {
-    return parseInt(this.params.postsLimit) || this.increment;
+  increment: 5, 
+  limit: function() { 
+    return parseInt(this.params.postsLimit) || this.increment; 
   },
   findOptions: function() {
     return {sort: {submitted: -1}, limit: this.limit()};
@@ -315,7 +315,7 @@ PostsListController = RouteController.extend({
     return Posts.find({}, this.findOptions());
   },
   data: function() {
-    var hasMore = this.posts().fetch().length === this.limit();
+    var hasMore = this.posts().count() === this.limit();
     var nextPath = this.route.path({postsLimit: this.limit() + this.increment});
     return {
       posts: this.posts(),
@@ -325,7 +325,7 @@ PostsListController = RouteController.extend({
 });
 ~~~
 <%= caption "lib/router.js" %>
-<%= highlight "16~23" %>
+<%= highlight "13~15,17~22" %>
 
 Diamo uno sguardo più approfondito a questa piccola magia del router. Ricordate che la route `postsList` (che eredita dal controller `PostsListController` su cui stiamo attualmente lavorando) accetta un parametro `postsLimit`.
 
@@ -353,7 +353,7 @@ Quel che rimane da fare è aggiungere il link "Carica di più" in fondo alla lis
     {{#each posts}}
       {{> postItem}}
     {{/each}}
-
+    
     {{#if nextPath}}
       <a class="load-more" href="{{nextPath}}">Load more</a>
     {{/if}}
@@ -388,9 +388,9 @@ Facciamo solo una modifica. Disabilitiamo `iron-router-progress` per la route `p
 
 ~~~js
 Router.map(function() {
-
+ 
   //...
-
+  
   this.route('postSubmit', {
     path: '/submit',
     disableProgress: true
@@ -426,13 +426,13 @@ Meteor.publish('singlePost', function(id) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-OOra, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottoscrivendo alla ppubblicazione `comments` nella funzion `waitOn` della route `postPage`, così possiamo semplicemente aaggiungere qui la sottoscrizione. Non dimentichiamo di aggiungere la sottoscrizione anche alla route `postEdit` dato che necessita degli stessi dati:
+Ora, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottoscrivendo alla ppubblicazione `comments` nella funzion `waitOn` della route `postPage`, così possiamo semplicemente aaggiungere qui la sottoscrizione. Non dimentichiamo di aggiungere la sottoscrizione anche alla route `postEdit` dato che necessita degli stessi dati:
 
 ~~~js
 Router.map(function() {
 
   //...
-
+    
   this.route('postPage', {
     path: '/posts/:_id',
     waitOn: function() {
@@ -446,12 +446,12 @@ Router.map(function() {
 
   this.route('postEdit', {
     path: '/posts/:_id/edit',
-    waitOn: function() {
+    waitOn: function() { 
       return Meteor.subscribe('singlePost', this.params._id);
     },
-    data: function() { return Posts.findOne(this.params._id); }
+    data: function() { return Posts.findOne(this.params._id); }    
   });
-
+  
   /...
 
 });

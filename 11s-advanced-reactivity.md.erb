@@ -78,27 +78,7 @@ Meteor.setInterval(function() {
 
 Quello che abbiamo fatto è impostare una dipendenza `_currentLikeCountListeners`, che tiene traccia di tutte le computation nelle quali `currentLikeCount()` è stato usato. Quando il valore `_currentLikeCount` cambia, chiamiamo la funzione `changed()` su tale dipendenza, che invalida tutte le computation tracciate. 
 
-Queste computation possono quindi andare avanti e gestire il cambiamento, caso per caso. Nel caso di una computation di un template, significa che il template ridisegna se stesso.
-
-### Computation del Template e controllo del ridisegno
-
-Il motivo per cui ogni template ha la sua computation è per controllare quante volte viene ridisegnato sullo schermo. 
-
-Quando chiamiamo un template all'interno di un altro, stiamo impostando una seconda computation all'interno della prima. Così, quando i dati reattivi utilizzati al template interno cambiano, solo quel template interno viene ridisegnato e il template esterno rimane invariato. In questo modo, le computation vengono utilizzate per controllare il contesto dei cambiamenti reattivi. 
-
-Meteor ci dà anche un po' di aiuto in più per aumentare i meccanismi di base per nidificare i template.
-
-In primo luogo, il `{{# costante}}` blocco helper * uccide * reattività in sé. Quindi, tutti i dati che si raccoglie dal aiutanti all'interno del blocco è sempre e solo usato una volta. E anche se il modello che contiene viene ridisegnato, il codice HTML della zona costante rimane invariato in quanto renderebbe di nuovo nello stesso modo. Questo rende regioni costanti un ottimo modo per gestire i widget di terze parti che non si aspettano Meteor di ri-disegnare la DOM da sotto di loro. 
-
-La seconda caratteristica che ci può aiutare a controllare la reattività è la `{{# isolare}}` blocco helper, che istituisce un * nuovo * calcolo all'interno di un modello. In altre parole, si ha lo stesso effetto di movimento che la sezione di template in un sub-modello in termini di reattività e ridisegno. 
-
-Quindi, se una delle fonti di dati reattive all'interno del blocco modifiche isolare la zona isolata si ri-draw, ma il resto del modello contenente non. Se il modello contenente ri-disegna tuttavia, il luogo isolato ridisegna pure.
-
-In primo luogo, l'helper `{{# costant}}` *uccide* reattività in sé. Quindi, tutti i dati che si raccoglie dall'helper all'interno del blocco sono sempre e solo usati una volta. E anche se il template  che lo contiene viene ridisegnato, il codice HTML della area costante rimane invariato in quanto renderizzerebbe di nuovo nello stesso modo. Questo rende regioni costanti un ottimo modo per gestire i widget di terze parti che non si aspettano che Meteor ridisegni il DOM sotto di loro. 
-
-La seconda caratteristica che ci può aiutare a controllare la reattività è l'helper `{{# isolate}}`, che istituisce una *nuova* computation all'interno di un template. In altre parole, ha lo stesso effetto di muovere la sezione di template in un sub-template in termini di reattività e ridisegno. 
-
-Quindi, se una delle fonti di dati reattive all'interno del blocco cambia, l'area isolata si ridisegnerà, ma non il resto del template contenente. Tuttavia se il template che lo contiene viene ridisegnato, anche l'area isolata verrà anche ridisegnata.
+Queste computation possono quindi andare avanti e gestire il cambiamento, caso per caso.
 
 ### Comparare Deps ad Angular
 

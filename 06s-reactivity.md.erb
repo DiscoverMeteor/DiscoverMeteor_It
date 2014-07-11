@@ -92,10 +92,14 @@ Le computation generalmente sono scritte in modo da rieseguire il proprio conten
 Ora che conosciamo la teoria alla base delle computation, scriverne una sembrerà incredibilmente semplice. Usiamo semplicemente la funzione `Deps.autorun` per racchiudere un blocco di codice e renderlo reattivo, creando una computation:
 
 ~~~js
-Deps.autorun(function() {
-  console.log('There are ' + Posts.find().count() + ' posts');
+Meteor.startup(function() {
+  Deps.autorun(function() {
+    console.log('There are ' + Posts.find().count() + ' posts');
+  });
 });
 ~~~
+
+Notiamo che bisogna racchiudere il blocco `Deps` all'interno di un blocco `Meteor.startup()` in modo da assicurarci che venga eseguito solo dopo che Meteor ha finito di caricare la collezione `Posts`. 
 
 Dietro le quinte `autorun` crea una computation, e si preoccupa di rieseguirla ogni volta che cambia la sorgente dati collegata. Abbiamo scritto una computation che semplicemente scrive nella console il numero di post. Poichè `Posts.find()` è una sorgente dati reattiva, si preoccuperà di informare la computation che è necessaria una riesecuzione ogni volta che il numero di post cambia.
 

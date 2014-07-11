@@ -94,7 +94,7 @@ $ rm client/views/includes/errors.js
 Dobbiamo fare qualche piccola modifica per utilizzare correttamente l'API:
 
 ~~~js
-Router.before(function() { Errors.clearSeen(); });
+Router.onBeforeAction(function() { Errors.clearSeen(); });
 ~~~
 <%= caption "lib/router.js" %>
 
@@ -146,9 +146,7 @@ Tinytest.addAsync("Errors template works", function(test, done) {
   test.equal(Errors.collection.find({seen: false}).count(), 1);
   
   // render the template
-  OnscreenDiv(Spark.render(function() {
-    return Template.meteorErrors();
-  }));
+  UI.insert(UI.render(Template.meteorErrors), document.body);
   
   // wait a few milliseconds
   Meteor.setTimeout(function() {

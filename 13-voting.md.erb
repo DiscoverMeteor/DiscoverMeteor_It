@@ -270,7 +270,7 @@ La classe viene cambiata da `.upvote` a `.upvotable`, quindi è opportuno non tr
 Ora, si può notare che i post con un singolo voto sono etichettati come "1 vote__s__", vediamo quindi come formattare il plurale (in Inglese) in modo appropriato. Mettere in forma plurale può essere un processo complicato, ma per adesso verrà affrontato in modo semplicistico. Si implementerà una funzione Handlebars generica, che può essere riutilizzata altrove.
 
 ~~~js
-Handlebars.registerHelper('pluralize', function(n, thing) {
+UI.registerHelper('pluralize', function(n, thing) {
   // fairly stupid pluralizer
   if (n === 1) {
     return '1 ' + thing;
@@ -279,7 +279,7 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
   }
 });
 ~~~
-<%= caption "client/helpers/handlebars.js" %>
+<%= caption "client/helpers/Spacebars.js" %>
 
 Le funzioni che sono state create sono legate ai relativi manager e template. Ma utilizzando `Handlebars.registerHelper` viene creata una funzione di supporto _globale_ che può essere utilizzata in qualunque template:
 
@@ -397,7 +397,7 @@ PostsListController = RouteController.extend({
     return Posts.find({}, this.findOptions());
   },
   data: function() {
-    var hasMore = this.posts().fetch().length === this.limit();
+    var hasMore = this.posts().count() === this.limit();
     return {
       posts: this.posts(),
       nextPath: hasMore ? this.nextPath() : null
@@ -438,13 +438,23 @@ Router.map(function() {
 });
 ~~~
 <%= caption "lib/router.js" %>
-<%= highlight "8,16,21~34,36~49" %>
+<%= highlight "8,20,25~37,40~53" %>
 
 Da notare che avendo adesso più di una route, la logica dietro `nextPath` è stata spostata da `PostsListController` a `NewPostsListController` `BestPostsListController`, poiché il percorso sarà diverso in entrambi i casi.
 
 Inoltre, quando si ordina per `votes` si ha un parametro di ordinamento aggiuntivo per timestamp di submit, per assicurare che l'ordinamento sia corretto.
 
-Verranno anche aggiunti i link all'header:
+Dopo aver introdotto i nuovi controller, possiamo ora rimuovere senza problemi la *route* `postsList` precedentemente definita. Cancelliamo qunidi il seguente codice:
+
+```
+ this.route('postsList', {
+  path: '/:postsLimit?',
+  controller: PostsListController
+ })
+```
+<%= caption "lib/router.js" %>
+
+Aggiungeremo anche i collegamenti nell'intestazione:
 
 ~~~html
 <template name="header">
@@ -474,15 +484,32 @@ Verranno anche aggiunti i link all'header:
           {{/if}}
         </ul>
         <ul class="nav pull-right">
-          <li>{{loginButtons}}</li>
+          <li>{{> loginButtons}}</li>
         </ul>
       </div>
     </div>
   </header>
 </template>
 ~~~
-<%= caption "client/views/include/header.html" %>
-<%= highlight "9, 15~21" %>
+<%= caption "client/views/includes/header.html" %>
+<%= highlight "9, 12~17" %>
+
+Dobbiamo anche aggiornare il gestore dell'evento di cancellazione dei post:
+
+~~~html
+  'click .delete': function(e) {
+    e.preventDefault();
+    
+    if (confirm("Delete this post?")) {
+      var currentPostId = this._id;
+      Posts.remove(currentPostId);
+      Router.go('home');
+    }
+  }
+~~~
+<%= caption "client/views/posts_edit.js" %>
+<%= highlight "7" %>
+
 
 Fatto ciò, si ottiene la lista dei migliori post:
 
@@ -524,7 +551,7 @@ La ragione per cui si vuole supportare più route è che sia `home` che `newPost
           {{/if}}
         </ul>
         <ul class="nav pull-right">
-          <li>{{loginButtons}}</li>
+          <li>{{> loginButtons}}</li>
         </ul>
       </div>
     </div>

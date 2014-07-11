@@ -48,13 +48,13 @@ Gli errori verranno mostrati al di sopra del layout principale:
     {{> header}}
     {{> errors}}
     <div id="main" class="row-fluid">
-      {{yield}}
+      {{> yield}}
     </div>
   </div>
 </template>
 ~~~
 <%= caption "client/views/application/layout.html" %>
-<%= highlight "7" %>
+<%= highlight "4" %>
 
 Si creino ora i template `errors` e `error` nel file `errors.html`:
 
@@ -171,8 +171,8 @@ Ripuliamo ora gli errori nel router in modo che navigando su un'altra pagina que
 ~~~js
 // ...
 
-Router.before(requireLogin, {only: 'postSubmit'})
-Router.before(function() { clearErrors() });
+Router.onBeforeAction(requireLogin, {only: 'postSubmit'})
+Router.onBeforeAction(function() { clearErrors() });
 ~~~
 <%= caption "lib/router.js" %>
 <%= highlight "4" %>
