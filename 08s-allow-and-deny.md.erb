@@ -28,7 +28,7 @@ In altre parole, Meteor si muove nella lista di callback partendo da quelle di t
 
 Un esempio pratico di questo schema è quello di avere due callback `allow()`, una che controlla se un post appartiene all'utente corrente e una seconda che controlla se questo utente ha i diritti di amministrazione. Se l'utente è un amministratore potrà sicuramente modificare ogni post, dato che almeno una delle callback ritornerà true.
 
-### Compensazione di latenza
+### Compensazione dela latenza
 
 Ricordate che i Metodi che modificano il database (come `.update()`) hanno compensazione di latenza, proprio come ogni altro Metodo. Per esempio, se provate ad eliminare un post di cui non avete i permessi attraverso la console del browser, vedrete il post sparire brevemente nel momento in cui viene cancellato nella collezione locale, ma poi lo vedrete riapparire quando il server informa che il documento non è stato cancellato.
 

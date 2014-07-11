@@ -32,7 +32,7 @@ Si noti che Iron Router è un pacchetto di terze parti, quindi serve Meteorite p
 
 <% note do %>
 
-### Vocabolario Router
+### Vocabolario del Router
 
 In questo capitolo vedremo molte caratteristiche del router. Se hai già esperienza con un framework tipo Rails, hai già familiarità con la maggior parte di questi concetti. Se no, ecco un veloce glossario per farti imparare rapidamente:
 
@@ -49,7 +49,7 @@ Per altre informazioni su Iron Router, consulta [la documentazione completa su G
 
 <% end %>
 
-### Routing: Mappare gli URL sui Template
+### Routing: Associare gli URL ai Template
 
 Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto.
 
@@ -173,6 +173,8 @@ Inoltre poiché lasciamo che sia il router a gestire la sottoscrizione, la puoi 
 
 Normalmente è una buona idea attendere il caricamento della sottoscrizione, non solo per l'esperienza d'uso, ma anche perché ti permette di contare sulla disponibilità dei dati all'interno del template. Così facendo infatti non dobbiamo più gestire la situazione in cui un template viene mostrato prima che i dati contenuti siano disponibili, con tutti i problemi che ne conseguono.
 
+Aggiungeremo anche un filtro `onBeforeAction` per triggherare la funzionalità 'loading', predefinita in Iron Router, ed assicurarci di mostrare il template di caricamento mentre attendiamo. 
+
 L'ultimo pezzo del puzzle è il template di caricamento vero e proprio. Useremo il pacchetto `spin` per creare una simpatica animazione di attesa caricamento. Aggiungilo con `mrt add spin` e poi crea il template di caricamento così:
 
 ~~~html
@@ -182,7 +184,7 @@ L'ultimo pezzo del puzzle è il template di caricamento vero e proprio. Useremo 
 ~~~
 <%= caption "client/views/includes/loading.html" %>
 
-Nota che `{{spinner}}` è un parziale contenuto nel pacchetto `spin`. Sebbene questo parziale arrivi "dall'esterno" dell'applicazione, possiamo includerlo come qualsiasi altro template.
+Nota che `{{>spinner}}` è un parziale contenuto nel pacchetto `spin`. Sebbene questo parziale arrivi "dall'esterno" dell'applicazione, possiamo includerlo come qualsiasi altro template.
 
 <%= commit "5-2", "Wait on the post subscription." %>
 
@@ -220,7 +222,7 @@ Creiamo poi un'altra route a cui assegniamo un nome, questa volta mappando il pa
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-
+  
   this.route('postPage', {
     path: '/posts/:_id'
   });
@@ -245,7 +247,7 @@ Nel nostro caso possiamo ottenere il giusto contesto dati cercando il nostro pos
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-
+  
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }
@@ -274,7 +276,7 @@ Normalmente lo si imposta implicitamente con l'iteratore `{{each}}`, che imposta
 {{/each}}
 ~~~
 
-Ma possiamo anche impostarlo esplicitamente usando `{{with}}`, che dice semplicemente: "considera questo oggetto e applicalo al seguente template". Ad esempio possiamo scrivere:
+Ma possiamo anche impostarlo esplicitamente usando `{{#with}}`, che dice semplicemente: "considera questo oggetto e applicalo al seguente template". Ad esempio possiamo scrivere:
 
 ~~~html
 {{#with myWidget}}

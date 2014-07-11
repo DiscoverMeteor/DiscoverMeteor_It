@@ -196,7 +196,7 @@ Template.postItem.events({
 <%= caption "/client/views/posts/post_item.js" %>
 <%= highlight "5~27" %>
 
-<%= commit "14-1", "Aggiunta animazione di riordinamento dei messaggi." %>
+<%= commit "14-1", "Added post reordering animation." %>
 
 Seguire non dovrebbe essere troppo difficile se fai riferimento al diagramma precedente.
 
@@ -254,9 +254,9 @@ Template.postItem.events({
 });
 ~~~
 <%= caption "/client/views/posts/post_item.js" %>
-<%= highlight "19~22,28" %>
+<%= highlight "8~10" %>
 
-<%= commit "14-2", "Fai apparire gradualmente gli elementi quando vengono disegnati." %>
+<%= commit "14-2", "Fade items in when they are drawn." %>
 
 Nota che la `removeClass("invisible")` che abbiamo aggiunto nella funzione `defer()` verrà eseguita ad ogni rendering. Ma farà qualcosa solamente se la classe `.invisible` è presente sull'elemento, il che è vero solamente la prima volta che è renderizzato.
 

@@ -57,10 +57,10 @@ Meteor.methods({
 
     // create the comment, save the id
     comment._id = Comments.insert(comment);
-
+    
     // now create a notification, informing the user that there's been a comment
     createCommentNotification(comment);
-
+    
     return comment._id;
   }
 });
@@ -91,7 +91,7 @@ Router.configure({
 <%= caption "lib/router.js" %>
 <%= highlight "5" %>
 
-<%= commit "11-1", "Aggiunta una collection base per le notifiche." %>
+<%= commit "11-1", "Added basic notifications collection." %>
 
 ### Visualizzare le notifiche
 
@@ -111,7 +111,7 @@ Ora possiamo andare avanti e aggiungere una lista di notifiche nell' header.
         <ul class="nav">
           {{#if currentUser}}
             <li>
-              <a href="{{pathFor 'postSubmit'}}">Invia Post</a>
+              <a href="{{pathFor 'postSubmit'}}">Submit Post</a>
             </li>
             <li class="dropdown">
               {{> notifications}}
@@ -189,7 +189,7 @@ Template.notification.events({
 ~~~
 <%= caption "client/views/notifications/notifications.js" %>
 
-<%= commit "11-2", "Visualizza le notifiche nel header." %>
+<%= commit "11-2", "Display notifications in the header." %>
 
 Si può pensare che le notifiche siano non troppo differenti dagli errori, ed è vero la loro struttura è molto simile. C'é solo una differenza importante: abbiamo creato una classica collezione sincronizzata client-server. Questo significa che le nostre notifiche sono *persistenti* e, fin quando usiamo lo stesso account utente, esisteranno ricaricamento della pagina e su differenti dispositivi.
 
@@ -226,7 +226,7 @@ Meteor.publish('notifications', function() {
 ~~~
 <%= caption "server/publications.js" %>
 
-<%= commit "11-3", "Sincronizza solo le notifiche che sono rilevanti per l'utente." %>
+<%= commit "11-3", "Only sync notifications that are relevant to the user." %>
 
 Ora se controlliamo le nostre due finestre del browser, dovremmo vedere due diverse collezioni per le notifiche:
 

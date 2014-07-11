@@ -116,14 +116,14 @@ Meteor.publish('topComments', function(topPostIds) {
 ~~~js
 Meteor.publish('topPosts', function(limit) {
   var sub = this, commentHandles = [], postHandle = null;
-
+  
   // send over the top two comments attached to a single post
   function publishPostComments(postId) {
     var commentsCursor = Comments.find({postId: postId}, {limit: 2});
-    commentHandles[post._id] =
+    commentHandles[post._id] = 
       Meteor.Collection._publishCursor(commentsCursor, sub, 'comments');
   }
-
+    
   postHandle = Posts.find({}, {limit: limit}).observeChanges({
     added: function(id, post) {
       publishPostComments(post._id);
@@ -139,9 +139,9 @@ Meteor.publish('topPosts', function(limit) {
       sub.removed('posts', id);
     }
   });
-
+  
   sub.ready();
-
+  
   // make sure we clean everything up (note `_publishCursor`
   //   does this for us with the comment observers)
   sub.onStop(function() { postsHandle.stop(); });
@@ -171,10 +171,10 @@ Meteor.publish('topPosts', function(limit) {
 ~~~js
   Meteor.publish('videos', function() {
     var sub = this;
-
+    
     var videosCursor = Resources.find({type: 'video'});
     Meteor.Collection._publishCursor(videosCursor, sub, 'videos');
-
+    
     // _publishCursor doesn't call this for us in case we do this more than once.
     sub.ready();
   });

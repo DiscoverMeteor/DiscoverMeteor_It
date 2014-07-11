@@ -34,21 +34,9 @@ Fare il deploy sul server di Meteor è piuttosto semplice. Aprite semplicemente 
 $ meteor deploy myapp.meteor.com
 ~~~
 
-Ovviamente dovrete sostituire "myapp" con un nome di vostra scelta e preferibilmente con uno che non sia già in uso. Nel caso il nome scelto sia già in uso, Meteor potrebbe chiedervi una password. Se capita, annullate semplicemente l'operazione con `ctrl+c` e provate nuovamente con un nome diverso. 
+Ovviamente dovrete sostituire "myapp" con un nome di vostra scelta e preferibilmente con uno che non sia già in uso. Se è la prima volta che fate il deploy di un'app, vi sarà chiesto di creare un account Meteor. Se tutto va a buon fine, dopo alcuni secondi potrete accedere alla vostra applicazione all'indirizzo `http://myapp.meteor.com`.
 
-Se tutto va a buon fine, dopo alcuni secondi potrete accedere alla vostra applicazione all'indirizzo `http://myapp.meteor.com`.
-
-### Protezione con Password
-
-Per i sotto-domini di Meteor, di default, non ci sono restrizioni. Chiunque può utilizzare un nome di dominio di sua scelta, sovrascrivendo anche applicazioni esistenti. Probabilmente vorrete quindi proteggere il vostro nome di dominio con l'opzione `-p`, come mostrato qui:
-
-~~~~bash
-$ meteor deploy myapp.meteor.com -p
-~~~~
-
-Meteor vi chiederà poi di impostare una password, e da quel momento in poi la password inserita sarà richiesta ogni volta che farete il deploy su questa applicazione. 
-
-Per avere maggiori informazioni riguardo cose come l'accesso diretto al database della vostra istanza in produzione, o per configurare un dominio personalizzato per la vostra applicazione, potete far riferimento alla [documentazione ufficiale](http://docs.meteor.com/#deploying). 
+Potete far riferimento alla [documentazione ufficiale](http://docs.meteor.com/#deploying) per avere maggiori informazioni rguardo a cose come accedere direttamente al database dell'istanza della vostra applicazione o su come configurare un dominio personalizzato. 
 
 ### Fare il Deploy Su Modulus
 

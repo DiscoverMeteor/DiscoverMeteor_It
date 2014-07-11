@@ -146,11 +146,11 @@ Dovremmo anche aggiungere dei links di modifica ai nostri messaggi, così che gl
     <div class="post-content">
       <h3><a href="{{url}}">{{title}}</a><span>{{domain}}</span></h3>
       <p>
-        inviato da {{author}}
-        {{#if ownPost}}<a href="{{pathFor 'postEdit'}}">Modifica</a>{{/if}}
+        submitted by {{author}}
+        {{#if ownPost}}<a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
       </p>
     </div>
-    <a href="{{pathFor 'postPage'}}" class="discuss btn">Discuti</a>
+    <a href="{{pathFor 'postPage'}}" class="discuss btn">Discuss</a>
   </div>
 </template>
 ~~~
@@ -176,7 +176,7 @@ Template.postItem.helpers({
 
 <%= screenshot "8-1", "Form di modifica messaggio." %>
 
-<%= commit "8-1", "Aggiunti i form di modifica messaggi." %>
+<%= commit "8-1", "Added edit posts form." %>
 
 Il nostro form di modifica sembra buono, ma in realtà non si può modificare niente. Che sta succedendo? 
 
@@ -212,7 +212,7 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "3~6" %>
 
-<%= commit "8-2", "Aggiunti dei permessi base per controllare il proprietario di un messaggio." %>
+<%= commit "8-2", "Added basic permission to check the post's owner." %>
 
 ### Limitare le modifiche
 
@@ -238,7 +238,7 @@ Posts.deny({
 <%= caption "collections/posts.js" %>
 <%= highlight "8~13" %>
 
-<%= commit "8-3", "Permetti di cambiare solamente certi campi." %>
+<%= commit "8-3", "Only allow changing certain fields of posts." %>
 
 Stiamo parlando dell'array `fieldNames` che contiene una lista dei campi modificati, e usando il metodo `without()` di [Underscore](http://underscorejs.org/) per ritornare un sotto-array contenente i campi che *non* sono `url` oppure `title`.
 

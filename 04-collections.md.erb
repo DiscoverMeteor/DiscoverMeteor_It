@@ -205,13 +205,13 @@ if (Posts.find().count() === 0) {
     author: 'Sacha Greif',
     url: 'http://sachagreif.com/introducing-telescope/'
   });
-
+  
   Posts.insert({
     title: 'Meteor',
     author: 'Tom Coleman',
     url: 'http://meteor.com'
   });
-
+  
   Posts.insert({
     title: 'The Meteor Book',
     author: 'Tom Coleman',
@@ -264,7 +264,7 @@ All'interno di un applicazione, Meteor è abbastanza intelligente da sapere come
 
 Ora, anziché caricare una lista di post come un vettore statico, restituiamo un cursore al nostro helper `posts`. Questo cosa comporta? Se torniamo al browser vediamo:
 
-<%= screenshot "4-3", "Using live data" %>
+<%= screenshot "4-3", "Utilizzare dati dinamici" %>
 
 Possiamo quindi vedere chiaramente che il nostro helper `{{#each}}` ha iterato su tutti i `Posts` e li ha visualizzati sullo schermo. La collezione lato server server ha caricato i post da Mongo, li ha passati attraverso la connessione alla collezione lato client e l'helper di handlebars li ha passati al template.
 
@@ -272,12 +272,12 @@ Ora facciamo un passo in più; aggiungiamo un altro post da console:
 
 ~~~js
 ❯ Posts.insert({
-  title: 'Meteor Docs',
-  author: 'Tom Coleman',
+  title: 'Meteor Docs', 
+  author: 'Tom Coleman', 
   url: 'http://docs.meteor.com'
 });
 ~~~
-<%= caption "Browser console" %>
+<%= caption "La console del Browser" %>
 
 Guardiamo di nuovo il browser -- dovremmo vedere quanto segue:
 

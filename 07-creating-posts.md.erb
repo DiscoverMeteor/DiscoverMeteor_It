@@ -69,7 +69,7 @@ Adesso, avendo definito quel percorso, possiamo aggiungere un link nella nostra 
 </template>
 ~~~
 <%= caption "client/views/includes/header.html" %>
-<%= highlight "11~16" %>
+<%= highlight "11~13" %>
 
 Impostare il nostro percorso significa che se l'utente accedesse alla URL '/submit', Meteor mostrera' il template 'postSubmit'. Quindi scriviamo quel template:
 
@@ -168,7 +168,7 @@ Posts = new Meteor.Collection('posts');
 
 Posts.allow({
   insert: function(userId, doc) {
-    // consenti di postare solo se connesso
+    // only allow posting if you are logged in
     return !! userId;
   }
 });
@@ -364,22 +364,22 @@ Meteor.methods({
     var user = Meteor.user(),
       postWithSameLink = Posts.findOne({url: postAttributes.url});
     
-    // Assicurarsi che l'utente sia connesso
+    // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to post new stories");
     
-    // Assicurarsi che il post abbia un titolo
+    // ensure the post has a title
     if (!postAttributes.title)
       throw new Meteor.Error(422, 'Please fill in a headline');
     
-    // Controllare che non ci siano precedenti post con lo stesso link
+    // check that there are no previous posts with the same link
     if (postAttributes.url && postWithSameLink) {
       throw new Meteor.Error(302, 
         'This link has already been posted', 
         postWithSameLink._id);
     }
     
-    // Scegliere le whitelisted keys
+    // pick out the whitelisted keys
     var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
       userId: user._id, 
       author: user.username, 

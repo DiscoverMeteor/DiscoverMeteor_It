@@ -109,18 +109,18 @@ In aggiunta, se ritorna un errore `302` (che significa che esiste già un post c
 Template.postSubmit.events({
   'submit form': function(e) {
     e.preventDefault();
-
+    
     var post = {
       url: $(e.target).find('[name=url]').val(),
       title: $(e.target).find('[name=title]').val(),
       message: $(e.target).find('[name=message]').val()
     }
-
+    
     Meteor.call('post', post, function(error, id) {
       if (error) {
         // display the error to the user
         throwError(error.reason);
-
+        
         if (error.error === 302)
           Router.go('postPage', {_id: error.details})
       } else {
@@ -141,15 +141,13 @@ Facciamo una prova: creiamo un post inserendo come URL `http://meteor.com`. Dato
 
 ### Rimuovere gli errori
 
-Se avete provato a cliccare sul bottone di chiusura dell'errore, avete visto l'errore sparire per poi ritornare visibile appena caricate un'altra pagina. Cosa sta succedendo?
+Se avete provato a cliccare sul bottone di chiusura dell'errore, avrete visto l'errore sparire perchè il bottone di chiusura scatena l'evento JavaScript di Twitter Bootstrap.
 
-Il bottone di chiusura scatena l'evento JavaScript di Twitter Bootstrap: non ha nulla a che fare con Meteor! Quello che sta accadendo è che Bootstrap rimuove il `<div>` dell'errore dal DOM, ma non dalla collezione di Meteor. Ciò significa che l'errore tornerà visibile nel momento in cui Meteor renderizza di nuovo la pagina.
+Quello che succede è che Bootstrap rimuove l'elemento `<div>` dell'errore dal DOM, ma non rimuove l'oggetto dell'errore dalla collezione di Meteor. Facciamo quindi in modo di ripulire la nostra collezione locale dopo che il messaggio di errore ha fatto il suo lavoro.
 
-A meno che non si voglia che gli errori tornino senza sosta dall'aldilà per continuare a ricordare agli utenti i loro errori passati portandoli lentamente alla follia, è meglio aggiungere un modo per rimuoverli dalla collezione.
+Come prima cosa, modificheremo la funzione `throwError` per includere una proprietà `seen` (visto). Questo ci aiuterà in seguito a tenere traccia del fatto che un errore sia stato visto o meno da un utente.
 
-Come prima cosa, si modifica la funzione `throwError` per includere una proprietà `seen` (visto). Questo ci aiuterà in seguito a tenere traccia del fatto che un errore sia stato visto o meno da un utente.
-
-Una volta fatto, si può scrivere una semplice funzione `clearErrors` che rimuove gli errori "visti":
+Una volta fatto, si può scrivere una semplice funzione `clearErrors` che rimuova gli errori "visualizzati":
 
 ~~~js
 // Local (client-only) collection
@@ -209,13 +207,3 @@ Template.error.rendered = function() {
 La callback `rendered` viene chiamata quando i template è renderizzato nel browser. Dentro la callback, `this` si riferisce all'istanza corrente del template, e `this.data` permette di accedere ai dati dell'oggetto che è al momento renderizzato (in questo caso, un errore).
 
 Wow! Abbiamo fatto un sacco di lavoro per qualcosa che si spera gli utenti non vedano mai!
-
-<% note do %>
-
-### La callbak `rendered`
-
-La callback `rendered` di un template si scatena ogni volta questo viene renderizzato nel browser. Questo avviene ovviamente la prima volta che viene visualizzato ma è importante ricordare che viene eseguita ogni volta che il template viene renderizzato di nuovo, ad esempio ogni volta qualcuno dei suoi dati cambia.
-
-Le callback di renderizzazione vengono normalmente eseguite almeno due volte: la prima quando l'applicazione viene caricata e la seconda quando vengono caricati i dati della collezione. Bisogna stare quindi molto attenti a non inserire del codice che non deve essere eseguito due volte (come un alert, o un codice di tracciamenti di analytics).
-
-<% end %>

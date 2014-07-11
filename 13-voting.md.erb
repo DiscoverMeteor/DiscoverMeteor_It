@@ -32,11 +32,11 @@ Da notare che se si volesse limitare l'accesso ad alcune di queste informazioni,
 Inoltre, il totale dei voti per ciascun post sarà denormalizzato, al fine di ottenere in maniera semplice tale contatore. Verranno quindi aggiunti due attributi ai post, `upvoters` e `votes`. Per cominciare, i suddetti campi verranno aggiunti ai dati di esempio:
 
 ~~~js
-// Dati di esempio 
+// Fixture data 
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
   
-  // crea 2 utenti
+  // create two users
   var tomId = Meteor.users.insert({
     profile: { name: 'Tom Coleman' }
   });
@@ -113,14 +113,14 @@ Al solito, fermare l'applicazione, eseguire `meteor reset`, riavviare l'app, qui
 ~~~js
 //...
 
-// verifica che non ci siano post precedenti con lo stesso link
+// check that there are no previous posts with the same link
 if (postAttributes.url && postWithSameLink) {
   throw new Meteor.Error(302, 
     'This link has already been posted', 
     postWithSameLink._id);
 }
 
-// reperisce le chiavi abilitate
+// pick out the whitelisted keys
 var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
   userId: user._id, 
   author: user.username, 
@@ -190,7 +190,7 @@ Meteor.methods({
   
   upvote: function(postId) {
     var user = Meteor.user();
-    // verifica che l'utente sia loggato
+    // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to upvote");
     
@@ -211,7 +211,7 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "6~23" %>
 
-<%= commit "13-1", "Aggiunto semplice algoritmo per votazione." %>
+<%= commit "13-1", "Added basic upvoting algorithm." %>
 
 Questo methodo è sufficientemente autoesplicativo. Si eseguono alcuni controlli preventivi per assicurarsi che l'utente sia loggato e che il post esista. Quindi si controlla che l'utente non abbia già espresso il suo voto per il post, quindi si incrementa il contatore dei voti e si aggiunge l'utente alla lista dei votanti.
 
@@ -265,7 +265,7 @@ La classe viene cambiata da `.upvote` a `.upvotable`, quindi è opportuno non tr
 
 <%= screenshot "13-2", "Disabilitazione del pulsante per la votazione." %>
 
-<%= commit "13-2", "Link in grigio se non autenticato o già votato." %>
+<%= commit "13-2", "Grey out upvote link when not logged in / already voted." %>
 
 Ora, si può notare che i post con un singolo voto sono etichettati come "1 vote__s__", vediamo quindi come formattare il plurale (in Inglese) in modo appropriato. Mettere in forma plurale può essere un processo complicato, ma per adesso verrà affrontato in modo semplicistico. Si implementerà una funzione Handlebars generica, che può essere riutilizzata altrove.
 
@@ -300,7 +300,7 @@ Le funzioni che sono state create sono legate ai relativi manager e template. Ma
 
 <%= screenshot "13-3", "Perfezionamento della forma plurale" %>
 
-<%= commit "13-3", "Aggiunta funzione per formattare il testo in forma plurale." %>
+<%= commit "13-3", "Added pluralize helper to format text better." %>
 
 Adesso si dovrebbe vedere `1 vote`.
 
@@ -324,7 +324,7 @@ Meteor.methods({
   
   upvote: function(postId) {
     var user = Meteor.user();
-    // verifica che l'utente sia loggato
+    // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to upvote");
     
@@ -341,7 +341,7 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "12~15" %>
 
-<%= commit "13-4", "Algoritmo di votazione migliorato." %>
+<%= commit "13-4", "Better upvoting algorithm." %>
 
 Il codice si traduce in: "trova tutti i post con questo `id` per cui l'utente non ha ancora votato, e aggiornali in questo modo". Se l'utente _non_ ha ancora votato, il post con quell'`id` sarà ovviamente trovato. D'altro canto, se l'utente ha *già* votato, allora la ricerca non produrrà alcun risultato, e di conseguenza non succederà niente.
 
@@ -515,7 +515,7 @@ Fatto ciò, si ottiene la lista dei migliori post:
 
 <%= screenshot "13-4", "Ordinamento per punteggio" %>
 
-<%= commit "13-5", "Aggiunte route per le liste di post, e le rispettive pagine per visualizzarle." %>
+<%= commit "13-5", "Added routes for post lists, and pages to display them." %>
 
 ### Migliorare l'Header
 
@@ -581,7 +581,7 @@ Template.header.helpers({
 
 <% note do %>
 
-### Parametri Helper
+### Parametri dell'Helper
 
 Non è stato usato finora questo specifico pattern, ma come ogni tag Handlebar, i tag del template helper possono ricevere parametri. 
 
@@ -595,6 +595,6 @@ Per ciascuna voce di navigazione, l'helper `activeRouteClass` accetta una lista 
 
 Se una qualunque delle route coincide con il path corrente, `any()` restituisce `true`. Per concludere, si utilizza il pattern Javascript `boolean && string`, dove `false && myString` restituisce `false`, ma `true && myString` restituisce invece `myString`.
 
-<%= commit "13-6", "Aggiunta classe active all'header" %>
+<%= commit "13-6", "Added active classes to the header." %>
 
 Ora che gli utenti possono votare post in tempo reale, è possibile vedere i post muoversi su e giù nella home page in risposta a cambiamenti nel loro punteggio. Non sarebbe meglio se esistesse il modo di rendere il tutto più fluido con alcune animazioni?

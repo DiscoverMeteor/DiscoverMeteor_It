@@ -190,7 +190,7 @@ Template.postItem.helpers({
 ~~~
 <%= caption "client/views/posts/post_item.js" %>
 
-<%= commit "3-2", "Si definisce un helper `domain` nel template `postItem`." %>
+<%= commit "3-2", "Setup a `domain` helper on the `postItem`." %>
 
 Questa volta il valore del nostro helper `domain` non è un array, ma una funzione anonima. Questo pattern è molto più diffuso (e utile) se paragonato al nostro precedente esempio con semplici dati statici.
 
@@ -222,7 +222,7 @@ Se avete seguito i passaggi correttamente, dovreste vedere una lista di post nel
 
 ### Ricaricamento del codice
 
-Vi siete forse accorti che non dovete nemmeno ricaricare il vostro browser ogni volta che modificate un file.
+Vi sarete forse accorti che non dovete nemmeno ricaricare il vostro browser ogni volta che modificate un file.
 
 Questo avviene perché Meteor traccia tutti i file all'interno della cartella del progetto e ricarica automaticamente il browser ogni volta che si accorge di una modifica in uno qualsiasi di essi.
 

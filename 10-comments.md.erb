@@ -10,8 +10,6 @@ paragraphs: 34
 
 Lo scopo di un sito di social news è creare una comunità di utenti, e sarebbe davvero impossibile farlo se questi utenti non avessero la possibilità di parlare tra di loro. Dunque, in questo capitolo, aggiungiamo i commenti!
 
-### Primi passi
-
 Iniziamo col creare una nuova collezione dove salvare i commenti, e aggiungendo un pò di dati di esempio a questa collezione.
 
 ~~~js
@@ -103,7 +101,7 @@ Router.configure({
 <%= caption "lib/router.js" %>
 <%= highlight "4~6" %>
 
-<%= commit "10-1", "Aggiunta la commezione comments, publicazione/sottoscrizione, e dati di esempio." %>
+<%= commit "10-1", "Added comments collection, pub/sub and fixtures." %>
 
 E' bene osservare che, perché il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database. Dopo aver eseguito il reset, non dimenticare di creare un nuovo utente ed effettuare di nuovo il login!
 
@@ -207,7 +205,7 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "9,10,11" %>
 
-<%= commit "10-2", "Visualizzazione dei commenti su `postPage`." %>
+<%= commit "10-2", "Display comments on `postPage`." %>
 
 Dovresti essere ora in grado di visualizzare i commenti di esempio, qualcosa del genere:
 
@@ -319,7 +317,7 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "3~25" %>
 
-<%= commit "10-3", "Creazione di un modulo per inserire commenti." %>
+<%= commit "10-3", "Created a form to submit comments." %>
 
 Non stiamo facendo nessun controllo particolare, solo verificando che l'utente sia autorizzato, che il commento non sia vuoto, e che sia collegato a un post.
 
@@ -385,7 +383,7 @@ Meteor.publish('comments', function(postId) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-<%= commit "10-4", "Una semplice pubblicazione/sottoscrizione per i commenti." %>
+<%= commit "10-4", "Made a simple publication/subscription for comments." %>
 
 Osserviamo ora un ultimo problema: quando torniamo alla pagina principale, l'applicazione dice che il nostro post ha 0 commenti:
 
@@ -447,6 +445,6 @@ return Comments.insert(comment);
 
 Possiamo dunque rimuovere l'helper commentsCount dal file client/views/posts/post_item.js, dal momento che il campo è disponibile nel post stesso.
 
-<%= commit "10-5", "Numero totale di commenti denormalizzato dentro al post." %>
+<%= commit "10-5", "Denormalized the number of comments into the post." %>
 
 Ora che gli utenti possono parlare l'un l'altro, sarebbe un peccato se la pagina non fosse aggiornata con i nuovi commenti via via che questi vengono inseriti; il prossimo capitolo ci spiega come utilizzare le notifiche per questo scopo.

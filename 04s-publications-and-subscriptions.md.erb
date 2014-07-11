@@ -57,9 +57,9 @@ Il nostro primo compito è di dire a Meteor quali dati *vogliamo* mandare al cli
 Questo è il codice corrispondente, che risiede sul server:
 
 ~~~js
-// sul server
+// on the server
 Meteor.publish('posts', function() {
-  return Posts.find({flagged: false});
+  return Posts.find({flagged: false}); 
 });
 ~~~
 
@@ -88,7 +88,7 @@ Ad esempio, stiamo navigando sul profilo di Bob Smith e vogliamo mostrare solo i
 Come prima cosa sistemiamo le nostre pubblicazioni in modo che accettino un parametro:
 
 ~~~js
-// sul server
+// on the server
 Meteor.publish('posts', function(author) {
   return Posts.find({flagged: false, author: author});
 });
@@ -97,7 +97,7 @@ Meteor.publish('posts', function(author) {
 Definiamo questo parametro quando facciamo *sottoscrizione* a quella pubblicazione nel codice lato client della nostra applicazione:
 
 ~~~js
-// sul client
+// on the client
 Meteor.subscribe('posts', 'bob-smith');
 ~~~
 
@@ -112,11 +112,11 @@ I post di Bob sono divisi in più categorie (per esempio: "JavaScript", "Ruby" e
 Come abbiamo fatto sul server, useremo la funzione `Posts.find()` per selezionare un sottoinsieme dei nostri dati:
 
 ~~~js
-// sul client
+// on the client
 Template.posts.helpers({
-  posts: function(){
-    return Posts.find(author: 'bob-smith', category: 'JavaScript');
-  }
+	posts: function(){
+		return Posts.find({author: 'bob-smith', category: 'JavaScript'});
+	}
 });
 ~~~
 
@@ -140,7 +140,7 @@ Per questo motivo autopublish è utile solo quando state iniziando e non avete a
 
 Dopo aver rimosso `autopublish` vi accorgerete presto che tutti i vostri dati sono spariti dal client. Un modo semplice per riverderli è di duplicare ciò che fa autopublish e pubblicare una collezione intera. Ad esempio:
 
-~~~js
+~~~js 
 Meteor.publish('allPosts', function(){
   return Posts.find();
 });
@@ -154,7 +154,7 @@ Stiamo ancora pubblicando le intere collezioni ma abbiamo ora controllo su quali
 
 Il prossimo livello di controllo è di pubblicare solo _parte_ di una collection. Ad esempio solo i post che appartengono ad un certo autore:
 
-~~~js
+~~~js 
 Meteor.publish('somePosts', function(){
   return Posts.find({'author':'Tom'});
 });

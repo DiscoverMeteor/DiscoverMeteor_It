@@ -121,7 +121,7 @@ Posts.update(currentPostId, {$set: postProperties}, function(error) {
 ~~~
 <%= caption "client/views/posts/post_edit.js" %>
 
-<%= scommit "9-5-1", "Created basic errors package and linked it in." %>
+<%= commit "9-5-1", "Created basic errors package and linked it in." %>
 
 Una volta terminate queste modifiche, la situazione dovrebbe essere tornata a com'era prima della creazione del pacchetto.
 
@@ -177,7 +177,7 @@ Package.on_test(function(api) {
 ~~~
 <%= caption "packages/errors/package.js" %>
 
-<%= scommit "9-5-2", "Added tests to the package." %>
+<%= commit "9-5-2", "Added tests to the package." %>
 
 Possiamo poi eseguirli da terminale con:
 
@@ -208,7 +208,7 @@ Come prima cosa, aggiungiamo un file `smart.json` per passare a Meteorite e Atmo
 ~~~
 <%= caption "packages/errors/smart.json" %>
 
-<%= scommit "9-5-3", "Added a smart.json" %>
+<%= commit "9-5-3", "Added a smart.json" %>
 
 Inseriamo dei metadati per segnalare informazioni sul pacchetto, fra i quali una descrizione per spiegare a cosa è utile, l'indirizzo di dove è posizionata la repository Git e un numero di versione iniziale. Se il nostro pacchetto dipendesse da altri presenti su Atmosphere, possiamo creare una sezione  `"packages"` per descrivere le dipendenze.
 
@@ -239,6 +239,6 @@ $ mrt add errors
 ~~~
 <%= caption "Terminal (run from the top level of the app)" %>
 
-<%= scommit "9-5-4", "Removed package from development tree." %>
+<%= commit "9-5-4", "Removed package from development tree." %>
 
 Meteorite ora dovrebbe scaricare il nostro pacchetto per la prima volta, ottimo lavoro!
