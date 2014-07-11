@@ -3,7 +3,7 @@ title: Votazioni
 slug: votazioni
 date: 0013/01/01
 number: 13
-contents: Implementare un sistema di votazione dei post.|Ordinare i post in base al voto su una pagina dei post "migliori".|Imparare a scrivere un helper handlebar generico.|Approfondimento sulla sicurezza dei dati in Meteor.|Alcune interessanti considerazioni riguardanti le prestazioni di MongoDB.
+contents: Implementare un sistema di votazione dei post.|Ordinare i post in base al voto su una pagina dei post "migliori".|Imparare a scrivere un helper Spacebars generico.|Approfondimento sulla sicurezza dei dati in Meteor.|Alcune interessanti considerazioni riguardanti le prestazioni di MongoDB.
 paragraphs: 49
 ---
 
@@ -267,7 +267,7 @@ La classe viene cambiata da `.upvote` a `.upvotable`, quindi è opportuno non tr
 
 <%= commit "13-2", "Grey out upvote link when not logged in / already voted." %>
 
-Ora, si può notare che i post con un singolo voto sono etichettati come "1 vote__s__", vediamo quindi come formattare il plurale (in Inglese) in modo appropriato. Mettere in forma plurale può essere un processo complicato, ma per adesso verrà affrontato in modo semplicistico. Si implementerà una funzione Handlebars generica, che può essere riutilizzata altrove.
+Ora, si può notare che i post con un singolo voto sono etichettati come "1 vote__s__", vediamo quindi come formattare il plurale (in Inglese) in modo appropriato. Mettere in forma plurale può essere un processo complicato, ma per adesso verrà affrontato in modo semplicistico. Si implementerà una funzione Spacebars generica, che può essere riutilizzata altrove.
 
 ~~~js
 UI.registerHelper('pluralize', function(n, thing) {
@@ -281,7 +281,7 @@ UI.registerHelper('pluralize', function(n, thing) {
 ~~~
 <%= caption "client/helpers/Spacebars.js" %>
 
-Le funzioni che sono state create sono legate ai relativi manager e template. Ma utilizzando `Handlebars.registerHelper` viene creata una funzione di supporto _globale_ che può essere utilizzata in qualunque template:
+Le funzioni che sono state create sono legate ai relativi manager e template. Ma utilizzando `Spacebars.registerHelper` viene creata una funzione di supporto _globale_ che può essere utilizzata in qualunque template:
 
 ~~~html
 <template name="postItem">
@@ -583,11 +583,11 @@ Template.header.helpers({
 
 ### Parametri dell'Helper
 
-Non è stato usato finora questo specifico pattern, ma come ogni tag Handlebar, i tag del template helper possono ricevere parametri. 
+Non è stato usato finora questo specifico pattern, ma come ogni tag Spacebars, i tag del template helper possono ricevere parametri. 
 
 E se da un lato è possibile passare parametri con nome alla funzione, è anche possibile passare un numero non specificato di parametri anonimi, acceduti tramite l'oggetto `arguments` dall'interno della funzione.
 
-In quest'ultimo caso, può risultare conveniente convertire l'oggetto `arguments` in un array JavaScript, e quindi utilizzare il metodo `pop()` al fine di liberarsi dell'hash aggiunto da Handlebars
+In quest'ultimo caso, può risultare conveniente convertire l'oggetto `arguments` in un array JavaScript, e quindi utilizzare il metodo `pop()` al fine di liberarsi dell'hash aggiunto da Spacebars.
 
 <% end %>
 

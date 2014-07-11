@@ -139,7 +139,7 @@ Template.postPage.helpers({
 
 Inseriamo il blocco `{{#each comments}}` dentro al template post, così `this` si riferisce a un post dentro all'helper `comments`. Per selezionare quali commenti mostrare, filtriamo la collezione selezionando quelli collegati allo specifico post tramite l'attributo `postId`.
 
-Considerato quanto abbiamo già imparato riguardo agli helpers e ad handlebar, visualizzare un commento è abbastanza semplice. Creiamo una nuova cartella `comments` dentro a `views` per salvare il template del dettaglio commenti:
+Considerato quanto abbiamo già imparato riguardo agli helpers e ad Spacebars, visualizzare un commento è abbastanza semplice. Creiamo una nuova cartella `comments` dentro a `views` per salvare il template del dettaglio commenti:
 
 ~~~html
 <template name="comment">

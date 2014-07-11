@@ -236,7 +236,7 @@ Se ora apriamo una console del browser, vedremo tutti e tre i post caricati dent
 ~~~
 <%= caption "Console del Browser" %>
 
-Per vedere questi post renderizzati in HTML, possiamo utilizzare un *template helper*. Nel Capitolo 3 abbiamo visto come Meteor permetta di collegare un *data context* ai template di Handlebars per costruire viste HTML di semplici strutture dati. Possiamo anche collegare i dati delle collezioni esattamente nello stesso modo. Rimpiazzeremo semplicemente l'oggetto statico `postsData` di JavaScript con una collezione dinamica.
+Per vedere questi post renderizzati in HTML, possiamo utilizzare un *template helper*. Nel Capitolo 3 abbiamo visto come Meteor permetta di collegare un *data context* ai template di Spacebars per costruire viste HTML di semplici strutture dati. Possiamo anche collegare i dati delle collezioni esattamente nello stesso modo. Rimpiazzeremo semplicemente l'oggetto statico `postsData` di JavaScript con una collezione dinamica.
 
 A proposito, a questo punto sentitevi liberi di cancellare il codice `postsData`. Questo è come ora dovrebbe diventare `posts_list.js`:
 
@@ -266,7 +266,7 @@ Ora, anziché caricare una lista di post come un vettore statico, restituiamo un
 
 <%= screenshot "4-3", "Utilizzare dati dinamici" %>
 
-Possiamo quindi vedere chiaramente che il nostro helper `{{#each}}` ha iterato su tutti i `Posts` e li ha visualizzati sullo schermo. La collezione lato server server ha caricato i post da Mongo, li ha passati attraverso la connessione alla collezione lato client e l'helper di handlebars li ha passati al template.
+Possiamo quindi vedere chiaramente che il nostro helper `{{#each}}` ha iterato su tutti i `Posts` e li ha visualizzati sullo schermo. La collezione lato server server ha caricato i post da Mongo, li ha passati attraverso la connessione alla collezione lato client e l'helper di Spacebars li ha passati al template.
 
 Ora facciamo un passo in più; aggiungiamo un altro post da console:
 
@@ -283,7 +283,7 @@ Guardiamo di nuovo il browser -- dovremmo vedere quanto segue:
 
 <%= screenshot "4-4", "Adding posts via the console" %>
 
-Per la prima volta abbiamo appena visto la reattività in azione. Quando diciamo ad handlebars di iterare sul cursore `Posts.find()`, sa anche come osservare quel cursore per accorgersi di cambiamenti di modo da poter modificare l'HTML nel modo più semplice possibile per visualizzare i dati corretti sullo schermo.
+Per la prima volta abbiamo appena visto la reattività in azione. Quando diciamo ad Spacebars di iterare sul cursore `Posts.find()`, sa anche come osservare quel cursore per accorgersi di cambiamenti di modo da poter modificare l'HTML nel modo più semplice possibile per visualizzare i dati corretti sullo schermo.
 
 <% note do %>
 

@@ -121,9 +121,9 @@ Chiariamo un aspetto potenzialmente ambiguo. Abbiamo chiamato la nostra route `p
 
 L'impostazione predefinita di Iron Router è quella di cercare un template con lo stesso nome della route. A dire il vero cercherà anche un *path* basandosi sul nome della route, e quindi se non avessimo definito un path personalizzato (cosa che abbiamo fatto indicando un `path` nella definizione della route), il nostro template sarebbe comunque stato accessibile all'URL `/postsList`.
 
-Potresti chiederti perché abbiamo bisogno di dare un nome alle route come prima cosa. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Handlebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
+Potresti chiederti perché abbiamo bisogno di dare un nome alle route come prima cosa. Dar loro un nome ci permette di usare alcune funzionalità di Iron Router che rendono più semplice costruire i link all'interno dell'applicazione. La più utile è l'helper di Spacebars `{{pathFor}}, che contiene la parte di path dell'URL di ogni route.
 
-Noi vogliamo che il link alla home principale punti alla lista di post, e quindi invece di indicare una URL statica `/`, possiamo usare l'helper di Handlebars. Il risultato finale sarà lo stesso, ma avremo maggiore flessibilità visto che l'helper fornirà sempre l'URL corretta anche se cambiassimo il path della route nel router.
+Noi vogliamo che il link alla home principale punti alla lista di post, e quindi invece di indicare una URL statica `/`, possiamo usare l'helper di Spacebars. Il risultato finale sarà lo stesso, ma avremo maggiore flessibilità visto che l'helper fornirà sempre l'URL corretta anche se cambiassimo il path della route nel router.
 
 ~~~html
 <header class="navbar">
