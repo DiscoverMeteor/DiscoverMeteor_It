@@ -26,16 +26,16 @@ $ mrt add accounts-password
 ~~~
 <%= caption "Terminale" %>
 
-Questi due comandi provvedono ad installare gli appositi template per gli account; è possibile includerli nel sito utilizzando `{{loginButtons}}`. Un consiglio molto utile: si può controllare su quale lato posizionare il menù a tendina utilizzando l'attributo `align` (ad esempio: `{{loginButtons align="right"}}).
+Questi due comandi provvedono ad installare gli appositi template per gli account; è possibile includerli nel sito utilizzando `{{> loginButtons}}`. Un consiglio molto utile: si può controllare su quale lato posizionare il menù a tendina utilizzando l'attributo `align` (ad esempio: `{{>loginButtons align="right"}}`).
 
 E' tempo di aggiungere i pulsanti all'header. Poiché l'header comincia a crescere oltremodo, è meglio concedergli un pò più di spazio spostandolo su un apposito template (che verrà salvato in `client/views/includes/`). Verrà anche utilizzato del markup aggiuntivo e alcune classi Bootstrap per migliorarlo dal punto di vista estetico:
 
 ~~~html
 <template name="layout">
   <div class="container">
-    {{>header}}
+    {{> header}}
     <div id="main" class="row-fluid">
-      {{yield}}
+      {{> yield}}
     </div>
   </div>
 </template>

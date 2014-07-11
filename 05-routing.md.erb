@@ -51,7 +51,7 @@ Per altre informazioni su Iron Router, consulta [la documentazione completa su G
 
 ### Routing: Associare gli URL ai Template
 
-Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{>postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto.
+Fino a questo momento abbiamo costruito l'interfaccia usando elementi statici nei template (come `{{> postsList}}`). In questo modo sebbene il contenuto dell'applicazione possa cambiare, la struttura di base della pagina rimane sempre la stessa: una intestazione con una lista di post sotto.
 
 Iron Router permette di superare questa staticità prendendo il controllo di ciò che viene mostrato nel tag HTML <body>. Non definiremo noi il contenuto di questo tag, come faremmo con una normale pagina HTML. Faremo invece puntare il router ad uno speciale template di struttura che contiene un helper `{{> yield}}`.
 
@@ -179,12 +179,12 @@ L'ultimo pezzo del puzzle è il template di caricamento vero e proprio. Useremo 
 
 ~~~html
 <template name="loading">
-  {{>spinner}}
+  {{> spinner}}
 </template>
 ~~~
 <%= caption "client/views/includes/loading.html" %>
 
-Nota che `{{>spinner}}` è un parziale contenuto nel pacchetto `spin`. Sebbene questo parziale arrivi "dall'esterno" dell'applicazione, possiamo includerlo come qualsiasi altro template.
+Nota che `{{> spinner}}` è un parziale contenuto nel pacchetto `spin`. Sebbene questo parziale arrivi "dall'esterno" dell'applicazione, possiamo includerlo come qualsiasi altro template.
 
 <%= commit "5-2", "Wait on the post subscription." %>
 
@@ -268,7 +268,7 @@ All'interno della funzione `data` di una route, `this` corrisponde alla route at
 
 Impostando il *contesto dati* di un template puoi controllare il valore assunto da `this` negli helpers all'interno del template.
 
-Normalmente lo si imposta implicitamente con l'iteratore `{{each}}`, che imposta automaticamente il contesto dati all'elemento su cui stiamo iterando:
+Normalmente lo si imposta implicitamente con l'iteratore `{{#each}}`, che imposta automaticamente il contesto dati all'elemento su cui stiamo iterando:
 
 ~~~html
 {{#each widgets}}
