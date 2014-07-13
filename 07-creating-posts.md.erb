@@ -116,7 +116,7 @@ Questo è un modulo semplice. Non dobbiamo preoccuparci di aggiungerci una funzi
 
 ### Creare i Post
 
-Fissiamo un event handler all'evento 'submit' del modulo. E' preferibile intercettare l'evento, invece che l'evento 'click' sul bottone, perché coprirà ogni possibile modo di invio, premendo 'invio' nel form, ad esempio.
+Fissiamo un event handler all'evento 'submit' del modulo. E' preferibile intercettare questo evento, anziché l'evento 'click' sul bottone, perché coprirà ogni possibile modo di invio, premendo 'invio' nel form, ad esempio.
 
 ~~~js
 Template.postSubmit.events({
@@ -157,7 +157,7 @@ $ meteor remove insecure
 ~~~
 <%= caption "Terminal" %>
 
-Fatto questo, vedrai che il modulo del post non funzionerà più. Il motivo è che senza il pacchetto 'insecure', insert client-side nella collezione dei post _non sono più permessi_. O diamo degli ordini precisi a Meteor per quando permettere all'utente di inserire i post o li inseriamo lato server.
+Fatto questo, vedrai che il modulo del post non funzionerà più. Il motivo è che senza il pacchetto 'insecure', _non sono più permessi insert_, in nessuna collezione, lato client. O diamo degli ordini precisi a Meteor per quando permettere all'utente di inserire i post o li inseriamo lato server con dei metodi specifici, che vedremo in seguito.
 
 ### Allowing Post Inserts
 
@@ -428,4 +428,4 @@ Template.postsList.helpers({
 
 C'è voluto un po' di lavoro ma abbiamo finalmente un'interfaccia utente che permetterà agli utenti di inserire del contenuto nella nostra applicazione!
 
-Detto questo, ogni applicazione che permetta all'utente di creare contenuti deve anche dargli modo di modificarli e cancellarli. Questo saràoggetto del prossimo capitolo 'Modificare i Post'.
+Detto questo, ogni applicazione che permetta all'utente di creare contenuti deve anche dargli modo di modificarli e cancellarli. Questo sarà oggetto del prossimo capitolo 'Modificare i Post'.
