@@ -4,7 +4,7 @@ slug: reactivity
 date: 0006/01/02
 number: 6.5
 sidebar: true
-contents: Su cosa si basa la gestione reattiva del codice in Meteor.|Capire come è perchè rende il codice dichiarativo.|Scrivere codice evoluto che utilizza sorgenti dati reattive.
+contents: Su cosa si basa la gestione reattiva del codice in Meteor.|Capire come è perché rende il codice dichiarativo.|Scrivere codice evoluto che utilizza sorgenti dati reattive.
 paragraphs: 20
 ---
 
@@ -41,7 +41,7 @@ Penso si possa già vedere come questo codice tenderà a diventare rapidamente m
 
 Lo schema di programmazione visto sopra a volte è necessario, specialmente se abbiamo a che fare con componenti di terze parti. Immaginiamo ad esempio di voler aggiungere o rimuovere punti su una mappa in tempo reale basandoci sui dai di una collezione (diciamo per mostrare la posizione degli utenti loggati).
 
-In questo caso abbiamo bisogno di usare le callback di `observe()` per far "parlare" la mappa con la collezione di Meteor e sapere come reagire alle modifiche dei dati. Ad esempio faremmo affidamento a delle callback `aggiunto` e `rimosso` per invocare i metodi `mettiPin()` o `togliPin` dalle API della mappa. 
+In questo caso abbiamo bisogno di usare le callback di `observe()` per far "parlare" la mappa con la collezione di Meteor e sapere come reagire alle modifiche dei dati. Ad esempio faremmo affidamento a delle callback `aggiunto` e `rimosso` per invocare i metodi `mettiPin()` o `togliPin` dalle API della mappa.
 
 <% end %>
 
@@ -49,7 +49,7 @@ In questo caso abbiamo bisogno di usare le callback di `observe()` per far "parl
 
 Meteor sa farlo molto meglio: con la reattività, che è basata su un approccio **dichiarativo**. Con uno stile dichiarativo possiamo definire le relazioni tra gli oggetti una volta per tutte e aspettarci che tutto rimanga sincronizzato, invece di specificare cosa fare ad ogni cambiamento.
 
-L'idea di fondo è estremamente potente, perchè un sistema in tempo reale ha diversi input che possono modificarsi anche contemporaneamente in maniera non prevedibile. Definendo dichiarativamente come rappresentare il codice HTML in base a quali sorgenti dati reattive ci interessano, Meteor si preoccuperà di monitorare queste sorgenti dati è fare per noi il complesso lavoro di aggiornamento dell'interfaccia in maniera trasparente.
+L'idea di fondo è estremamente potente, perché un sistema in tempo reale ha diversi input che possono modificarsi anche contemporaneamente in maniera non prevedibile. Definendo dichiarativamente come rappresentare il codice HTML in base a quali sorgenti dati reattive ci interessano, Meteor si preoccuperà di monitorare queste sorgenti dati è fare per noi il complesso lavoro di aggiornamento dell'interfaccia in maniera trasparente.
 
 Tutto ciò per dire che invece di usare le callback con `observe`, Meteor ci permette di scrivere:
 
@@ -99,7 +99,7 @@ Meteor.startup(function() {
 });
 ~~~
 
-Notiamo che bisogna racchiudere il blocco `Deps` all'interno di un blocco `Meteor.startup()` in modo da assicurarci che venga eseguito solo dopo che Meteor ha finito di caricare la collezione `Posts`. 
+Notiamo che bisogna racchiudere il blocco `Deps` all'interno di un blocco `Meteor.startup()` in modo da assicurarci che venga eseguito solo dopo che Meteor ha finito di caricare la collezione `Posts`.
 
 Dietro le quinte `autorun` crea una computation, e si preoccupa di rieseguirla ogni volta che cambia la sorgente dati collegata. Abbiamo scritto una computation che semplicemente scrive nella console il numero di post. Poichè `Posts.find()` è una sorgente dati reattiva, si preoccuperà di informare la computation che è necessaria una riesecuzione ogni volta che il numero di post cambia.
 

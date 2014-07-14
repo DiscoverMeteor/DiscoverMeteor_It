@@ -10,7 +10,7 @@ contents: Vedi cosa succede nei retroscena quando Meteor scambia due elementi de
 paragraphs: 58
 ---
 
-A questo punto abbiamo un sistema di votazione, conto punteggi e valutazione in tempo reale. Questo tuttavia risulta in un'esperienza erratica ed irritante, con messaggi che saltano da una parte all'altra della homepage. Per migliorare questa situazione useremo le animazioni.   
+A questo punto abbiamo un sistema di votazione, conto punteggi e valutazione in tempo reale. Questo tuttavia risulta in un'esperienza erratica ed irritante, con messaggi che saltano da una parte all'altra della homepage. Per migliorare questa situazione useremo le animazioni.
 
 ### Meteor & il DOM
 
@@ -18,22 +18,22 @@ Prima di iniziare la parte divertente (fare sì che le cose si muovano), dobbiam
 
 È cruciale ricordarsi che gli elementi *non possono essere spostati*. Possono solamente essere eliminati e creati (nota che questa è una limitazione del DOM, non di Meteor). Quindi per dare l'illusione che gli elementi A e B cambino di posto, Meteor cancellerà l'elemento B e inserirà una copia nuova di zecca (B') prima dell'elemento A.
 
-Questo rende l'animazione difficoltosa, siccome non puoi semplicemente animare B per muoverlo in una nuova posizione, perchè B sarà scomparso non appena Meteor renderizza la pagina (che come sappiamo accade instantaneamente, grazie alla reactivity). Dovrai invece animare B' mentre si muove dalla vecchia posizione di B verso la sua nuova posizione prima di A.
+Questo rende l'animazione difficoltosa, siccome non puoi semplicemente animare B per muoverlo in una nuova posizione, perché B sarà scomparso non appena Meteor renderizza la pagina (che come sappiamo accade instantaneamente, grazie alla reactivity). Dovrai invece animare B' mentre si muove dalla vecchia posizione di B verso la sua nuova posizione prima di A.
 
 Per scambiare i messaggi A e B (posizionati rispettivamente nelle posizioni p1 e p2), dobbiamo seguire i seguenti punti:
 
 1. Elimina B
-2. Nel DOM, prima di A crea B' 
+2. Nel DOM, prima di A crea B'
 3. Muovi B' verso p2
 4. Muovi A verso p1
 5. Anima A verso p2
 6. Anima B' verso p1
 
-Questi punti sono esposti in dettaglio nel seguente diagramma: 
+Questi punti sono esposti in dettaglio nel seguente diagramma:
 
 <%= diagram "animation_diagram", "Scambiare due messaggi", "pull-center" %>
 
-Nota che nei punti 3 e 4 non stiamo *animando* A e B' verso le loro posizioni, ma li stiamo "teleportando" istantaneamente. Questo darà l'illusione che B non è mai stato cancellato e posizionerà entrambi gli elementi così che possano essere animati verso la loro nuova posizione. 
+Nota che nei punti 3 e 4 non stiamo *animando* A e B' verso le loro posizioni, ma li stiamo "teleportando" istantaneamente. Questo darà l'illusione che B non è mai stato cancellato e posizionerà entrambi gli elementi così che possano essere animati verso la loro nuova posizione.
 
 Fortunatamente Meteor si prende cura dei punti 1 & 2, quindi ci dobbiamo preoccupare solamente dei punti da 3 a 6.
 
@@ -45,13 +45,13 @@ Fino ad ora abbiamo parlato di *come* animare i nostri messaggi, ma non di *dove
 
 Per i punti 3 e 4, la risposta sta nella template callback `rendered` all'interno del gestore `post_item.js`, che è scatenato ogni volta che cambia la proprietà di un messaggio (nel nostro caso il punteggio).
 
-I punti 5 e 6 sono un pò più complessi. Pensaci su: se tu dicessi ad un automata di correre verso nord per 5 minuti, dopodichè di correre verso sud per 5 minuti, probabilmente l'automata dedurrà che siccome finirà nello stesso posto, potrebbe risparmiarsi le sue forze e non correre per niente.  
+I punti 5 e 6 sono un pò più complessi. Pensaci su: se tu dicessi ad un automata di correre verso nord per 5 minuti, dopodichè di correre verso sud per 5 minuti, probabilmente l'automata dedurrà che siccome finirà nello stesso posto, potrebbe risparmiarsi le sue forze e non correre per niente.
 
 Quindi se vuoi assicurarti che il tuo automata corra per tutti e 10 i minuti, devi *aspettare* fino a che non ha corso i primi 5 minuti, e *dopo* dirgli di tornare indietro.
 
 Il browser funziona in una simile maniera: se simultaneamente gli diamo entrambe le istruzioni, le nuove coordinate semplicemente sostituirebbero quelle vecchie e non accadrebbe nulla. In altre parole, il browser ha bisogno di registrare i cambiamenti di posizione come punti separati nel tempo, altrimenti non sarà in grado di animarli.
 
-Meteor non fornisce una callback `justAfterRendered`, ma può imitarla usando `Meteor.defer()`, che semplicemente prende una funzione e pospone la sua esecuzione appena in tempo per registrarsi come un evento diverso. 
+Meteor non fornisce una callback `justAfterRendered`, ma può imitarla usando `Meteor.defer()`, che semplicemente prende una funzione e pospone la sua esecuzione appena in tempo per registrarsi come un evento diverso.
 
 ### Posizionamento con i CSS
 
@@ -101,9 +101,9 @@ Le istanze di template ci permetteno anche di accedere alla collezione di dati t
 
 ### Punteggio dei messaggi
 
-Abbiamo parlato del punteggio dei messaggi, ma questo "valore" effettivamente non esiste come una proprietà del messaggio, sicome è semplicemente una conseguenza dell'ordine dei messaggi che sono elencati nella nostra collezione. Dovremo in qualche maniera trovare un modo per far apparire questa proprietà dall'aria se vogliamo essere in grado di animare i messaggi a seconda del loro punteggio. 
+Abbiamo parlato del punteggio dei messaggi, ma questo "valore" effettivamente non esiste come una proprietà del messaggio, sicome è semplicemente una conseguenza dell'ordine dei messaggi che sono elencati nella nostra collezione. Dovremo in qualche maniera trovare un modo per far apparire questa proprietà dall'aria se vogliamo essere in grado di animare i messaggi a seconda del loro punteggio.
 
-Nota che siccome il punteggio è una proprietà relativa che dipende da come ordini i messaggi (un messaggio può essere valutato primo mentre si ordina per data, ma terzo quando si ordina per punteggio), non possiamo mettere questa proprietà `rank` nel database stesso. 
+Nota che siccome il punteggio è una proprietà relativa che dipende da come ordini i messaggi (un messaggio può essere valutato primo mentre si ordina per data, ma terzo quando si ordina per punteggio), non possiamo mettere questa proprietà `rank` nel database stesso.
 
 Idealmente metteremmo la proprietà nelle nostre collezioni `newPosts` e `topPosts`, ma Meteor al momento non offre un meccanismo conveniente per farlo.
 
@@ -133,7 +133,7 @@ E non dimenticarti di aggiornare il template `postsList`:
     {{#each postsWithRank}}
       {{> postItem}}
     {{/each}}
-    
+
     {{#if nextPath}}
       <a class="load-more" href="{{nextPath}}">Load more</a>
     {{/if}}
@@ -148,9 +148,9 @@ E non dimenticarti di aggiornare il template `postsList`:
 
 ### Sii cortese, riavvolgi
 
-Meteor è uno dei web frameworks più progressisti e all'avanguardia che ci siano. Ma una delle sue funzionalità, la funzione `rewind()`, sembra essere un ritorno ai giorni passati delle video cassette e dei VCRs.   
+Meteor è uno dei web frameworks più progressisti e all'avanguardia che ci siano. Ma una delle sue funzionalità, la funzione `rewind()`, sembra essere un ritorno ai giorni passati delle video cassette e dei VCRs.
 
-Ogni volta che usi un cursore con `forEach()`, `map()`, oppure `fetch()`, dovrai riavvolgerlo prima di poterlo usare di nuovo. 
+Ogni volta che usi un cursore con `forEach()`, `map()`, oppure `fetch()`, dovrai riavvolgerlo prima di poterlo usare di nuovo.
 
 E in alcuni casi è meglio stare sul sicuro e riavvolgere il cursore in maniera preventiva piuttosto che rischiare un errore.
 
@@ -172,7 +172,7 @@ Template.postItem.rendered = function(){
   var $this = $(this.firstNode);
   var postHeight = 80;
   var newPosition = rank * postHeight;
- 
+
   // se l'elemento ha una currentPosition (non è il primo rendering)
   if (typeof(instance.currentPosition) !== 'undefined') {
     var previousPosition = instance.currentPosition;
@@ -180,13 +180,13 @@ Template.postItem.rendered = function(){
     var delta = previousPosition - newPosition;
     $this.css("top", delta + "px");
   }
-  
+
   // lascia che venga disegnato nella vecchia posizione, dopodichè...
   Meteor.defer(function() {
     instance.currentPosition = newPosition;
     // porta l'elemento indietro alla sua posizione originale
     $this.css("top",  "0px");
-  }); 
+  });
 };
 
 Template.postItem.events({
@@ -206,7 +206,7 @@ Apri il sito e prova a votare. Dovresti vedere i messaggi, che con grazia da bal
 
 ### Animare nuovi messaggi
 
-Ora i nostri messaggi si riordinano correttamente, ma non abbiamo ancora un'animazione per un "nuovo messaggio". Invece di far spuntare immediatamente i nuovi messaggi, facciamoli apparire gradualmente. 
+Ora i nostri messaggi si riordinano correttamente, ma non abbiamo ancora un'animazione per un "nuovo messaggio". Invece di far spuntare immediatamente i nuovi messaggi, facciamoli apparire gradualmente.
 
 In verità questo è più complesso di quel che sembra. Il problema è che la callback `rendered` di Meteor viene scatenata in due casi separati:
 
@@ -215,7 +215,7 @@ In verità questo è più complesso di quel che sembra. Il problema è che la ca
 
 Solamente il primo caso dovrebbe essere animato, a meno che tu non voglia un'interfaccia utente che si illumina come un albero di natale ogni volta che i tuoi dati cambiano.
 
-Assicuriamoci quindi di animare solamente i messaggi che sono veramente nuovi e non quelli che vengono ri-renderizzati perchè i loro dati sono cambiati. Stiamo già testando per la presenza di una variabile d'istanza (che è impostata solamente dopo il primo render), quindi dobbiamo solo tornare indietro alla nostra callback `rendered` e aggiungere un blocco `else`:
+Assicuriamoci quindi di animare solamente i messaggi che sono veramente nuovi e non quelli che vengono ri-renderizzati perché i loro dati sono cambiati. Stiamo già testando per la presenza di una variabile d'istanza (che è impostata solamente dopo il primo render), quindi dobbiamo solo tornare indietro alla nostra callback `rendered` e aggiungere un blocco `else`:
 
 ~~~js
 Template.postItem.helpers({
@@ -229,7 +229,7 @@ Template.postItem.rendered = function(){
   var $this = $(this.firstNode);
   var postHeight = 80;
   var newPosition = rank * postHeight;
- 
+
   // se l'elemento ha una currentPosition (non è il primo rendering)
   if (typeof(instance.currentPosition) !== 'undefined') {
     var previousPosition = instance.currentPosition;
@@ -240,13 +240,13 @@ Template.postItem.rendered = function(){
     // è il primo evento render in assoluto, quindi nascondi l'elemento
     $this.addClass("invisible");
   }
-  
+
   // lascia che venga disegnato nella vecchia posizione, dopodichè...
   Meteor.defer(function() {
     instance.currentPosition = newPosition;
     // porta l'elemento indietro alla sua posizione originale
     $this.css("top",  "0px").removeClass("invisible");
-  }); 
+  });
 };
 
 Template.postItem.events({
@@ -264,7 +264,7 @@ Nota che la `removeClass("invisible")` che abbiamo aggiunto nella funzione `defe
 
 ### CSS & JavaScript
 
-Avrai notato che stiamo usando una classe CSS `.invisible` per scatenare l'animazione invece di animare direttamente la proprietà CSS `opacity` come abbiamo fatto per `top`. Questo è perchè per `top` avevamo bisogno di animare la proprietà usando un valore specifico che dipende dai dati dell'istanza.
+Avrai notato che stiamo usando una classe CSS `.invisible` per scatenare l'animazione invece di animare direttamente la proprietà CSS `opacity` come abbiamo fatto per `top`. Questo è perché per `top` avevamo bisogno di animare la proprietà usando un valore specifico che dipende dai dati dell'istanza.
 
 Dall'altro canto qui vogliamo solo mostrare e nascondere un elemento, indipendentemente dai suoi dati. Siccome è una buona idea lasciare il più possibile CSS fuori da Javascript, qui aggiungeremo e toglieremo solamente la classe e specificheremo i dettagli dell'animazione nel nostro stylesheet.
 

@@ -8,7 +8,7 @@ paragraphs: 27
 ---
 Finora si è lavorato alla creazione e visualizzazione di dati di esempio statici ed implementato un semplice prototipo.
 
-E' stato verificato come l'interfaccia utente sia reattiva a variazioni dei dati, con inserimenti e modifiche che vengono presentati immediatamente. Tuttavia, il sito è ancora penalizzato dal fatto che non è possibile inserire dati. E infatti ancora non vengono neanche gestiti gli utenti.
+È stato verificato come l'interfaccia utente sia reattiva a variazioni dei dati, con inserimenti e modifiche che vengono presentati immediatamente. Tuttavia, il sito è ancora penalizzato dal fatto che non è possibile inserire dati. E infatti ancora non vengono neanche gestiti gli utenti.
 
 Vediamo come sia possibile sistemare la cosa.
 
@@ -18,7 +18,7 @@ In molti framework per il web, aggiungere profili utente è un problema ricorren
 
 Fortunatamente, Meteor ha la soluzione. Grazie alla peculiarità dei package di Meteor di fornire codice sia lato server (JavaScript) che lato client (JavaScript, HTML e CSS), è possibile implementare un sistema di gestione degli account a costo quasi nullo.
 
-E' sufficiente utilizzare l'interfaccia utente per gli account integrata in Meteor (tramite `mrt add accounts-ui`), ma poiché  l'intera applicazione utilizza Bootstrap, verrà invece utilizzato il package `accounts-ui-bootstrap-dropdown` (niente di cui preoccuparsi, la sola differenza riguarda il foglio di stile). Da linea di comando, scrivere:
+È sufficiente utilizzare l'interfaccia utente per gli account integrata in Meteor (tramite `mrt add accounts-ui`), ma poiché  l'intera applicazione utilizza Bootstrap, verrà invece utilizzato il package `accounts-ui-bootstrap-dropdown` (niente di cui preoccuparsi, la sola differenza riguarda il foglio di stile). Da linea di comando, scrivere:
 
 ~~~bash
 $ mrt add accounts-ui-bootstrap-dropdown
@@ -28,7 +28,7 @@ $ mrt add accounts-password
 
 Questi due comandi provvedono ad installare gli appositi template per gli account; è possibile includerli nel sito utilizzando `{{> loginButtons}}`. Un consiglio molto utile: si può controllare su quale lato posizionare il menù a tendina utilizzando l'attributo `align` (ad esempio: `{{>loginButtons align="right"}}`).
 
-E' tempo di aggiungere i pulsanti all'header. Poiché l'header comincia a crescere oltremodo, è meglio concedergli un pò più di spazio spostandolo su un apposito template (che verrà salvato in `client/views/includes/`). Verrà anche utilizzato del markup aggiuntivo e alcune classi Bootstrap per migliorarlo dal punto di vista estetico:
+È tempo di aggiungere i pulsanti all'header. Poiché l'header comincia a crescere oltremodo, è meglio concedergli un pò più di spazio spostandolo su un apposito template (che verrà salvato in `client/views/includes/`). Verrà anche utilizzato del markup aggiuntivo e alcune classi Bootstrap per migliorarlo dal punto di vista estetico:
 
 ~~~html
 <template name="layout">
@@ -68,9 +68,9 @@ Ora, accedendo all'applicazione, i pulsanti per l'autenticazione saranno visuali
 
 <%= screenshot "6-1", "Interfaccia utente per la gestione degli account integrata in Meteor" %>
 
-E' possibile utilizzarli per la registrazione, il login, per modificare la password, e tutto ciò che un semplice sito necessita per gli account basati su password.
+È possibile utilizzarli per la registrazione, il login, per modificare la password, e tutto ciò che un semplice sito necessita per gli account basati su password.
 
-Per abilitare l'autenticazione tramite nome utente nel sistema di gestione degli account, è sufficiente aggiungere un blocco di configurazione `Accounts.ui` in un nuovo file `config.js`, da salvare in `client/helpers/`: 
+Per abilitare l'autenticazione tramite nome utente nel sistema di gestione degli account, è sufficiente aggiungere un blocco di configurazione `Accounts.ui` in un nuovo file `config.js`, da salvare in `client/helpers/`:
 
 ~~~js
 Accounts.ui.config({
@@ -102,9 +102,9 @@ Provando adesso ad uscire e registrandosi con un nuovo nome utente, `Meteor.user
 ~~~
 <%= caption "Console del browser" %>
 
-La console restituisce 1. Non dovrebbe invece essere 2? E' stato eliminato il primo utente? Provando a loggarsi utilizzando il primo account, si verifica immediatamente che non è questo il caso.
+La console restituisce 1. Non dovrebbe invece essere 2? È stato eliminato il primo utente? Provando a loggarsi utilizzando il primo account, si verifica immediatamente che non è questo il caso.
 
-E' meglio assicurarsi controllando l'archivio dati predefinito, il database Mongo. Loggarsi in Mongo (`meteor mongo` da terminale) e verificare quanto segue:
+È meglio assicurarsi controllando l'archivio dati predefinito, il database Mongo. Loggarsi in Mongo (`meteor mongo` da terminale) e verificare quanto segue:
 
 ~~~bash
 > db.users.count()
@@ -118,9 +118,9 @@ Indubbiamente ci sono due utenti. Quindi perché solo uno per volta è visibile 
 
 Nel capitolo 4 si era parlato di come, disabilitando l'`autopublishing`, le collezioni non vengano più trasferite in maniera automatica dal server alla corrispondente versione locale della collezione, per ciascuno dei client collegati. Si è reso necessario create una coppia pubblicazione e sottoscrizione per veicolare i dati tra le parti.
 
-Ma non è stata mai creata una pubblicazione per gli utenti. Per cui, come è possibile che i dati utente siano visibili? 
+Ma non è stata mai creata una pubblicazione per gli utenti. Per cui, come è possibile che i dati utente siano visibili?
 
-La risposta sta nel fatto che il package degli account automaticamente esegue una "auto-pubblicazione" di un sottoinsieme dei dati relativi all'account dell'utente correntemente loggato. Se così non fosse, l'utente non sarebbe mai in grado di loggarsi sul sito! 
+La risposta sta nel fatto che il package degli account automaticamente esegue una "auto-pubblicazione" di un sottoinsieme dei dati relativi all'account dell'utente correntemente loggato. Se così non fosse, l'utente non sarebbe mai in grado di loggarsi sul sito!
 
 Comunque il package degli account pubblica solamente l'utente corrente. Questo spiega il perché i dati degli altri utenti non sono visibili.
 

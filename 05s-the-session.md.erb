@@ -20,7 +20,7 @@ In questo momento in Microscope lo stato dell'applicazione è interamente conten
 
 In molti casi però hai bisogno di alcune informazioni transitorie sullo stato dell'applicazione, rilevanti solo per l'istanza corrente dell'applicazione di uno specifico utente (ad esempio se un elemento è mostrato o nascosto). L'oggetto Session è perfetto per questo.
 
-L'oggetto Session è un contenitore dati globale e reattivo. E' globale nel senso di un unico oggetto visibile ovunque: c'è una sola sessione ed è accessibile dall'intera applicazione. Le variabili globali sono normalmente mal viste ma in questo caso l'oggetto Session è usato come centro di comunicazione tra tutte le parti dell'applicazione.
+L'oggetto Session è un contenitore dati globale e reattivo. È globale nel senso di un unico oggetto visibile ovunque: c'è una sola sessione ed è accessibile dall'intera applicazione. Le variabili globali sono normalmente mal viste ma in questo caso l'oggetto Session è usato come centro di comunicazione tra tutte le parti dell'applicazione.
 
 ### Memorizzare dati nell'oggetto Session
 
@@ -31,7 +31,7 @@ L'oggetto sessione è visibile ovunque come `Session`. Per impostare un valore s
 ~~~
 <%= caption "Browser console" %>
 
-I dati memorizzati posso essere letti con `Session.get('mySessionProperty');`. E' una sorgente dati reattiva, quindi se utilizzata all'interno di un helper vedremo l'output dell'helper modificarsi automaticamente al cambio dei dati.
+I dati memorizzati posso essere letti con `Session.get('mySessionProperty');`. È una sorgente dati reattiva, quindi se utilizzata all'interno di un helper vedremo l'output dell'helper modificarsi automaticamente al cambio dei dati.
 
 Per fare una prova, aggiungi questo codice al template di layout:
 
@@ -84,7 +84,7 @@ helloWorld = function() {
 
 Anche se stiamo utilizzando una variabile di sessione, il *contesto* in cui viene usata non è reattivo, e dunque non saranno mostrati nuovi `alert` ogni volta che modifichiamo la variabile.
 
-E' in queste circostanze che torna utile [Autorun](http://docs.meteor.com/#deps_autorun). Come dice il nome stesso, il codice all'interno di un blocco `autorun` sarà eseguito e rieseguito ogni volta che le sorgenti dati reattive all'interno vengono modificate.
+È in queste circostanze che torna utile [Autorun](http://docs.meteor.com/#deps_autorun). Come dice il nome stesso, il codice all'interno di un blocco `autorun` sarà eseguito e rieseguito ogni volta che le sorgenti dati reattive all'interno vengono modificate.
 
 Scriviamo nella console del browser:
 

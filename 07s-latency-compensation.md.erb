@@ -12,7 +12,7 @@ Nell'ultimo capitolo abbiamo introdotto un nuovo concetto nell'universo di Meteo
 
 <%= diagram "latency1", "Without latency compensation", "pull-right" %>
 
-Un Metodo di Meteor è un modo per eseguire una serie di comandi sul server in maniera strutturata. Nel nostro esempio abbiamo usato un Metodo perchè vogliamo che i nuovi post siano taggati con il nome e l'id dell'autore e con l'orario corrente del server.
+Un Metodo di Meteor è un modo per eseguire una serie di comandi sul server in maniera strutturata. Nel nostro esempio abbiamo usato un Metodo perché vogliamo che i nuovi post siano taggati con il nome e l'id dell'autore e con l'orario corrente del server.
 
 Tuttavia se Meteor eseguisse i Metodi nel modo più semplice avremmo un problema. Considerate questa sequenza di eventi (nota: i timestamp sono valori casuali presi per semplice scopo illustrativo):
 
@@ -49,15 +49,15 @@ In questo modo chiediamo a Meteor se il codice si sta eseguendo sul client. Se �
 Meteor.methods({
   post: function(postAttributes) {
     // […]
-    
+
     // pick out the whitelisted keys
     var post = _.extend(_.pick(postAttributes, 'url', 'message'), {
       title: postAttributes.title + (this.isSimulation ? '(client)' : '(server)'),
-      userId: user._id, 
-      author: user.username, 
+      userId: user._id,
+      author: user.username,
       submitted: new Date().getTime()
     });
-    
+
     // wait for 5 seconds
     if (! this.isSimulation) {
       var Future = Npm.require('fibers/future');
@@ -67,9 +67,9 @@ Meteor.methods({
       }, 5 * 1000);
       future.wait();
     }
-    
+
     var postId = Posts.insert(post);
-    
+
     return postId;
   }
 });
@@ -87,13 +87,13 @@ Abbiamo fatto anche un reindirizzamento alla lista di post:
 Template.postSubmit.events({
   'submit form': function(event) {
     event.preventDefault();
-    
+
     var post = {
       url: $(event.target).find('[name=url]').val(),
       title: $(event.target).find('[name=title]').val(),
       message: $(event.target).find('[name=message]').val()
     }
-    
+
     Meteor.call('post', post, function(error, id) {
       if (error)
         return alert(error.reason);
@@ -123,11 +123,11 @@ Quando definite una collezione sul server chiamata `'posts'`, state implicitamen
 
 1. Controlla che possiamo fare il cambiamento chiamando le callback `allow` e `deny` (questo non avviene durante la simulazione).
 2. Rende effettivi i cambiamenti nel sottostante archivio dati.
-  
+
 ### Metodi che chiamano Metodi
 
 Se state riuscendo a seguire, potete aver notato che il nostro Metodo `post` sta chiamando un altro Metodo (`posts/insert`) quando inseriamo un nuovo post. Come funziona?
- 
-Quando la simulazione (la versione lato client del Metodo) viene eseguita, eseguiamo la simulazione di `insert` (in modo da inserire il documento nella collezione lato client), ma *non* chiamiamo la versione lato server di `insert`, perchè ci aspettiamo che sia la *versione server* di `post` a farlo.
+
+Quando la simulazione (la versione lato client del Metodo) viene eseguita, eseguiamo la simulazione di `insert` (in modo da inserire il documento nella collezione lato client), ma *non* chiamiamo la versione lato server di `insert`, perché ci aspettiamo che sia la *versione server* di `post` a farlo.
 
 Di conseguenza quando il Metodo lato server `post` chiama `insert` non c'è bisogno di preoccuparsi della simulazione, e l'inserimento prosegue senza problemi.

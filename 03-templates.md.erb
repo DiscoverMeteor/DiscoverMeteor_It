@@ -7,11 +7,11 @@ contents: Utilizzare il linguaggio di templating di Meteor, Spacebars.|Creare i 
 paragraphs: 46
 ---
 
-Per rendere semplice l'apprendimento dello sviluppo in Meteor, adotteremo un approccio dall'esterno. In altre parole realizzeremo prima una semplice struttura in HTML/JavaScript e la integreremo con le funzionalità dell'applicazione solo in un secondo momento. 
+Per rendere semplice l'apprendimento dello sviluppo in Meteor, adotteremo un approccio dall'esterno. In altre parole realizzeremo prima una semplice struttura in HTML/JavaScript e la integreremo con le funzionalità dell'applicazione solo in un secondo momento.
 
 Ciò significa che in questo capitolo ci preoccuperemo solamente di ciò che accade all'interno della cartella `/client`.
 
-Creiamo un nuovo file chiamato `main.html` all'interno della cartella `/client` e inseriamoci il seguente codice: 
+Creiamo un nuovo file chiamato `main.html` all'interno della cartella `/client` e inseriamoci il seguente codice:
 
 ~~~html
 <head>
@@ -63,7 +63,7 @@ Creiamo finalmente il nostro secondo template. Dentro `client/views/posts`, crei
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-E `post_item.html`: 
+E `post_item.html`:
 
 ~~~html
 <template name="postItem">
@@ -78,7 +78,7 @@ E `post_item.html`:
 
 Notate l'attributo `name="postsList"` dell'elemento template. Questo è il nome che viene utilizzato da Meteor per tenere traccia di dove vanno inseriti i vari template.
 
-E' il momento di introdurre il sistema di template di Meteor, Spacebars. Spacebars è semplice HTML, con l'aggiunta di tre particolarità: *parziali*, *espressioni* e *blocchi di controllo*.
+È il momento di introdurre il sistema di template di Meteor, Spacebars. Spacebars è semplice HTML, con l'aggiunta di tre particolarità: *parziali*, *espressioni* e *blocchi di controllo*.
 
 I *parziali* usano la sintassi `{{> templateName}}`, e dicono semplicemente a Meteor di sostituire il parziale con il template con lo stesso nome (nel nostro caso `postItem`).
 
@@ -90,17 +90,17 @@ Infine, i *blocchi di controllo* sono tag speciali che controllano il flusso del
 
 ### Più informazioni
 
-Potete far riferimento alla [documentazione di Spacebars](https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md) se volete imparare di più su Spacebars. 
+Potete far riferimento alla [documentazione di Spacebars](https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md) se volete imparare di più su Spacebars.
 
 <% end %>
 
 Armati di queste nuove conoscenze, possiamo facilmente capire cosa sta succedendo.
 
-Come prima cosa nel template `postsList`, stiamo iterando su un oggetto `posts` grazie al blocco di controllo `{{#each}}…{{/each}}`. Successivamente, per ogni iterazione, includiamo il template `postItem`. 
+Come prima cosa nel template `postsList`, stiamo iterando su un oggetto `posts` grazie al blocco di controllo `{{#each}}…{{/each}}`. Successivamente, per ogni iterazione, includiamo il template `postItem`.
 
-Da dove arriva questo oggetto `posts`? Buona domanda. Si tratta di un helper di template che definiremo più avanti quando di occuperemo dei manager di template. 
+Da dove arriva questo oggetto `posts`? Buona domanda. Si tratta di un helper di template che definiremo più avanti quando di occuperemo dei manager di template.
 
-Il template `postItem` è abbastanza lineare. Usa solo tre espressioni: `{{url}}` e `{{title}}` ritornano le proprietà del documento, mentre `{{domain}}` chiama un helper del template. 
+Il template `postItem` è abbastanza lineare. Usa solo tre espressioni: `{{url}}` e `{{title}}` ritornano le proprietà del documento, mentre `{{domain}}` chiama un helper del template.
 
 Abbiamo nominato molte volte gli "helper del template" in questo capitolo senza in realtà spiegare come funzionano. Prima di poter riparare a questa mancanza dobbiamo parlare dei manager.
 
@@ -132,12 +132,12 @@ var postsData = [
     title: 'Introducing Telescope',
     author: 'Sacha Greif',
     url: 'http://sachagreif.com/introducing-telescope/'
-  }, 
+  },
   {
     title: 'Meteor',
     author: 'Tom Coleman',
     url: 'http://meteor.com'
-  }, 
+  },
   {
     title: 'The Meteor Book',
     author: 'Tom Coleman',
@@ -212,7 +212,7 @@ Sebbene non sia proprio di Meteor, di seguito trovate una veloce spiegazione del
 
 Definiamo poi il valore del suo attributo `href` tramite il valore dell'URL del post attuale (come abbiamo appena visto, in un helper `this` è l'oggetto sul quale stiamo al momento operando).
 
-Infine sfruttiamo la proprietà speciale dell'elemento `a`, `hostname`, per recuperare il nome del dominio del link senza il resto dell'URL. 
+Infine sfruttiamo la proprietà speciale dell'elemento `a`, `hostname`, per recuperare il nome del dominio del link senza il resto dell'URL.
 
 <% end %>
 

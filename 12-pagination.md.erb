@@ -17,14 +17,14 @@ Al momento stiamo ancora pubblicando tutti i post insieme, a tutti gli utenti co
 
 ### Aggiungere Post
 
-Prima di tutto, nei nostri dati di esempio, carichiamo abbastanza post perchè la paginazione abbia senso:
+Prima di tutto, nei nostri dati di esempio, carichiamo abbastanza post perché la paginazione abbia senso:
 
 ~~~js
-// Fixture data 
+// Fixture data
 if (Posts.find().count() === 0) {
 
   //...
-  
+
   Posts.insert({
     title: 'The Meteor Book',
     userId: tom._id,
@@ -33,7 +33,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 12 * 3600 * 1000,
     commentsCount: 0
   });
-  
+
   for (var i = 0; i < 10; i++) {
     Posts.insert({
       title: 'Test post #' + i,
@@ -73,7 +73,7 @@ Come prima cosa, fermiamo la sottoscrizione alla pubblicazione `posts` nel blocc
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() { 
+  waitOn: function() {
     return [Meteor.subscribe('notifications')]
   }
 });
@@ -86,7 +86,7 @@ Aggiugiamo un parametro `postsLimit` al percorso della route. Aggiungendo un `?`
 ~~~js
 Router.map(function() {
   //...
-  
+
   this.route('postsList', {
     path: '/:postsLimit?'
   });
@@ -95,20 +95,20 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "5" %>
 
-E' importante contare che un percorso come `/:parameter?` combacerà con ogni possibile percorso. Siccome ogni route viene analizzata in maniera successiva per vedere se corrisponde al percorso attuale, dobbiamo organizzare le nostre route in ordine di specificità decrescente.
+È importante contare che un percorso come `/:parameter?` combacerà con ogni possibile percorso. Siccome ogni route viene analizzata in maniera successiva per vedere se corrisponde al percorso attuale, dobbiamo organizzare le nostre route in ordine di specificità decrescente.
 
 In altre parole, le route più specifiche come `/posts/:_id` devono essere messe per prime, e la route `postsList` dev'essere posizionata alla fine del file dato che si combina praticamente con tutti i percorsi.
 
-E' ora di gestire il problema più complesso di sottoscrivere e trovare i dati corretti. Dobbiamo gestire il caso in cui il parametro `postsLimit` non sia presente, assegnando un valore di default. Useremo come limite "5", che ci da la possibilità di giocare abbastanza con la paginazione.
+È ora di gestire il problema più complesso di sottoscrivere e trovare i dati corretti. Dobbiamo gestire il caso in cui il parametro `postsLimit` non sia presente, assegnando un valore di default. Useremo come limite "5", che ci da la possibilità di giocare abbastanza con la paginazione.
 
 ~~~js
 Router.map(function() {
   //..
-  
+
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var postsLimit = parseInt(this.params.postsLimit) || 5; 
+      var postsLimit = parseInt(this.params.postsLimit) || 5;
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: postsLimit});
     }
   });
@@ -166,11 +166,11 @@ Router.map(function() {
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit});
     },
     data: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return {
         posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
       };
@@ -189,7 +189,7 @@ Facciamo il punto della situazione. Il codice modificato di `router.js` dovrebbe
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() { 
+  waitOn: function() {
     return [Meteor.subscribe('notifications')]
   }
 });
@@ -200,11 +200,11 @@ Router.map(function() {
   this.route('postsList', {
     path: '/:postsLimit?',
     waitOn: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit});
     },
     data: function() {
-      var limit = parseInt(this.params.postsLimit) || 5; 
+      var limit = parseInt(this.params.postsLimit) || 5;
       return {
         posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
       };
@@ -223,9 +223,9 @@ Proviamo il nostro nuovo sistema di paginazione. Abbiamo ora la possibilità di 
 
 <% note do %>
 
-### Perchè non usare delle pagine?
+### Perché non usare delle pagine?
 
-Perchè stiamo usando un approccio a "paginazione infinita" invece di mostare pagine di 10 post ciascuna, come fa Google con i risultati di ricerca? Questo è dovuto al paradigma di un'applicazione in tempo reale utilizzato da Meteor.
+Perché stiamo usando un approccio a "paginazione infinita" invece di mostare pagine di 10 post ciascuna, come fa Google con i risultati di ricerca? Questo è dovuto al paradigma di un'applicazione in tempo reale utilizzato da Meteor.
 
 Immaginiamo di star paginando la nostra collezione `Posts` utilizzando lo schema di paginazione dei risultati di Google e che siamo al momento in pagina 2, che mostra i post da 10 a 20. Cosa succede se uno degli utenti cancella un post dei precedenti 10?
 
@@ -254,9 +254,9 @@ Introduciamo ora un nuovo aspetto dell'Iron Router, i *Controller delle Route*. 
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5, 
-  limit: function() { 
-    return parseInt(this.params.postsLimit) || this.increment; 
+  increment: 5,
+  limit: function() {
+    return parseInt(this.params.postsLimit) || this.increment;
   },
   findOptions: function() {
     return {sort: {submitted: -1}, limit: this.limit()};
@@ -301,9 +301,9 @@ Come prima, aggiungiamo la logica della paginazione nella nostra route. Ricordat
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5, 
-  limit: function() { 
-    return parseInt(this.params.postsLimit) || this.increment; 
+  increment: 5,
+  limit: function() {
+    return parseInt(this.params.postsLimit) || this.increment;
   },
   findOptions: function() {
     return {sort: {submitted: -1}, limit: this.limit()};
@@ -353,7 +353,7 @@ Quel che rimane da fare è aggiungere il link "Carica di più" in fondo alla lis
     {{#each posts}}
       {{> postItem}}
     {{/each}}
-    
+
     {{#if nextPath}}
       <a class="load-more" href="{{nextPath}}">Load more</a>
     {{/if}}
@@ -388,9 +388,9 @@ Facciamo solo una modifica. Disabilitiamo `iron-router-progress` per la route `p
 
 ~~~js
 Router.map(function() {
- 
+
   //...
-  
+
   this.route('postSubmit', {
     path: '/submit',
     disableProgress: true
@@ -432,7 +432,7 @@ Ora, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottos
 Router.map(function() {
 
   //...
-    
+
   this.route('postPage', {
     path: '/posts/:_id',
     waitOn: function() {
@@ -446,12 +446,12 @@ Router.map(function() {
 
   this.route('postEdit', {
     path: '/posts/:_id/edit',
-    waitOn: function() { 
+    waitOn: function() {
       return Meteor.subscribe('singlePost', this.params._id);
     },
-    data: function() { return Posts.findOne(this.params._id); }    
+    data: function() { return Posts.findOne(this.params._id); }
   });
-  
+
   /...
 
 });
@@ -461,4 +461,4 @@ Router.map(function() {
 
 <%= commit "12-6","Use a single post subscription to ensure that we can always see the right post." %>
 
-Terminata la paginazione, la nostra applicazione non soffre più di problemi di scalabilità, e gli utenti sono sicuri di poter contribuire con molti più link di prima. Non sarebbe carino avere un sistema per poter dare un voto a questi link? E' esattamente l'argomento del prossimo capitolo, *Votare*.
+Terminata la paginazione, la nostra applicazione non soffre più di problemi di scalabilità, e gli utenti sono sicuri di poter contribuire con molti più link di prima. Non sarebbe carino avere un sistema per poter dare un voto a questi link? È esattamente l'argomento del prossimo capitolo, *Votare*.

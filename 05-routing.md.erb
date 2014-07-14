@@ -36,7 +36,7 @@ Si noti che Iron Router è un pacchetto di terze parti, quindi serve Meteorite p
 
 In questo capitolo vedremo molte caratteristiche del router. Se hai già esperienza con un framework tipo Rails, hai già familiarità con la maggior parte di questi concetti. Se no, ecco un veloce glossario per farti imparare rapidamente:
 
-- **Route**: Una route è il mattone base del routing. E' il set di istruzioni che dice all'applicazione dove andare e cosa fare quando incontra un URL.
+- **Route**: Una route è il mattone base del routing. È il set di istruzioni che dice all'applicazione dove andare e cosa fare quando incontra un URL.
 - **Path**: Un path è il percorso indicato da un URL all'interno dell'applicazione. Può essere statico (`/terms_of_service`) o dinamico (`/posts/xyz`), e può anche includere parametri di ricerca (`/search?keyword=meteor`).
 - **Segment**: Le diverse parti di un path, delimitato da slashes (`/`).
 - **Hook**: Gli hook sono azioni che desideri fare prima, dopo, o anche durante il processo di routing. Un esempio tipico è il controllo dei diritti di accesso dell'utente prima di mostrare una determinata pagina.
@@ -109,7 +109,7 @@ Abbiamo appena fatto due cose importanti. Primo, abbiamo detto al router di usar
 
 ### La cartella `/lib`
 
-Tutto ciò che metti dentro la cartella `/lib` è garantito che sarà caricato prima di qualsiasi altra cosa nell'applicazione (con la sola potenziale eccezione dei pacchetti smart). E' quindi il posto migliore dove mettere il codice degli helper che deve essere disponibile sempre.
+Tutto ciò che metti dentro la cartella `/lib` è garantito che sarà caricato prima di qualsiasi altra cosa nell'applicazione (con la sola potenziale eccezione dei pacchetti smart). È quindi il posto migliore dove mettere il codice degli helper che deve essere disponibile sempre.
 
 Una piccola avvertenza: poiché la cartella `/lib` non si trova né dentro `/client` né dentro `/server` il suo contenuto sarà visibile in entrambi gli ambienti.
 
@@ -173,7 +173,7 @@ Inoltre poiché lasciamo che sia il router a gestire la sottoscrizione, la puoi 
 
 Normalmente è una buona idea attendere il caricamento della sottoscrizione, non solo per l'esperienza d'uso, ma anche perché ti permette di contare sulla disponibilità dei dati all'interno del template. Così facendo infatti non dobbiamo più gestire la situazione in cui un template viene mostrato prima che i dati contenuti siano disponibili, con tutti i problemi che ne conseguono.
 
-Aggiungeremo anche un filtro `onBeforeAction` per triggherare la funzionalità 'loading', predefinita in Iron Router, ed assicurarci di mostrare il template di caricamento mentre attendiamo. 
+Aggiungeremo anche un filtro `onBeforeAction` per triggherare la funzionalità 'loading', predefinita in Iron Router, ed assicurarci di mostrare il template di caricamento mentre attendiamo.
 
 L'ultimo pezzo del puzzle è il template di caricamento vero e proprio. Useremo il pacchetto `spin` per creare una simpatica animazione di attesa caricamento. Aggiungilo con `mrt add spin` e poi crea il template di caricamento così:
 
@@ -222,7 +222,7 @@ Creiamo poi un'altra route a cui assegniamo un nome, questa volta mappando il pa
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id'
   });
@@ -247,7 +247,7 @@ Nel nostro caso possiamo ottenere il giusto contesto dati cercando il nostro pos
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }

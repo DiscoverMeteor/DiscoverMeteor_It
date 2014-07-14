@@ -24,12 +24,12 @@ Router.configure({
 
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }
   });
-  
+
   this.route('postSubmit', {
     path: '/submit'
   });
@@ -95,7 +95,7 @@ Impostare il nostro percorso significa che se l'utente accede all'URL '/submit',
         <div class="controls">
             <textarea name="message" type="text" value=""></textarea>
         </div>
-    </div> 
+    </div>
 
     <div class="control-group">
         <div class="controls">
@@ -116,19 +116,19 @@ Questo è un modulo semplice. Non dobbiamo preoccuparci di aggiungerci una funzi
 
 ### Creare i Post
 
-Fissiamo un event handler all'evento 'submit' del modulo. E' preferibile intercettare questo evento, anziché l'evento 'click' sul bottone, perché coprirà ogni possibile modo di invio, premendo 'invio' nel form, ad esempio.
+Fissiamo un event handler all'evento 'submit' del modulo. È preferibile intercettare questo evento, anziché l'evento 'click' sul bottone, perché coprirà ogni possibile modo di invio, premendo 'invio' nel form, ad esempio.
 
 ~~~js
 Template.postSubmit.events({
   'submit form': function(e) {
     e.preventDefault();
-    
+
     var post = {
       url: $(e.target).find('[name=url]').val(),
       title: $(e.target).find('[name=title]').val(),
       message: $(e.target).find('[name=message]').val()
     }
-    
+
     post._id = Posts.insert(post);
     Router.go('postPage', post);
   }
@@ -186,11 +186,11 @@ Siamo riusciti a garantire la necessità di essere connessi per creare un post. 
 
 <%= screenshot "7-2", "Insert failed: Access denied " %>
 
-Tuttavia, abbiamo ancora un paio di problemi da rsolvere: 
+Tuttavia, abbiamo ancora un paio di problemi da rsolvere:
 
  - Utenti non connessi possono ancora accedere al modulo per creare post.
  - Il post non è legato all'utente in nessun modo (e non c'è nemmeno codice sul server per farlo applicare)
- - E' possibile creare post multipli che condividono lo stesso URL 
+ - È possibile creare post multipli che condividono lo stesso URL
 
 Risolviamo questi problemi:
 
@@ -211,12 +211,12 @@ Router.configure({
 
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }
   });
-  
+
   this.route('postSubmit', {
     path: '/submit'
   });
@@ -264,12 +264,12 @@ Modifichiamo quindi il nostro hook al fine di utilizzare il template di caricame
 ~~~js
 Router.map(function() {
   this.route('postsList', {path: '/'});
-  
+
   this.route('postPage', {
     path: '/posts/:_id',
     data: function() { return Posts.findOne(this.params._id); }
   });
-  
+
   this.route('postSubmit', {
     path: '/submit'
   });
@@ -282,7 +282,7 @@ var requireLogin = function(pause) {
       this.render(this.loadingTemplate);
     else
       this.render('accessDenied');
-    
+
     pause();
   }
 }
@@ -297,7 +297,7 @@ Router.onBeforeAction(requireLogin, {only: 'postSubmit'});
 
 ### Nascondere il Link
 
-Il modo più semplice per prevenire che l'utente non connesso possa accedere a questa pagina per sbaglio è di nascondere il link. E' molto facile:
+Il modo più semplice per prevenire che l'utente non connesso possa accedere a questa pagina per sbaglio è di nascondere il link. È molto facile:
 
 ~~~html
 <ul class="nav">
@@ -312,7 +312,7 @@ L'helper 'currentUser' viene fornito dal pacchetto 'accounts' ed è l'equivalent
 
 ### Meteor Method: Miglior sicurezza e astrazione
 
-Siamo riusciti a garantire accesso alla pagina del nuovo post per utenti non connessi e negarli dal creare post nuovi anche se provassero ad imbrogliare usando la console. Detto questo, ci sono pero' ancora un paio di cose da aggiustare:
+Siamo riusciti a garantire accesso alla pagina del nuovo post per utenti non connessi e negarli dal creare post nuovi anche se provassero ad imbrogliare usando la console. Detto questo, ci sono però ancora un paio di cose da aggiustare:
 
 - Data e ora per i post.
 - Garantire che lo stesso URL non sia postato più di una volta.
@@ -334,17 +334,17 @@ Torniamo a 'post_submit.js'. Invece che inserirlo direttamente nella collezione 
 Template.postSubmit.events({
   'submit form': function(e) {
     e.preventDefault();
-    
+
     var post = {
       url: $(e.target).find('[name=url]').val(),
       title: $(e.target).find('[name=title]').val(),
       message: $(e.target).find('[name=message]').val()
     }
-    
+
     Meteor.call('post', post, function(error, id) {
       if (error)
         return alert(error.reason);
-        
+
       Router.go('postPage', {_id: id});
     });
   }
@@ -363,31 +363,31 @@ Meteor.methods({
   post: function(postAttributes) {
     var user = Meteor.user(),
       postWithSameLink = Posts.findOne({url: postAttributes.url});
-    
+
     // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to post new stories");
-    
+
     // ensure the post has a title
     if (!postAttributes.title)
       throw new Meteor.Error(422, 'Please fill in a headline');
-    
+
     // check that there are no previous posts with the same link
     if (postAttributes.url && postWithSameLink) {
-      throw new Meteor.Error(302, 
-        'This link has already been posted', 
+      throw new Meteor.Error(302,
+        'This link has already been posted',
         postWithSameLink._id);
     }
-    
+
     // pick out the whitelisted keys
     var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
-      userId: user._id, 
-      author: user.username, 
+      userId: user._id,
+      author: user.username,
       submitted: new Date().getTime()
     });
-    
+
     var postId = Posts.insert(post);
-    
+
     return postId;
   }
 });

@@ -10,7 +10,7 @@ paragraphs: 22
 
 Dopo che abbiamo creato uno schema riutilizzabile per la gestione dei nostri errori, possiamo creare un pacchetto e condividerlo con gli altri sviluppatori della comunità di Meteor.
 
-Come prima cosa dobbiamo preparare la struttura del pacchetto. Lo inseriamo in una cartella chiamate `packages/errors/`, in questo modo si crea un pacchetto personalizzato che l'applicazione utilizzerà automaticamente. (E' possibile che abbiate notato che Meteorite installa i pacchetto tramite symlinks nella cartella `packages/`).
+Come prima cosa dobbiamo preparare la struttura del pacchetto. Lo inseriamo in una cartella chiamate `packages/errors/`, in questo modo si crea un pacchetto personalizzato che l'applicazione utilizzerà automaticamente. (È possibile che abbiate notato che Meteorite installa i pacchetto tramite symlinks nella cartella `packages/`).
 
 In seguito, creiamo il file `package.js`, nel quale viene detto a Meteor come deve utilizzare il pacchetto e quali simboli vengono esportati, cioè quali oggetti vengono resi disponibili all'applicazione.
 
@@ -23,8 +23,8 @@ Package.on_use(function (api, where) {
   api.use(['minimongo', 'mongo-livedata', 'templating'], 'client');
 
   api.add_files(['errors.js', 'errors_list.html', 'errors_list.js'], 'client');
-  
-  if (api.export) 
+
+  if (api.export)
     api.export('Errors');
 });
 ~~~
@@ -36,7 +36,7 @@ Aggiungiamo tre file al pacchetto, prendendoli direttamente da Microscope e aggi
 Errors = {
   // Local (client-only) collection
   collection: new Meteor.Collection(null),
-  
+
   throw: function(message) {
     Errors.collection.insert({message: message, seen: false})
   },
@@ -134,26 +134,26 @@ Creiamo ora un file nel quale, utilizzando Tinytest, faremo dei test sul codice 
 ~~~js
 Tinytest.add("Errors collection works", function(test) {
   test.equal(Errors.collection.find({}).count(), 0);
-  
+
   Errors.throw('A new error!');
   test.equal(Errors.collection.find({}).count(), 1);
-  
+
   Errors.collection.remove({});
 });
 
-Tinytest.addAsync("Errors template works", function(test, done) {  
+Tinytest.addAsync("Errors template works", function(test, done) {
   Errors.throw('A new error!');
   test.equal(Errors.collection.find({seen: false}).count(), 1);
-  
+
   // render the template
   UI.insert(UI.render(Template.meteorErrors), document.body);
-  
+
   // wait a few milliseconds
   Meteor.setTimeout(function() {
     test.equal(Errors.collection.find({seen: false}).count(), 0);
     test.equal(Errors.collection.find({}).count(), 1);
     Errors.clearSeen();
-    
+
     test.equal(Errors.collection.find({seen: true}).count(), 0);
     done();
   }, 500);
@@ -170,8 +170,8 @@ Per dire a Meteor come eseguire i testi, aggiungiamo nel file `package.js` il se
 ~~~js
 Package.on_test(function(api) {
   api.use('errors', 'client');
-  api.use(['tinytest', 'test-helpers'], 'client');  
-  
+  api.use(['tinytest', 'test-helpers'], 'client');
+
   api.add_files('errors_tests.js', 'client');
 });
 ~~~
@@ -229,7 +229,7 @@ Done!
 
 Nota: i nomi dei pacchetti devono essere unici. Se avete seguito il procedimento parola per parola e utilizzato lo stesso nome per il pacchetto, verrà segnalato un conflitto e il rilascio non avrà successo. Tuttavia nel prossimo futuro i pacchetti Atmosphere saranno preceduti da quello dell'autore in modo che questo non si verifichi.
 
-Seconda Nota: dovrete crearvi un utente su http://atmosphere.meteor.com, perchè all'esecuzione di `mrt release .` vi verranno richiesti username e password.
+Seconda Nota: dovrete crearvi un utente su http://atmosphere.meteor.com, perché all'esecuzione di `mrt release .` vi verranno richiesti username e password.
 
 Ora che abbiamo rilasciato il pacchetto, possiamo eliminarlo dal progetto e installarlo di nuovo usando Meteorite:
 

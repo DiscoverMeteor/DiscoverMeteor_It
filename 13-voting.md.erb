@@ -7,7 +7,7 @@ contents: Implementare un sistema di votazione dei post.|Ordinare i post in base
 paragraphs: 49
 ---
 
-Adesso che il sito sta guadagnando in popolarità, trovare i link migliori sta cominciando a diventando complicato. E' necessario un qualche sistema ordinamento per i post.
+Adesso che il sito sta guadagnando in popolarità, trovare i link migliori sta cominciando a diventando complicato. È necessario un qualche sistema ordinamento per i post.
 
 Si potrebbe implementare un complesso sistema di ordinamento basato su karma, decadimento del punteggio a tempo, e svariati altri parametri (la maggior parte dei quali implementati in (Telescope)[http://telesc.pe/], il fratello maggiore di Microscope). Nella nostra applicazione invece si punta alla semplicità, per cui i post saranno ordinati in base al numero di voti ricevuti.
 
@@ -32,10 +32,10 @@ Da notare che se si volesse limitare l'accesso ad alcune di queste informazioni,
 Inoltre, il totale dei voti per ciascun post sarà denormalizzato, al fine di ottenere in maniera semplice tale contatore. Verranno quindi aggiunti due attributi ai post, `upvoters` e `votes`. Per cominciare, i suddetti campi verranno aggiunti ai dati di esempio:
 
 ~~~js
-// Fixture data 
+// Fixture data
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
-  
+
   // create two users
   var tomId = Meteor.users.insert({
     profile: { name: 'Tom Coleman' }
@@ -45,7 +45,7 @@ if (Posts.find().count() === 0) {
     profile: { name: 'Sacha Greif' }
   });
   var sacha = Meteor.users.findOne(sachaId);
-  
+
   var telescopeId = Posts.insert({
     title: 'Introducing Telescope',
     userId: sacha._id,
@@ -55,7 +55,7 @@ if (Posts.find().count() === 0) {
     commentsCount: 2,
     upvoters: [], votes: 0
   });
-  
+
   Comments.insert({
     postId: telescopeId,
     userId: tom._id,
@@ -63,7 +63,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 5 * 3600 * 1000,
     body: 'Interesting project Sacha, can I get involved?'
   });
-  
+
   Comments.insert({
     postId: telescopeId,
     userId: sacha._id,
@@ -71,7 +71,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 3 * 3600 * 1000,
     body: 'You sure can Tom!'
   });
-  
+
   Posts.insert({
     title: 'Meteor',
     userId: tom._id,
@@ -81,7 +81,7 @@ if (Posts.find().count() === 0) {
     commentsCount: 0,
     upvoters: [], votes: 0
   });
-  
+
   Posts.insert({
     title: 'The Meteor Book',
     userId: tom._id,
@@ -91,7 +91,7 @@ if (Posts.find().count() === 0) {
     commentsCount: 0,
     upvoters: [], votes: 0
   });
-  
+
   for (var i = 0; i < 10; i++) {
     Posts.insert({
       title: 'Test post #' + i,
@@ -108,25 +108,25 @@ if (Posts.find().count() === 0) {
 <%= caption "server/fixtures.js" %>
 <%= highlight "22, 48, 58, 69" %>
 
-Al solito, fermare l'applicazione, eseguire `meteor reset`, riavviare l'app, quindi creare un nuovo account. E' opportuno assicurarsi che i due campi vengano inizializzati al momento della creazione dei post:
+Al solito, fermare l'applicazione, eseguire `meteor reset`, riavviare l'app, quindi creare un nuovo account. È opportuno assicurarsi che i due campi vengano inizializzati al momento della creazione dei post:
 
 ~~~js
 //...
 
 // check that there are no previous posts with the same link
 if (postAttributes.url && postWithSameLink) {
-  throw new Meteor.Error(302, 
-    'This link has already been posted', 
+  throw new Meteor.Error(302,
+    'This link has already been posted',
     postWithSameLink._id);
 }
 
 // pick out the whitelisted keys
 var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
-  userId: user._id, 
-  author: user.username, 
+  userId: user._id,
+  author: user.username,
   submitted: new Date().getTime(),
   commentsCount: 0,
-  upvoters: [], 
+  upvoters: [],
   votes: 0
 });
 
@@ -187,20 +187,20 @@ Meteor.methods({
   post: function(postAttributes) {
     //...
   },
-  
+
   upvote: function(postId) {
     var user = Meteor.user();
     // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to upvote");
-    
+
     var post = Posts.findOne(postId);
     if (!post)
       throw new Meteor.Error(422, 'Post not found');
-    
+
     if (_.include(post.upvoters, user._id))
       throw new Meteor.Error(422, 'Already upvoted this post');
-    
+
     Posts.update(post._id, {
       $addToSet: {upvoters: user._id},
       $inc: {votes: 1}
@@ -312,7 +312,7 @@ Ci sono due problemi in questa scelta implementativa. Per prima cosa, è ineffic
 
 1. Legge il post dal database
 2. Verifica se l'utente ha votato
-3. In caso negativo, esegue il voto 
+3. In caso negativo, esegue il voto
 
 Cosa succede se lo stesso utente vota nuovamente lo stesso post durante i passi 1 e 3? Questa versione consente all'utente di votare 2 volte per lo stesso post. Fortunatamente, Mongo fornisce un metodo più efficace combinando i passi 1-3 in un singolo comando:
 
@@ -321,15 +321,15 @@ Meteor.methods({
   post: function(postAttributes) {
     //...
   },
-  
+
   upvote: function(postId) {
     var user = Meteor.user();
     // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to upvote");
-    
+
     Posts.update({
-      _id: postId, 
+      _id: postId,
       upvoters: {$ne: user._id}
     }, {
       $addToSet: {upvoters: user._id},
@@ -383,9 +383,9 @@ Per realizzare quanto detto, verrà _esteso_ `PostsListController` in due distin
 ~~~js
 PostsListController = RouteController.extend({
   template: 'postsList',
-  increment: 5, 
-  limit: function() { 
-    return parseInt(this.params.postsLimit) || this.increment; 
+  increment: 5,
+  limit: function() {
+    return parseInt(this.params.postsLimit) || this.increment;
   },
   findOptions: function() {
     return {sort: this.sort, limit: this.limit()};
@@ -424,12 +424,12 @@ Router.map(function() {
     path: '/',
     controller: NewPostsListController
   });
-  
+
   this.route('newPosts', {
     path: '/new/:postsLimit?',
     controller: NewPostsListController
   });
-  
+
   this.route('bestPosts', {
     path: '/best/:postsLimit?',
     controller: BestPostsListController
@@ -499,7 +499,7 @@ Dobbiamo anche aggiornare il gestore dell'evento di cancellazione dei post:
 ~~~html
   'click .delete': function(e) {
     e.preventDefault();
-    
+
     if (confirm("Delete this post?")) {
       var currentPostId = this._id;
       Posts.remove(currentPostId);
@@ -519,7 +519,7 @@ Fatto ciò, si ottiene la lista dei migliori post:
 
 ### Migliorare l'Header
 
-Avendo due pagine che elencano i post, non è chiaro quale delle due liste è correntemente visualizzata. E' necessario quindi modificare l'header per rendere la cosa esplicita. Viene creato un gestore `header.js` e una funzione di supporto che usa il percorso corrente e una o più route per aggiungere una classe attiva alle voci di nagivatione. 
+Avendo due pagine che elencano i post, non è chiaro quale delle due liste è correntemente visualizzata. È necessario quindi modificare l'header per rendere la cosa esplicita. Viene creato un gestore `header.js` e una funzione di supporto che usa il percorso corrente e una o più route per aggiungere una classe attiva alle voci di nagivatione.
 
 La ragione per cui si vuole supportare più route è che sia `home` che `newPosts` (a cui corrispondono le URL rispettivamente `/` e `/new`) puntano allo stesso template. Quindi `activeRouteClass` deve essere sufficientemente intelligente da rendere il tag `<li>`attivo in entrambi i casi.
 
@@ -566,11 +566,11 @@ Template.header.helpers({
   activeRouteClass: function(/* route names */) {
     var args = Array.prototype.slice.call(arguments, 0);
     args.pop();
-    
+
     var active = _.any(args, function(name) {
       return Router.current() && Router.current().route.name === name
     });
-    
+
     return active && 'active';
   }
 });
@@ -583,7 +583,7 @@ Template.header.helpers({
 
 ### Parametri dell'Helper
 
-Non è stato usato finora questo specifico pattern, ma come ogni tag Spacebars, i tag del template helper possono ricevere parametri. 
+Non è stato usato finora questo specifico pattern, ma come ogni tag Spacebars, i tag del template helper possono ricevere parametri.
 
 E se da un lato è possibile passare parametri con nome alla funzione, è anche possibile passare un numero non specificato di parametri anonimi, acceduti tramite l'oggetto `arguments` dall'interno della funzione.
 

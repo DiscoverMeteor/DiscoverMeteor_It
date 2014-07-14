@@ -18,10 +18,10 @@ Comments = new Meteor.Collection('comments');
 <%= caption "collections/comments.js" %>
 
 ~~~js
-// Fixture data 
+// Fixture data
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
-  
+
   // create two users
   var tomId = Meteor.users.insert({
     profile: { name: 'Tom Coleman' }
@@ -31,7 +31,7 @@ if (Posts.find().count() === 0) {
     profile: { name: 'Sacha Greif' }
   });
   var sacha = Meteor.users.findOne(sachaId);
-  
+
   var telescopeId = Posts.insert({
     title: 'Introducing Telescope',
     userId: sacha._id,
@@ -39,7 +39,7 @@ if (Posts.find().count() === 0) {
     url: 'http://sachagreif.com/introducing-telescope/',
     submitted: now - 7 * 3600 * 1000
   });
-  
+
   Comments.insert({
     postId: telescopeId,
     userId: tom._id,
@@ -47,7 +47,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 5 * 3600 * 1000,
     body: 'Interesting project Sacha, can I get involved?'
   });
-  
+
   Comments.insert({
     postId: telescopeId,
     userId: sacha._id,
@@ -55,7 +55,7 @@ if (Posts.find().count() === 0) {
     submitted: now - 3 * 3600 * 1000,
     body: 'You sure can Tom!'
   });
-  
+
   Posts.insert({
     title: 'Meteor',
     userId: tom._id,
@@ -63,7 +63,7 @@ if (Posts.find().count() === 0) {
     url: 'http://meteor.com',
     submitted: now - 10 * 3600 * 1000
   });
-  
+
   Posts.insert({
     title: 'The Meteor Book',
     userId: tom._id,
@@ -93,7 +93,7 @@ Meteor.publish('comments', function() {
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() { 
+  waitOn: function() {
     return [Meteor.subscribe('posts'), Meteor.subscribe('comments')];
   }
 });
@@ -103,7 +103,7 @@ Router.configure({
 
 <%= commit "10-1", "Added comments collection, pub/sub and fixtures." %>
 
-E' bene osservare che, perché il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database. Dopo aver eseguito il reset, non dimenticare di creare un nuovo utente ed effettuare di nuovo il login!
+È bene osservare che, perché il codice sopra sia eseguito, devi prima lanciare `meteor reset` per svuotare il tuo database. Dopo aver eseguito il reset, non dimenticare di creare un nuovo utente ed effettuare di nuovo il login!
 
 Prima di tutto, abbiamo creato un paio di (finti) utenti, li abbiamo inseriti nel database e abbiamo usato i loro `ids` per selezionarli dal database stesso subito dopo. Dopodichè, abbiamo aggiunto dei commenti al primo post, uno per ciascuno degli utenti, collegando il commento al post (con `postId`) e all'utente (con `userId`). Abbiamo anche aggiunto una data di inserimento e un testo per ciascun commento, insieme a un valore per `author`, un campo non normalizzato.
 
@@ -111,7 +111,7 @@ Inoltre, abbiamo modificato in nostro router per attendere sulle collezioni comm
 
 ### Visualizzare i commenti
 
-E' già un risultato l'aver inserito i commenti nel database, ma dobbiamo anche mostrarli nella pagina di discussione. La procedura dovrebbe ormai esserti familiare, e ti sei già fatto un'idea di quali sono i passi necessari:
+È già un risultato l'aver inserito i commenti nel database, ma dobbiamo anche mostrarli nella pagina di discussione. La procedura dovrebbe ormai esserti familiare, e ti sei già fatto un'idea di quali sono i passi necessari:
 
 ~~~html
 <template name="postPage">
@@ -220,13 +220,13 @@ Incominciamo con il creare il modulo di inserimento alla fine di ciascun post:
 ~~~html
 <template name="postPage">
   {{> postItem}}
-  
+
   <ul class="comments">
     {{#each comments}}
       {{> comment}}
     {{/each}}
   </ul>
-  
+
   {{#if currentUser}}
     {{> commentSubmit}}
   {{else}}
@@ -266,13 +266,13 @@ Per inserire il commento, chiameremo un metodo `comment` nel manager `commentSub
 Template.commentSubmit.events({
   'submit form': function(e, template) {
     e.preventDefault();
-    
+
     var $body = $(e.target).find('[name=body]');
     var comment = {
       body: $body.val(),
       postId: template.data._id
     };
-    
+
     Meteor.call('comment', comment, function(error, commentId) {
       if (error){
         throwError(error.reason);
@@ -297,19 +297,19 @@ Meteor.methods({
     // ensure the user is logged in
     if (!user)
       throw new Meteor.Error(401, "You need to login to make comments");
-      
+
     if (!commentAttributes.body)
       throw new Meteor.Error(422, 'Please write some content');
-      
+
     if (!post)
       throw new Meteor.Error(422, 'You must comment on a post');
-    
+
     comment = _.extend(_.pick(commentAttributes, 'postId', 'body'), {
       userId: user._id,
       author: user.username,
       submitted: new Date().getTime()
     });
-    
+
     return Comments.insert(comment);
   }
 });
@@ -339,7 +339,7 @@ Prima di tutto, eviteremo di precaricare tutti i commenti all'interno del blocco
 Router.configure({
   layoutTemplate: 'layout',
   loadingTemplate: 'loading',
-  waitOn: function() { 
+  waitOn: function() {
     return Meteor.subscribe('posts');
   }
 });
@@ -423,8 +423,8 @@ Dopodichè, ogni post deve partire da 0 commenti:
 ~~~js
 // pick out the whitelisted keys
 var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
-  userId: user._id, 
-  author: user.username, 
+  userId: user._id,
+  author: user.username,
   submitted: new Date().getTime(),
   commentsCount: 0
 });

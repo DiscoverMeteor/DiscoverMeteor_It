@@ -109,18 +109,18 @@ In aggiunta, se ritorna un errore `302` (che significa che esiste già un post c
 Template.postSubmit.events({
   'submit form': function(e) {
     e.preventDefault();
-    
+
     var post = {
       url: $(e.target).find('[name=url]').val(),
       title: $(e.target).find('[name=title]').val(),
       message: $(e.target).find('[name=message]').val()
     }
-    
+
     Meteor.call('post', post, function(error, id) {
       if (error) {
         // display the error to the user
         throwError(error.reason);
-        
+
         if (error.error === 302)
           Router.go('postPage', {_id: error.details})
       } else {
@@ -141,7 +141,7 @@ Facciamo una prova: creiamo un post inserendo come URL `http://meteor.com`. Dato
 
 ### Rimuovere gli errori
 
-Se avete provato a cliccare sul bottone di chiusura dell'errore, avrete visto l'errore sparire perchè il bottone di chiusura scatena l'evento JavaScript di Twitter Bootstrap.
+Se avete provato a cliccare sul bottone di chiusura dell'errore, avrete visto l'errore sparire perché il bottone di chiusura scatena l'evento JavaScript di Twitter Bootstrap.
 
 Quello che succede è che Bootstrap rimuove l'elemento `<div>` dell'errore dal DOM, ma non rimuove l'oggetto dell'errore dalla collezione di Meteor. Facciamo quindi in modo di ripulire la nostra collezione locale dopo che il messaggio di errore ha fatto il suo lavoro.
 
@@ -183,7 +183,7 @@ Per farlo useremo `Meteor.defer()`. Questa funzione dice a Meteor di eseguire la
 
 Si sta dicendo a Meteor di impostare `seen` a `true` un millisecondo dopo che il template `errors` e stato renderizzato. Ricordate che abbiamo detto che il reindirizzamento accade in maniera istantanea? Questo significa che il reindirizzamento avverrà prima della callback `defer`, che quindi non sarà mai eseguita.
 
-E' esattamente ciò che si stava cercando: se non viene eseguita l'errore non sarà mai marcato come `seen`, il che significa che non sarà eliminato, e quindi apparirà sulla pagina alla quale l'utente è stato reindirizzato esattamente come desiderato!
+È esattamente ciò che si stava cercando: se non viene eseguita l'errore non sarà mai marcato come `seen`, il che significa che non sarà eliminato, e quindi apparirà sulla pagina alla quale l'utente è stato reindirizzato esattamente come desiderato!
 
 ~~~js
 Template.errors.helpers({
