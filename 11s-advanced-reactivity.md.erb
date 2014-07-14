@@ -21,7 +21,7 @@ currentLikeCount = 0;
 Meteor.setInterval(function() {
   var postId;
   if (Meteor.user() && postId = Session.get('currentPostId')) {
-    getFacebookLikeCount(Meteor.user(), Posts.find(postId), 
+    getFacebookLikeCount(Meteor.user(), Posts.find(postId),
       function(err, count) {
         if (!err)
           currentLikeCount = count;
@@ -42,9 +42,9 @@ Tuttavia, nulla ancora dice al nostro template di ri-disegnare quando `currentLi
 
 ### Tracciare la reattività: Computation
 
-La reattività di Meteor è mediata dalle *dipendenze*, strutture di dati che tracciano una serie di calcoli. 
+La reattività di Meteor è mediata dalle *dipendenze*, strutture di dati che tracciano una serie di calcoli.
 
-Come abbiamo visto nel precedente approfondimento reattività, una computation è una sezione di codice che utilizza i dati reattivi. Nel nostro caso, c'è una computation che è stata creata in modo implicito per il modello `PostItem`. Ogni helper sul gestore del template sta lavorando all'interno di tale computation. 
+Come abbiamo visto nel precedente approfondimento reattività, una computation è una sezione di codice che utilizza i dati reattivi. Nel nostro caso, c'è una computation che è stata creata in modo implicito per il modello `PostItem`. Ogni helper sul gestore del template sta lavorando all'interno di tale computation.
 
 Si può pensare alla computation, come la sezione di codice che "si interessa" dei dati reattivi. Quando i dati cambiano, sarà questa computation che sarà informata (via `invalidate ()`), ed è la computation che decide se c'é bisogno di fare qualcosa.
 
@@ -64,7 +64,7 @@ currentLikeCount = function() {
 Meteor.setInterval(function() {
   var postId;
   if (Meteor.user() && postId = Session.get('currentPostId')) {
-    getFacebookLikeCount(Meteor.user(), Posts.find(postId), 
+    getFacebookLikeCount(Meteor.user(), Posts.find(postId),
       function(err, count) {
         if (!err && count !== _currentLikeCount) {
           _currentLikeCount = count;
@@ -76,7 +76,7 @@ Meteor.setInterval(function() {
 ~~~
 <%= highlight "1~7,14~17" %>
 
-Quello che abbiamo fatto è impostare una dipendenza `_currentLikeCountListeners`, che tiene traccia di tutte le computation nelle quali `currentLikeCount()` è stato usato. Quando il valore `_currentLikeCount` cambia, chiamiamo la funzione `changed()` su tale dipendenza, che invalida tutte le computation tracciate. 
+Quello che abbiamo fatto è impostare una dipendenza `_currentLikeCountListeners`, che tiene traccia di tutte le computation nelle quali `currentLikeCount()` è stato usato. Quando il valore `_currentLikeCount` cambia, chiamiamo la funzione `changed()` su tale dipendenza, che invalida tutte le computation tracciate.
 
 Queste computation possono quindi andare avanti e gestire il cambiamento, caso per caso.
 
@@ -100,17 +100,17 @@ $rootScope.$watch('currentLikeCount', function(likeCount) {
 });
 ~~~
 
-Naturalmente, proprio come raramente si imposta una computation in Meteor, neanche `$watch` viene chiamato spesso esplicitamente in Angular come direttiva `ng-model` e `{{expressions}}` imposta automaticamente il tracciamento che poi si prende cura del re-rendering ad ogni cambiamento. 
+Naturalmente, proprio come raramente si imposta una computation in Meteor, neanche `$watch` viene chiamato spesso esplicitamente in Angular come direttiva `ng-model` e `{{expressions}}` imposta automaticamente il tracciamento che poi si prende cura del re-rendering ad ogni cambiamento.
 
-Quando un certo valore reattivo è cambiato, `scope.$apply()` deve poi essere chiamato. Questo rivaluta ogni osservatore del campo dello scope, ma chiama solo la funzione listener di watcher il cui valore di espressione è *cambiato*. 
+Quando un certo valore reattivo è cambiato, `scope.$apply()` deve poi essere chiamato. Questo rivaluta ogni osservatore del campo dello scope, ma chiama solo la funzione listener di watcher il cui valore di espressione è *cambiato*.
 
-Quindi `scope.$apply()` è simile a `dependency.changed()`, tranne che agisce a livello del campo dello scope, piuttosto che dare il comando di dire che proprio gli ascoltatori dovrebbero essere rivalutato. Detto questo, questa leggera mancanza di controllo dà ad Angular la capacità di essere molto intelligente ed efficiente nel modo in cui determina con precisione quali listener devono essere rivalutati. 
+Quindi `scope.$apply()` è simile a `dependency.changed()`, tranne che agisce a livello del campo dello scope, piuttosto che dare il comando di dire che proprio gli ascoltatori dovrebbero essere rivalutato. Detto questo, questa leggera mancanza di controllo dà ad Angular la capacità di essere molto intelligente ed efficiente nel modo in cui determina con precisione quali listener devono essere rivalutati.
 
 Con Angular, il codice della nostra funzione `getFacebookLikeCount()` codice sarebbe assomigliato a qualcosa di simile:
 
 ~~~js
 Meteor.setInterval(function() {
-  getFacebookLikeCount(Meteor.user(), Posts.find(postId), 
+  getFacebookLikeCount(Meteor.user(), Posts.find(postId),
     function(err, count) {
       if (!err) {
         $rootScope.currentLikeCount = count;

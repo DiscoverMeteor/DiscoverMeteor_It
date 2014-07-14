@@ -59,7 +59,7 @@ Questo è il codice corrispondente, che risiede sul server:
 ~~~js
 // on the server
 Meteor.publish('posts', function() {
-  return Posts.find({flagged: false}); 
+  return Posts.find({flagged: false});
 });
 ~~~
 
@@ -140,7 +140,7 @@ Per questo motivo autopublish è utile solo quando state iniziando e non avete a
 
 Dopo aver rimosso `autopublish` vi accorgerete presto che tutti i vostri dati sono spariti dal client. Un modo semplice per riverderli è di duplicare ciò che fa autopublish e pubblicare una collezione intera. Ad esempio:
 
-~~~js 
+~~~js
 Meteor.publish('allPosts', function(){
   return Posts.find();
 });
@@ -154,7 +154,7 @@ Stiamo ancora pubblicando le intere collezioni ma abbiamo ora controllo su quali
 
 Il prossimo livello di controllo è di pubblicare solo _parte_ di una collection. Ad esempio solo i post che appartengono ad un certo autore:
 
-~~~js 
+~~~js
 Meteor.publish('somePosts', function(){
   return Posts.find({'author':'Tom'});
 });

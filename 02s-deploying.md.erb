@@ -8,9 +8,9 @@ contents: Come fare il deploy su Meteor.com.|Come fare il deploy su Modulus.|Com
 paragraphs: 46
 ---
 
-Alcune persone preferiscono lavorare silenziosamente su di un progetto finché non è perfetto, mentre altre non vedono l'ora di farlo vedere al mondo intero. 
+Alcune persone preferiscono lavorare silenziosamente su di un progetto finché non è perfetto, mentre altre non vedono l'ora di farlo vedere al mondo intero.
 
-Se appartenete alla prima categoria di persone, e per ora preferite sviluppare in locale, sentitevi liberi di saltare questo capitolo. Diversamente, se volete prendervi un po' di tempo per imparare come fare il *deploy* (trasferire il progetto funzionante su di un server remoto) online della la vostra applicazione Meteor, abbiamo la soluzione per te. 
+Se appartenete alla prima categoria di persone, e per ora preferite sviluppare in locale, sentitevi liberi di saltare questo capitolo. Diversamente, se volete prendervi un po' di tempo per imparare come fare il *deploy* (trasferire il progetto funzionante su di un server remoto) online della la vostra applicazione Meteor, abbiamo la soluzione per te.
 
 Impareremo come fare il deploy di un'applicazione Meteor in diversi modi. Sentitevi liberi di utilizzare ciascuno di esse in ogni momento del vostro processo di sviluppo, sia che stiate lavorando a Microscope che a qualsiasi altra app Meteor. Iniziamo!
 
@@ -20,7 +20,7 @@ Impareremo come fare il deploy di un'applicazione Meteor in diversi modi. Sentit
 
 Questo è un capitolo di **approfondimento**. Gli approfondimenti forniscono uno sguardo più approfondito ad argomenti di Meteor più generali, in modo indipendente dal resto del libro.
 
-Se preferite continuare a costruire Microscope, potete quindi saltare temporaneamente questo capitolo e tornare indietro più avanti. 
+Se preferite continuare a costruire Microscope, potete quindi saltare temporaneamente questo capitolo e tornare indietro più avanti.
 
 <% end %>
 
@@ -36,7 +36,7 @@ $ meteor deploy myapp.meteor.com
 
 Ovviamente dovrete sostituire "myapp" con un nome di vostra scelta e preferibilmente con uno che non sia già in uso. Se è la prima volta che fate il deploy di un'app, vi sarà chiesto di creare un account Meteor. Se tutto va a buon fine, dopo alcuni secondi potrete accedere alla vostra applicazione all'indirizzo `http://myapp.meteor.com`.
 
-Potete far riferimento alla [documentazione ufficiale](http://docs.meteor.com/#deploying) per avere maggiori informazioni rguardo a cose come accedere direttamente al database dell'istanza della vostra applicazione o su come configurare un dominio personalizzato. 
+Potete far riferimento alla [documentazione ufficiale](http://docs.meteor.com/#deploying) per avere maggiori informazioni rguardo a cose come accedere direttamente al database dell'istanza della vostra applicazione o su come configurare un dominio personalizzato.
 
 ### Fare il Deploy Su Modulus
 
@@ -76,7 +76,7 @@ Una volta creato il vostro database MongoDB, potete ottenere il `MONGO_URL` per 
 $ modulus env set MONGO_URL "mongodb://<user>:<pass>@mongo.onmodulus.net:27017/<database_name>"
 ~~~
 
-È giunto il momento di fare il deploy della vostra app. Non potrebbe essere più semplice, scrivete: 
+È giunto il momento di fare il deploy della vostra app. Non potrebbe essere più semplice, scrivete:
 
 ~~~bash
 $ modulus deploy
@@ -86,9 +86,9 @@ Avrete così fatto con successo il deploy della vostra applicazione su Modulus. 
 
 ### Meteor Up
 
-Nonostante ogni giorno appaiano nuove soluzioni per il cloud, spesso queste presentano problemi e limitazioni. Ad oggi, fare il deploy di applicazioni Meteor sui propri server rimane la soluzione migliore per andare in produzione. L'unica cosa è che gestire un deploy da soli non è così semplice, in particolar modo se siete interessati a fare una distribuzione di qualità. 
+Nonostante ogni giorno appaiano nuove soluzioni per il cloud, spesso queste presentano problemi e limitazioni. Ad oggi, fare il deploy di applicazioni Meteor sui propri server rimane la soluzione migliore per andare in produzione. L'unica cosa è che gestire un deploy da soli non è così semplice, in particolar modo se siete interessati a fare una distribuzione di qualità.
 
-[Meteor Up](https://github.com/arunoda/meteor-up) (o `mup` in breve) è un altro tentativo per risolvere questo problema: è uno strumento per la riga di comando che si cura di tutte le impostazioni e di fare il deploy. Vediamo quindi come fare il deploy di Microscope utilizzando Meteor Up. 
+[Meteor Up](https://github.com/arunoda/meteor-up) (o `mup` in breve) è un altro tentativo per risolvere questo problema: è uno strumento per la riga di comando che si cura di tutte le impostazioni e di fare il deploy. Vediamo quindi come fare il deploy di Microscope utilizzando Meteor Up.
 
 Prima di qualsiasi altra cosa, avremo bisogno di un server su cui inviare l'applicazione. Suggeriamo, indifferentemente, [Digital Ocean](http://digitalocean.com), con tariffe che partono da 5$ al mese, o [AWS](http://aws.amazon.com/), che mette a disposizione gratuitamente istanze Micro (incontrerete presto problemi di scalabilità, ma se avete intenzione di fare giusto qualche prova con Meteor Up dovrebbe essere sufficiente).
 
@@ -102,9 +102,9 @@ Per iniziare, dobbiamo installare Meteor Up utilizzando `npm` come segue:
 $ npm install -g mup
 ~~~
 
-Creeremo poi una speciale cartella separata che conterrà le nostre impostazioni di Meteor Up per un particolare deploy. Usiamo una cartella separata per due ragioni: primo, è buona pratica evitare di includere qualsiasi credenziale privata nel vostro repository Git, in particolare se state lavorando ad un progetto pubblico. 
+Creeremo poi una speciale cartella separata che conterrà le nostre impostazioni di Meteor Up per un particolare deploy. Usiamo una cartella separata per due ragioni: primo, è buona pratica evitare di includere qualsiasi credenziale privata nel vostro repository Git, in particolare se state lavorando ad un progetto pubblico.
 
-Secondo, utilizzando più cartelle separate potremo gestire più configurazioni di Meteor Up in parallelo. Questo risulterà utile, ad esempio, per gestire diversamente istanze di pre-produzione e di produzione. 
+Secondo, utilizzando più cartelle separate potremo gestire più configurazioni di Meteor Up in parallelo. Questo risulterà utile, ad esempio, per gestire diversamente istanze di pre-produzione e di produzione.
 
 Creiamo quindi questa nuova cartella ed utilizziamola per inizializzare un nuovo progetto di Meteor Up:
 
@@ -124,7 +124,7 @@ Un modo fantastico per assicurarvi che voi e il vostro team utilizziate tutti le
 
 ### Configurare Meteor Up
 
-Quando si inizializza un nuovo progetto, Meteor Up crea per voi due file: `mup.json` e `settings.json`. 
+Quando si inizializza un nuovo progetto, Meteor Up crea per voi due file: `mup.json` e `settings.json`.
 
 `mup.json` conterrà tutte le vostre impostazioni per il deploy, mentre `settings.json` conterrà tutte le impostazioni relative all'applicazione (chiavi OAuth, chiavi per analytics, etc.)
 
@@ -171,7 +171,7 @@ Se decidete di utilizzare MongoHQ, impostate `setupMongo` a `false` e aggiungete
 
 **Il Percorso della App Meteor**
 
-Visto che la nostra configurazione di Meteor Up si trova in una cartella diversa, dovremo puntare Meteor Up alla nostra applicazione utilizzando la proprietà `app`. Digitate semplicemente il percorso locale completo, che potete anche ottenere utilizzando il comando `pwd` dal terminale quando vi trovate all'interno della cartella della vostra applicazione. 
+Visto che la nostra configurazione di Meteor Up si trova in una cartella diversa, dovremo puntare Meteor Up alla nostra applicazione utilizzando la proprietà `app`. Digitate semplicemente il percorso locale completo, che potete anche ottenere utilizzando il comando `pwd` dal terminale quando vi trovate all'interno della cartella della vostra applicazione.
 
 **Variabili d'Ambiente**
 
@@ -191,7 +191,7 @@ Potranno servire alcuni minuti, a seconda delle performance del server e della c
 $ mup deploy
 ~~~
 
-Questo impacchetterà l'applicazione Meteor e ne farà il deploy sul server che abbiamo appena impostato. 
+Questo impacchetterà l'applicazione Meteor e ne farà il deploy sul server che abbiamo appena impostato.
 
 ### Visualizzare i Log
 
