@@ -37,13 +37,13 @@ Meteor.publish('postDetail', function(postId) {
 });
 ~~~
 
-////
+Ora, quando il client sottoscrive queste due pubblicazioni (utilizzando `autorun` per garantire che il giusto `postID` è stato inviato alla sottoscrizione `postDetail`), la sua collezione `'posts'` viene popolata da due sorgenti: un elenco di titoli ei nomi degli autori della prima sottoscrizione, e tutti i dettagli di un post dal secondo.
 
-////
+Si potrebbe notare che il post pubblicato da `postDetail` viene anche pubblicato da `allPosts` (anche se con solo un sottoinsieme delle sue proprietà). Tuttavia, Meteor si prende cura della sovrapposizione unendo i campi e garantendo che nessun post sia duplicato.
 
-////
+Questa è una bella cosa, perché ora quando renderizziamo l'elenco sommario dei post, gestiamo degli oggetti di dati che hanno sufficienti dati per mostrare quello che ci serve. Quindi quando rederizziamo la pagina per un singolo post, abbiamo tutto quello che serve per mostrarlo. Certo, abbiamo bisogno di prenderci cura sul client di non aspettarsi che tutti i campi siano disponibili su tutti i post - questa è una situazione comune!
 
-////
+Bisogna notare che non sei limitato a variare le proprietà del documento. Si potrebbe benissimo pubblicare le stesse proprietà di entrambe le pubblicazioni, ma ordinare gli elementi in modo diverso.
 
 ~~~js
 Meteor.publish('newPosts', function(limit) {
@@ -56,17 +56,17 @@ Meteor.publish('bestPosts', function(limit) {
 ~~~
 <%= caption "server/publications.js" %>
 
-### Subscribing to a Publication Multiple Times
+### Sottoscrivere una pubblicazione più volte
 
-////
+Abbiamo appena visto come è possibile pubblicare una singola collezione più di una volta. Allo stesso modo si può realizzare un risultato molto simile con un altro pattern: la creazione di una singola pubblicazione, ma *sottoscrivendoci* più volte.
 
-////
+In Microscope, sottoscriviamo la pubblicazione `posts` più volte, ma Iron Router attiva e disattiva ogni sottoscrizione per noi. Però non c'è alcun motivo per cui non ci si possa sottoscrivere più volte *contemporaneamente*.
 
-////
+Ad esempio, diciamo che abbiamo voluto caricare sia i più recenti che i migliori post in memoria allo stesso tempo:
 
-<%= diagram "subscribetwice", "Subscribing twice to one publication", "pull-center" %>
+<%= diagram "subscribetwice", "Sottoscriversi due volte a una pubblicazione", "pull-center" %>
 
-////
+Stiamo impostando una singola pubblicazione:
 
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -74,18 +74,18 @@ Meteor.publish('posts', function(options) {
 });
 ~~~
 
-////
+E poi sottoscriviamo questa pubblicazione più volte. In realtà questo è più o meno quello che stiamo facendo in Microscope:
 
 ~~~js
 Meteor.subscribe('posts', {submitted: -1, limit: 10});
 Meteor.subscribe('posts', {baseScore: -1, submitted: -1, limit: 10});
 ~~~
 
-////
+Quindi cosa sta succedendo qui esattamente? Ogni browser sta aprendo *due* sottoscrizioni differenti, ciascuna che si connette alla *stessa* pubblicazione sul server.
 
-////
+Ogni sottoscrizione fornisce diversi argomenti per tale pubblicazione, ma fondamentalmente, ogni volta un (diverso) set di documenti viene raccolto dalla collezione `posts` e trasferito sulla collezione client-side.
 
-### Multiple Collections in a Single Subscription
+### Collezioni multiple in una singola sottoscrizione
 
 ////
 
