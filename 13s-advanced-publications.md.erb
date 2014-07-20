@@ -101,7 +101,7 @@ Supponiamo che, insieme con la nostra lista di post in prima pagina, vogliamo so
 
 Sarebbe difficile realizzare questo con una pubblicazione commenti indipendente, soprattutto se l'elenco dei posti fosse limitato in qualche modo (per esempio, gli ultimi 10). Dovremmo scrivere una pubblicazione che assomiglierebbe a qualcosa di simile:
 
-<%= diagram "multiplecollections", "Two collections in one subscription", "pull-center" %>
+<%= diagram "multiplecollections", "Due collezioni in una sottoscrizione", "pull-center" %>
 
 ~~~js
 Meteor.publish('topComments', function(topPostIds) {
@@ -158,9 +158,9 @@ Sebbene Meteor non rende ancora questo approccio molto semplice, puoi anche guar
 
 Che altro può darci la nostra conoscenza ritrovata sulla flessibilità delle sottoscrizioni? Beh, se non usiamo `_publishCursor`, non abbiamo bisogno di seguire il vincolo che la collezione sorgente sul server deve avere lo stesso nome della collezione di destinazione sul client.
 
-<%= diagram "linkedcollections", "One collection for two subscriptions", "pull-center" %>
+<%= diagram "linkedcollections", "Una collezione per due sottoscrizioni", "pull-center" %>
 
-Una ragione per cui vorremmo fare questo è l' * ereditarietà su singola tabella* (Single Table Inheritance). 
+Una ragione per cui vorremmo fare questo è l' *ereditarietà su singola tabella* (Single Table Inheritance). 
 
 Supponiamo che abbiamo voluto fare riferimento a vari tipi di oggetti da parte dei nostri post, ognuno dei quali memorizza campi comuni, ma anche che differivano leggermente nel contenuto. Ad esempio, potremmo costruire un motore di blogging Tumblr-like, dove ogni post ha la solita ID, timestamp, e titolo; ma in più può anche caratterizzato da un'immagine, un video, un collegamento, o semplicemente il testo.
 
