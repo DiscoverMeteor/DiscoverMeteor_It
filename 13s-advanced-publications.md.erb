@@ -87,19 +87,19 @@ Ogni sottoscrizione fornisce diversi argomenti per tale pubblicazione, ma fondam
 
 ### Collezioni multiple in una singola sottoscrizione
 
-////
+A differenza dei database relazionali più tradizionali come MySQL che fanno uso di *join*, i database NoSQL come Mongo sono tutti su *denormalizzazione* e *incorporamento* (embedding). Vediamo come funziona nel contesto di Meteor.
 
-////
+Diamo uno sguardo a un esempio concreto. Abbiamo aggiunto commenti ai nostri post, e finora, siamo stati felici di pubblicare solo i commenti sul singolo post che l'utente sta guardando.
 
-////
+Tuttavia, supponiamo di voler mostrare i commenti su *tutti* i posti in prima pagina (tenendo presente che questi post cambieranno come verranno impaginati). Questo caso d'uso rappresenta un buon motivo per l'incorporamento commenti nei post, e in effetti è ciò che ci ha spinto a denormalizzare il *contatore* dei commenti.
 
-////
+Naturalmente potremmo sempre solo incorporare i commenti nei post, sbarazzandoci della collezione `Comments`. Ma come abbiamo visto nel capitolo *Denormalizzazione*, così facendo perderemo alcuni vantaggi supplementari di lavorare con una collezione separata. 
 
-////
+Ma scopriamo un trucco che coinvolge le sottoscrizioni che permette di inserire i nostri commenti preservando le collezioni separate.
 
-////
+Supponiamo che, insieme con la nostra lista di post in prima pagina, vogliamo sottoscriverci ad una lista dei primi 2 commenti per ogni post. 
 
-////
+Sarebbe difficile realizzare questo con una pubblicazione commenti indipendente, soprattutto se l'elenco dei posti fosse limitato in qualche modo (per esempio, gli ultimi 10). Dovremmo scrivere una pubblicazione che assomiglierebbe a qualcosa di simile:
 
 <%= diagram "multiplecollections", "Two collections in one subscription", "pull-center" %>
 
@@ -109,9 +109,9 @@ Meteor.publish('topComments', function(topPostIds) {
 });
 ~~~
 
-////
+Questo sarebbe un problema dal punto di vista delle prestazioni, visto che la pubblicazione dovrebbe essere abbattuta e ristabilita ogni volta l'elenco dei `topPostIds` cambia. 
 
-////
+C'è però un modo per aggirare questo. Abbiamo appena usato il fatto che non possiamo avere non più di un *pubblicazione* per *collezione*, ma possiamo anche avere più di una *collezione* a *pubblicazione*:
 
 ~~~js
 Meteor.publish('topPosts', function(limit) {
@@ -148,25 +148,25 @@ Meteor.publish('topPosts', function(limit) {
 });
 ~~~
 
-////
+Si può notare che non stiamo restituendo nulla in questa pubblicazione, visto che trasmettiamo manualmente messaggi alla nostra `sub` (via `.added()` e simili). Quindi non abbiamo bisogno di chiedere a `_publishCursor` di farlo per noi restituendo un cursore. 
 
-////
+Ora, ogni volta che pubblichiamo un post pubblichiamo anche automaticamente i primi due commenti chr gli sono collegati. E il tutto con una sola chiamata di sottoscrizione!
 
-////
+Sebbene Meteor non rende ancora questo approccio molto semplice, puoi anche guardare nel pacchetto `publish-with-relations` su Atmosphere, che mira a rendere questo pattern più facile da usare.
 
-### Linking different collections
+### Collegare collezioni differenti
 
-////
+Che altro può darci la nostra conoscenza ritrovata sulla flessibilità delle sottoscrizioni? Beh, se non usiamo `_publishCursor`, non abbiamo bisogno di seguire il vincolo che la collezione sorgente sul server deve avere lo stesso nome della collezione di destinazione sul client.
 
 <%= diagram "linkedcollections", "One collection for two subscriptions", "pull-center" %>
 
-////
+Una ragione per cui vorremmo fare questo è l' * ereditarietà su singola tabella* (Single Table Inheritance). 
 
-////
+Supponiamo che abbiamo voluto fare riferimento a vari tipi di oggetti da parte dei nostri post, ognuno dei quali memorizza campi comuni, ma anche che differivano leggermente nel contenuto. Ad esempio, potremmo costruire un motore di blogging Tumblr-like, dove ogni post ha la solita ID, timestamp, e titolo; ma in più può anche caratterizzato da un'immagine, un video, un collegamento, o semplicemente il testo.
 
-////
+Potremmo memorizzare tutti questi oggetti in una singola collezione `'risorse'`, utilizzando un attributo `tipo` per indicare quale tipo di oggetto che sono. (`video`, `immagine`, `link`, ecc.)
 
-////
+E anche se avessimo una singolo collezione `risorse` sul server, potremmo trasformare questa collezione unica in multiple `Video`, `Immagini`, ecc collezioni sul client col seguente pizzico di magia:
 
 ~~~js
   Meteor.publish('videos', function() {
@@ -180,6 +180,6 @@ Meteor.publish('topPosts', function(limit) {
   });
 ~~~
 
-////
+Stiamo dicendo a `_publishCursor` di pubblicare i nostri video (proprio come restituire) il cursore farebbe, ma invece di pubblicare la collezione di `risorse` sul client, pubblichiamo da "'risorse'" a `'video'`. 
 
-////
+È una buona idea farlo? Non è nostro compito giudicare. In ogni caso, è bene sapere che sia possibile fare per poter utilizzare Meteor al massimo!
