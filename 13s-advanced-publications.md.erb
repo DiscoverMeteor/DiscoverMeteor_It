@@ -145,6 +145,7 @@ Meteor.publish('topPosts', function(limit) {
   // make sure we clean everything up (note `_publishCursor`
   //   does this for us with the comment observers)
   sub.onStop(function() { postsHandle.stop(); });
+});
 ~~~
 
 Possiamo notare che non stiamo restituendo nulla in questa pubblicazione, visto che trasmettiamo manualmente messaggi alla nostra `sub` (via `.added()` e simili). Non abbiamo quindi bisogno di chiedere a `_publishCursor` di farlo per noi restituendo un cursore.
