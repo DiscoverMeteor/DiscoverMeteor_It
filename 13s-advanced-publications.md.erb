@@ -117,7 +117,7 @@ C'è però un modo per aggirare questo ostacolo. Abbiamo appena sfruttato il non
 Meteor.publish('topPosts', function(limit) {
   var sub = this, commentHandles = [], postHandle = null;
 
-  // Manda i primi due commenti
+  // send over the top two comments attached to a single post
   function publishPostComments(postId) {
     var commentsCursor = Comments.find({postId: postId}, {limit: 2});
     commentHandles[post._id] =
@@ -133,19 +133,18 @@ Meteor.publish('topPosts', function(limit) {
       sub.changed('posts', id, fields);
     },
     removed: function(id) {
-      // interrompi watch modifiche sui commenti del post
+      // stop observing changes on the post's comments
       commentHandles[id] && commentHandles[id].stop();
-      // elimina post
+      // delete the post
       sub.removed('posts', id);
     }
   });
 
   sub.ready();
 
-  // Assicuriamoci di aver pulito tutto (nota che `_publishCursor`
-  //  fa questo per noi con il watch sui commenti)
+  // make sure we clean everything up (note `_publishCursor`
+  //   does this for us with the comment observers)
   sub.onStop(function() { postsHandle.stop(); });
-});
 ~~~
 
 Possiamo notare che non stiamo restituendo nulla in questa pubblicazione, visto che trasmettiamo manualmente messaggi alla nostra `sub` (via `.added()` e simili). Non abbiamo quindi bisogno di chiedere a `_publishCursor` di farlo per noi restituendo un cursore.
@@ -175,7 +174,7 @@ Se avessimo una singola collezione `risorse` sul server, potremmo trasformare qu
     var videosCursor = Resources.find({type: 'video'});
     Meteor.Collection._publishCursor(videosCursor, sub, 'videos');
 
-    // _publishCursor non chiama questo per noi se lo facciamo più di una volta.
+    // _publishCursor doesn't call this for us in case we do this more than once.
     sub.ready();
   });
 ~~~
