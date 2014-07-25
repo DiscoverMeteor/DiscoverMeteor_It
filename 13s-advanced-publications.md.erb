@@ -91,7 +91,7 @@ A differenza dei database relazionali più tradizionali come MySQL, che fanno us
 
 Diamo uno sguardo ad un esempio concreto. Abbiamo aggiunto commenti ai nostri post e, finora, siamo stati felici di pubblicare solo i commenti sul singolo post che l'utente sta guardando.
 
-Tuttavia, supponiamo di voler mostrare i commenti su *tutti* i posti in prima pagina (tenendo presente che questi post cambieranno come verranno impaginati). Questo caso d'uso rappresenta un buon motivo per l'incorporamento dei commenti nei post, ed in effetti è ciò che ci ha spinto a denormalizzare il *contatore* dei commenti.
+Tuttavia, supponiamo di voler mostrare i commenti su *tutti* i post in prima pagina (tenendo presente che questi post cambieranno nel momento in cui verranno impaginati, essendo solo quelli in prima pagina a dover mostrare i commenti). Questo caso d'uso rappresenta un buon motivo per l'incorporamento dei commenti nei post, ed in effetti è ciò che ci ha spinto a denormalizzare il *contatore* dei commenti.
 
 Naturalmente potremmo sempre solo incorporare i commenti nei post, sbarazzandoci della collezione `Comments`. Ma come abbiamo visto nel capitolo *Denormalizzazione*, così facendo perderemmo alcuni vantaggi supplementari di lavorare con una collezione separata.
 
