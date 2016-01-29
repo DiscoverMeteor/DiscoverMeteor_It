@@ -7,9 +7,9 @@ contents: Implementare un sistema di votazione dei post.|Ordinare i post in base
 paragraphs: 49
 ---
 
-Adesso che il sito sta guadagnando in popolarità, trovare i link migliori sta cominciando a diventando complicato. È necessario un qualche sistema ordinamento per i post.
+Adesso che il sito sta guadagnando in popolarità, trovare i link migliori sta cominciando a diventare difficile. È necessario un qualche sistema ordinamento per i post.
 
-Si potrebbe implementare un complesso sistema di ordinamento basato su karma, decadimento del punteggio a tempo, e svariati altri parametri (la maggior parte dei quali implementati in (Telescope)[http://telesc.pe/], il fratello maggiore di Microscope). Nella nostra applicazione invece si punta alla semplicità, per cui i post saranno ordinati in base al numero di voti ricevuti.
+Si potrebbe implementare un complesso sistema di ordinamento basato su karma, decadimento del punteggio a tempo, e svariati altri parametri (la maggior parte dei quali implementati in [Telescope](http://telesc.pe/), il fratello maggiore di Microscope). Nella nostra applicazione invece si punta alla semplicità, per cui i post saranno ordinati in base al numero di voti ricevuti.
 
 Per cominciare, verrà fornita agli utenti la possibilità di votare un post.
 
@@ -25,7 +25,7 @@ Le liste dei votanti saranno disponibili a tutti gli utenti, il che renderà i d
 
 Questo è il tipico problema di riservatezza dei dati causato dal modo in cui le collezioni funzionano. Ad esempio, si vuole consentire agli utenti la ricerca degli utenti che hanno votato i loro post? Nel caso in questione rendere tali informazioni pubbliche non ha reali conseguenze, ma è importante almeno avere consapevolezza del problema.
 
-Da notare che se si volesse limitare l'accesso ad alcune di queste informazioni, ci si dovrebbe assicurare che lato client non venga consentito smanettare con le opzioni dei campi `fields` della pubblicazione, rimuovendo la proprietà lato server, oppure evitando di passare per intero le opzioni dal client al server.
+Da notare che se si volesse limitare l'accesso ad alcune di queste informazioni, ci si dovrebbe assicurare che lato client non venga consentito di smanettare con le opzioni dei campi `fields` della pubblicazione, rimuovendo la proprietà lato server, oppure evitando di passare per intero le opzioni dal client al server.
 
 <% end %>
 
@@ -281,7 +281,7 @@ UI.registerHelper('pluralize', function(n, thing) {
 ~~~
 <%= caption "client/helpers/Spacebars.js" %>
 
-Le funzioni che sono state create sono legate ai relativi manager e template. Ma utilizzando `Spacebars.registerHelper` viene creata una funzione di supporto _globale_ che può essere utilizzata in qualunque template:
+Le funzioni che sono state create sono legate ai relativi manager e template. Ma utilizzando `Spacebars.registerHelper` viene creata una funzione di supporto _globale_ che può essere utilizzata in qualsiasi template:
 
 ~~~html
 <template name="postItem">
