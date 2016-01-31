@@ -382,7 +382,7 @@ mrt add iron-router-progress
 ~~~
 <%= caption "bash console" %>
 
-Attraverso la magia dei pacchetti, la nostra nuova barra di progresso funziona perfettamente appena installata! La barra di progresoo si attiverà per ogni route e si completerà automaticamente appena la route avrà caricato i dati richiesti.
+Attraverso la magia dei pacchetti, la nostra nuova barra di progresso funziona perfettamente appena installata! La barra di progresso si attiverà per ogni route e si completerà automaticamente appena la route avrà caricato i dati richiesti.
 
 Facciamo solo una modifica. Disabilitiamo `iron-router-progress` per la route `postSubmit` dato che non deve aspettare per i dati da nessuna sottoscrizione (dopo tutto è solo un form vuoto):
 
@@ -426,7 +426,7 @@ Meteor.publish('singlePost', function(id) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-Ora, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottoscrivendo alla ppubblicazione `comments` nella funzion `waitOn` della route `postPage`, così possiamo semplicemente aaggiungere qui la sottoscrizione. Non dimentichiamo di aggiungere la sottoscrizione anche alla route `postEdit` dato che necessita degli stessi dati:
+Ora, facciamo la sottoscrizione lato client ai post corretti. Stiamo già sottoscrivendo alla pubblicazione `comments` nella funzion `waitOn` della route `postPage`, così possiamo semplicemente aggiungere qui la sottoscrizione. Non dimentichiamo di aggiungere la sottoscrizione anche alla route `postEdit` dato che necessita degli stessi dati:
 
 ~~~js
 Router.map(function() {
