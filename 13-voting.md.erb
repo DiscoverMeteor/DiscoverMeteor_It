@@ -374,7 +374,7 @@ Risultato finale: durante l'attesa di una risposta da parte del server, l'interf
 
 Ora che ciascun post ha un punteggio dipendente dal numero dei voti, si può visualizzare una lista dei migliori post. Per far ciò, si vedrà come sia possibile gestire due sottoscrizioni separate operanti sulla collezione dei post, e rendere maggiormente generico il template `postsList`.
 
-Per cominciare, sono necessarie _due_ sottoscrizioni, una per ciascun ordinamento. Il trucco sta nel fatto che  entrambe sranno sottoscritte alla _stessa_ pubblicazione `posts`, solo con parametri differenti!
+Per cominciare, sono necessarie _due_ sottoscrizioni, una per ciascun ordinamento. Il trucco sta nel fatto che  entrambe saranno sottoscritte alla _stessa_ pubblicazione `posts`, solo con parametri differenti!
 
 Verranno inoltre create due nuove route chiamate `newPosts` e `bestPosts`, accedibili tramite le URL rispettivamente `/new` e `/best` (ovviamente insieme a `/new/5` e `/best/5` per la paginazione).
 
@@ -519,9 +519,9 @@ Fatto ciò, si ottiene la lista dei migliori post:
 
 ### Migliorare l'Header
 
-Avendo due pagine che elencano i post, non è chiaro quale delle due liste è correntemente visualizzata. È necessario quindi modificare l'header per rendere la cosa esplicita. Viene creato un gestore `header.js` e una funzione di supporto che usa il percorso corrente e una o più route per aggiungere una classe attiva alle voci di nagivatione.
+Avendo due pagine che elencano i post, non è chiaro quale delle due liste è correntemente visualizzata. È necessario quindi modificare l'header per rendere la cosa esplicita. Viene creato un gestore `header.js` e una funzione di supporto che usa il percorso corrente e una o più route per aggiungere una classe attiva alle voci di navigazione.
 
-La ragione per cui si vuole supportare più route è che sia `home` che `newPosts` (a cui corrispondono le URL rispettivamente `/` e `/new`) puntano allo stesso template. Quindi `activeRouteClass` deve essere sufficientemente intelligente da rendere il tag `<li>`attivo in entrambi i casi.
+La ragione per cui si vogliono supportare più route è che sia `home` che `newPosts` (a cui corrispondono le URL rispettivamente `/` e `/new`) puntano allo stesso template. Quindi `activeRouteClass` deve essere sufficientemente intelligente da rendere il tag `<li>`attivo in entrambi i casi.
 
 ~~~html
 <template name="header">
@@ -591,7 +591,7 @@ In quest'ultimo caso, può risultare conveniente convertire l'oggetto `arguments
 
 <% end %>
 
-Per ciascuna voce di navigazione, l'helper `activeRouteClass` accetta una lista di nomi di route, e quindi usa la funzione `any()` di Underscore per verificare se il route passa il test (ovvero se la URL corrispondente coincide con il percorso corrente).
+Per ciascuna voce di navigazione, l'helper `activeRouteClass` accetta una lista di nomi di route, e quindi usa la funzione `any()` di Underscore per verificare se la route passa il test (ovvero se la URL corrispondente coincide con il percorso corrente).
 
 Se una qualunque delle route coincide con il path corrente, `any()` restituisce `true`. Per concludere, si utilizza il pattern Javascript `boolean && string`, dove `false && myString` restituisce `false`, ma `true && myString` restituisce invece `myString`.
 
