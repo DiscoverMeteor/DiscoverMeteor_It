@@ -10,7 +10,7 @@ contents: Vedi cosa succede nei retroscena quando Meteor scambia due elementi de
 paragraphs: 58
 ---
 
-A questo punto abbiamo un sistema di votazione, conto punteggi e valutazione in tempo reale. Questo tuttavia risulta in un'esperienza erratica ed irritante, con messaggi che saltano da una parte all'altra della homepage. Per migliorare questa situazione useremo le animazioni.
+A questo punto abbiamo un sistema di votazione, contatore punteggi e valutazione in tempo reale. Questo tuttavia risulta in un'esperienza erratica ed irritante, con messaggi che saltano da una parte all'altra della homepage. Per migliorare questa situazione useremo le animazioni.
 
 ### Meteor & il DOM
 
@@ -43,11 +43,11 @@ Nei punti 5 e 6 inoltre, stiamo semplicemente spostando gli elementi nelle loro 
 
 Fino ad ora abbiamo parlato di *come* animare i nostri messaggi, ma non di *dove* animarli.
 
-Per i punti 3 e 4, la risposta sta nella template callback `rendered` all'interno del gestore `post_item.js`, che è scatenato ogni volta che cambia la proprietà di un messaggio (nel nostro caso il punteggio).
+Per i punti 3 e 4, la risposta sta nel template callback `rendered` all'interno del gestore `post_item.js`, che è scatenato ogni volta che cambia la proprietà di un messaggio (nel nostro caso il punteggio).
 
-I punti 5 e 6 sono un pò più complessi. Pensaci su: se tu dicessi ad un automata di correre verso nord per 5 minuti, dopodichè di correre verso sud per 5 minuti, probabilmente l'automata dedurrà che siccome finirà nello stesso posto, potrebbe risparmiarsi le sue forze e non correre per niente.
+I punti 5 e 6 sono un pò più complessi. Pensaci su: se tu dicessi ad un automa di correre verso nord per 5 minuti, dopodichè di correre verso sud per 5 minuti, probabilmente l'automa dedurrà che siccome finirà nello stesso posto, potrebbe risparmiarsi le sue forze e non correre per niente.
 
-Quindi se vuoi assicurarti che il tuo automata corra per tutti e 10 i minuti, devi *aspettare* fino a che non ha corso i primi 5 minuti, e *dopo* dirgli di tornare indietro.
+Quindi se vuoi assicurarti che il tuo automa corra per tutti e 10 i minuti, devi *aspettare* fino a che non ha corso i primi 5 minuti, e *dopo* dirgli di tornare indietro.
 
 Il browser funziona in una simile maniera: se simultaneamente gli diamo entrambe le istruzioni, le nuove coordinate semplicemente sostituirebbero quelle vecchie e non accadrebbe nulla. In altre parole, il browser ha bisogno di registrare i cambiamenti di posizione come punti separati nel tempo, altrimenti non sarà in grado di animarli.
 
@@ -55,13 +55,13 @@ Meteor non fornisce una callback `justAfterRendered`, ma può imitarla usando `M
 
 ### Posizionamento con i CSS
 
-Per animare i messaggi che si stanno riordinando per la pagina, dovremo avventurarci nel mondo dei CSS. È quindi d'ordine un breve ripasso sul posizionamento on i CSS.
+Per animare i messaggi che si stanno riordinando per la pagina, dovremo avventurarci nel mondo dei CSS. È quindi d'ordine un breve ripasso sul posizionamento con i CSS.
 
 Gli elementi di una pagina sono predefiniti per avere un posizionamento **statico**. Gli elementi posizionati staticamente si adattano al flusso della pagina e le loro coordinate sullo schermo non possono essere cambiate o animate.
 
-Un posizionamento **relativo** dall'altro canto invece significa che l'elemento anche si adatta al flusso della pagina, ma può essere posizionato *relativamente* alla sua posizione originale*.
+Un posizionamento **relativo** invece significa che l'elemento anche in questo caso si adatta al flusso della pagina, ma può essere posizionato *relativamente* alla sua posizione originale*.
 
-Un posizionamento *assoluto* va un passo più in avanti e ti permette di specificare delle coordinate x/y relative al *documento* oppure **al primo elemento padre posizionato relativamente o assolutamente**.
+Un posizionamento *assoluto* va un passo più in avanti e ti permette di specificare delle coordinate x/y relative al *documento* oppure **al primo elemento padre posizionato in modo relativo o assoluto**.
 
 Per animare i nostri messaggi useremo un posizionamento relativo.
 
@@ -81,7 +81,7 @@ Questo vuol dire che la nostra unica sfida è quella di calcolare da *dove* anim
 
 ### Position:absolute
 
-Per posizionare i nostri elementi potremmo anche usare `position:absolute` con un padre relativo. Ma un gran svantaggio degli elementi posizionati assolutamente è che sono completamente rimossi dal flusso della pagina, causando il collasso del loro contenitore padre come se fosse vuoto.
+Per posizionare i nostri elementi potremmo anche usare `position:absolute` con un padre relativo. Ma un gran svantaggio degli elementi posizionati in questo modo è che sono completamente rimossi dal flusso della pagina, causando il collasso del loro contenitore padre come se fosse vuoto.
 
 A sua volta questo significa che dovremmo impostare l'altezza del contenitore artificialmente con Javascript, invece di lasciare che il browser aggiusti naturalmente gli elementi. Di conseguenza, ogni qual volta sia possibile è meglio rimanere con il posizionamento relativo.
 
@@ -200,7 +200,7 @@ Template.postItem.events({
 
 Seguire non dovrebbe essere troppo difficile se fai riferimento al diagramma precedente.
 
-Nota che siccome abbiamo impostato la proprietà `currentPosition` dell'istanza di template nella callback `defer`, questa proprietà non esisterà al primo rendering del frammento di template. Ma non è un problema siccome in ogni modo non siamo interessati ad animare il primo rendering.
+Nota che siccome abbiamo impostato la proprietà `currentPosition` dell'istanza di template nella callback `defer`, questa proprietà non esisterà al primo rendering del frammento di template. Ma non è un problema dato che non siamo interessati ad animare il primo rendering.
 
 Apri il sito e prova a votare. Dovresti vedere i messaggi, che con grazia da ballerine, si spostano gentilmente su e giù!
 
